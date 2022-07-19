@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Account;
+﻿using DM.MovieApi;
+using MovieMatch.Movies;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -27,5 +29,7 @@ public class MovieMatchApplicationModule : AbpModule
         {
             options.AddMaps<MovieMatchApplicationModule>();
         });
+
+        MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
     }
 }

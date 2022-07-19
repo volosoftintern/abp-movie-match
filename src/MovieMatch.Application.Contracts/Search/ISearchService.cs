@@ -9,6 +9,6 @@ namespace MovieMatch.Search
 {
     public interface ISearchService:IApplicationService
     {
-        Task<List<MovieDto>> GetMovies(SearchMovieDto input);
+        Task<IReadOnlyList<MovieDto>> GetMovies(SearchMovieDto input);
     }
 }

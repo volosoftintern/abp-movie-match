@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DM.MovieApi.MovieDb.Movies;
 using IMDbApiLib.Models;
 using MovieMatch.Movies;
 
@@ -8,6 +9,6 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
 {
     public MovieMatchApplicationAutoMapperProfile()
     {
-        CreateMap<SearchResult, MovieDto>();
+        CreateMap<MovieInfo, MovieDto>();
     }
 }

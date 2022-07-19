@@ -1,4 +1,5 @@
-﻿using IMDbApiLib;
+﻿using DM.MovieApi.MovieDb.Movies;
+using IMDbApiLib;
 using IMDbApiLib.Models;
 using Microsoft.Extensions.Options;
 using MovieMatch.Movies;
@@ -22,14 +23,17 @@ namespace MovieMatch.Search
         }
 
 
-        public async Task<List<MovieDto>> GetMovies(SearchMovieDto input)
+        public async Task<IReadOnlyList<MovieDto>> GetMovies(SearchMovieDto input)
         {
+            
+            
+            var result = await _movieApiService.SearchMovieAsync(input.Name);
+            
 
-            var result=await  _movieApiService.SearchMovieAsync(input.Name);
+            
+            //if (!string.IsNullOrEmpty(result.ErrorMessage)) throw new UserFriendlyException(result.ErrorMessage);
 
-            if (!string.IsNullOrEmpty(result.ErrorMessage)) throw new UserFriendlyException(result.ErrorMessage);
-
-            return ObjectMapper.Map<List<SearchResult>, List<MovieDto>>(result.Results);
+            return ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(result);
 
         }
     }

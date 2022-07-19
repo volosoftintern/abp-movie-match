@@ -1,4 +1,6 @@
-﻿using IMDbApiLib;
+﻿using DM.MovieApi;
+using DM.MovieApi.MovieDb.Movies;
+using IMDbApiLib;
 using IMDbApiLib.Models;
 using System;
 using System.Collections.Generic;
@@ -12,17 +14,17 @@ namespace MovieMatch.Movies
 {
     public class MovieApiService:ITransientDependency
     {
-        private readonly ApiLib _apiLib;
-
+        private readonly IApiMovieRequest _movieApi;
+        
         public MovieApiService()
         {
-            _apiLib=new ApiLib(MovieApiConstants.ApiKey);
+            _movieApi = MovieDbFactory.Create<IApiMovieRequest>().Value;
         }
 
-        public async Task<SearchData> SearchMovieAsync(string name)
+        public async Task<IReadOnlyList<MovieInfo>> SearchMovieAsync(string name)
         {
-             var result= await _apiLib.SearchMovieAsync(name);
-            return result;  
+            var response= await _movieApi.SearchByTitleAsync(name);
+            return response.Results;
         }
 
     }
