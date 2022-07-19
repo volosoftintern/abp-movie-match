@@ -8,18 +8,17 @@
         if (isNullOrEmpty(movieName)) return;
         
         movieMatch.search.search.getMovies({ name: movieName }).done((res) => {
-            console.log(res);
 
             movieList.empty();
 
             res.forEach((val, i) => {
                 movieList.append(`
-                        <li class="list-group-item">
+                        <li class="list-group-item" onclick="navigateToDetail(${val.id})">
                             <div class="card" style="width:300px;">
-                                <img style="width:300px" class="card-img-top" src="${val.image}" alt="${val.title}">
+                                <img style="width:300px" class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
                                 <div class="card-body">
-                                    <h5 class="card-title">${val.title}</h5>
-                                    <p class="card-text">${val.description}</p>
+                                    <h5 class="card-title"><a href="Movies/${val.id}">${val.title}</a></h5>
+                                    <p class="card-text">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
                                         <button data-id="${val.id}" class="btn btn-primary">Watch Later</a>
                                         <button data-id="${val.id}" class="btn btn-primary">Watched Before</a>
@@ -31,9 +30,6 @@
                     `)
             })
         });
-
-
-
 
     });
 
