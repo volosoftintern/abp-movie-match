@@ -1,0 +1,20 @@
+﻿@page
+@model MovieMatch.Web.Pages.Search.IndexModel
+@section scripts{
+    <abp-script src="/Pages/Search/Index.js" />
+}
+
+
+<div class="container d-flex align-items-center flex-column">
+    <form id="searchMovieForm" class="form-inline my-2 my-lg-0 d-flex w-100 ">
+
+      <input id="movie-name" class="form-control mx-2" type="search" placeholder="Search" name="name" aria-label="Search">
+      
+      <button id="search-movie" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+
+    </form>
+
+    <ul class="list-group my-3" style="display:inline-block;list-style-type:none;" id="movie-list">
+    </ul>
+
+</div>
