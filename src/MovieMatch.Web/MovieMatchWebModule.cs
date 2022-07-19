@@ -38,6 +38,12 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
+using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
+using Volo.Abp.Account.Web.ProfileManagement;
 
 namespace MovieMatch.Web;
 
@@ -86,6 +92,10 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        Configure<ProfileManagementPageOptions>(options =>
+        {
+            options.Contributors.Add(new MovieMatchProfilePageContributor());
+        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -137,7 +147,7 @@ public class MovieMatchWebModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MovieMatchDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MovieMatch.Domain.Shared"));
+                options.FileSets.ReplaceEmbeddedByPhysical<MovieMatchDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MovieMatch.Domain.Shared"));
                 options.FileSets.ReplaceEmbeddedByPhysical<MovieMatchDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MovieMatch.Domain"));
                 options.FileSets.ReplaceEmbeddedByPhysical<MovieMatchApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MovieMatch.Application.Contracts"));
                 options.FileSets.ReplaceEmbeddedByPhysical<MovieMatchApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MovieMatch.Application"));
@@ -178,6 +188,9 @@ public class MovieMatchWebModule : AbpModule
         {
             options.MenuContributors.Add(new MovieMatchMenuContributor());
         });
+
+
+
     }
 
     private void ConfigureAutoApiControllers()

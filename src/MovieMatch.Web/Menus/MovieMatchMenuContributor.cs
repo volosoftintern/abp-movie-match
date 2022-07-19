@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using MovieMatch.Localization;
 using MovieMatch.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.TenantManagement.Web.Navigation;
@@ -10,6 +14,7 @@ namespace MovieMatch.Web.Menus;
 
 public class MovieMatchMenuContributor : IMenuContributor
 {
+
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
         if (context.Menu.Name == StandardMenus.Main)
@@ -17,6 +22,8 @@ public class MovieMatchMenuContributor : IMenuContributor
             await ConfigureMainMenuAsync(context);
         }
     }
+
+   
 
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
