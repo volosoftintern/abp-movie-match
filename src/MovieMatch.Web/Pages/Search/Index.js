@@ -14,7 +14,7 @@
 
             res.forEach((val, i) => {
                 movieList.append(`
-                        <li>
+                        <li class="list-group-item">
                             <div class="card" style="width:300px;">
                                 <img style="width:300px" class="card-img-top" src="${val.image}" alt="${val.title}">
                                 <div class="card-body">
