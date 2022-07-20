@@ -13,7 +13,7 @@
 
             res.forEach((val, i) => {
                 movieList.append(`
-                        <li class="list-group-item" onclick="navigateToDetail(${val.id})">
+                        <li class="list-group-item">
                             <div class="card" style="width:300px;">
                                 <img style="width:300px" class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
                                 <div class="card-body">

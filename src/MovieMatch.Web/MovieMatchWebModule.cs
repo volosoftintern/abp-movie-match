@@ -38,6 +38,7 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MovieMatch.Web;
 
@@ -86,6 +87,11 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        Configure<RazorPagesOptions>(options =>
+        {
+
+            options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
+        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
