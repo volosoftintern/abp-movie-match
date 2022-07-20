@@ -1,6 +1,4 @@
 ﻿using DM.MovieApi.MovieDb.Movies;
-using IMDbApiLib;
-using IMDbApiLib.Models;
 using Microsoft.Extensions.Options;
 using MovieMatch.Movies;
 using System;

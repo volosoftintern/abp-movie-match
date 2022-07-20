@@ -1,7 +1,5 @@
 ﻿using DM.MovieApi;
 using DM.MovieApi.MovieDb.Movies;
-using IMDbApiLib;
-using IMDbApiLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +23,12 @@ namespace MovieMatch.Movies
         {
             var response= await _movieApi.SearchByTitleAsync(name);
             return response.Results;
+        }
+
+        public async Task<Movie> GetMovieAsync(int id)
+        {
+            var response= await _movieApi.FindByIdAsync(id);
+            return response.Item;
         }
 
     }
