@@ -49,15 +49,35 @@
                                     <h5 class="card-title"><a href="Movies/${val.id}">${val.title}</a></h5>
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
-                                        <button data-id="${val.id}" class="btn btn-primary">Watch Later</a>
-                                        <button data-id="${val.id}" class="btn btn-primary">Watched Before</a>
+                                        <button data-id="${val.id}" class="btn btn-primary" onclick="addWatchLater(${val.id},'${abp.currentUser.id}')">Watch Later</a>
+                                        <button data-id="${val.id}" class="btn btn-primary" onclick="addWatchedBefore(${val.id},'${abp.currentUser.id}')">Watched Before</a>
                                     </div>
 
                                 </div>
                             </div>
-                        
+
                     `)
         })
     }
+
+    addWatchLater = (movieId, userId) => {
+        movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
+            abp.notify.success(
+                'Movie added watch later list.',
+                'Success'
+            );
+        });
+    }
+
+    addWatchedBefore = (movieId, userId) => {
+        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
+            abp.notify.success(
+                'Movie added watch later list.',
+                'Success'
+            );
+        });
+    }
+
+
 
 });
