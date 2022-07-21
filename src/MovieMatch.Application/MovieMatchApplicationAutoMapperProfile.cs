@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using DM.MovieApi.ApiResponse;
+using DM.MovieApi.MovieDb.Movies;
+using MovieMatch.Movies;
+using MovieMatch.Search;
 
 namespace MovieMatch;
 
@@ -6,8 +10,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
 {
     public MovieMatchApplicationAutoMapperProfile()
     {
-        /* You can configure your AutoMapper mapping configuration here.
-         * Alternatively, you can split your mapping configurations
-         * into multiple profile classes for a better organization. */
+        CreateMap<MovieInfo, MovieDto>();
+        CreateMap<Movie, MovieDetailDto>();
     }
 }
