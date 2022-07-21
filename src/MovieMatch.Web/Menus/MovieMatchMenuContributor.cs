@@ -38,7 +38,7 @@ public class MovieMatchMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 MovieMatchMenus.Search,
                 l["Menu:Search"],
-                "Search",
+                "/Search",
                 icon: "fa fa-search",
                 order: 1
             )

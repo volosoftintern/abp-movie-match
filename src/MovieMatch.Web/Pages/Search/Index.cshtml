@@ -1,7 +1,7 @@
 ﻿@page
 @model MovieMatch.Web.Pages.Search.IndexModel
 @section styles{
- 
+    <abp-style src="/Pages/Search/Index.css"/>
 }
 @section scripts{
  
@@ -17,8 +17,9 @@
       <button id="search-movie" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 
     </form>
-    <ul class="list-group my-3" style="display:inline-block;list-style-type:none;" id="movie-list">
-    </ul>
+    <div id="movie-list" class="d-flex flex-wrap justify-content-around">
+
+    </div>
     <div id="pagination"></div>
     
 </div>
