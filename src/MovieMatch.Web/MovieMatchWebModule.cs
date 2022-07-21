@@ -44,6 +44,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Account.Web.ProfileManagement;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
 
 namespace MovieMatch.Web;
 
@@ -92,10 +94,18 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+
         Configure<ProfileManagementPageOptions>(options =>
         {
             options.Contributors.Add(new MovieMatchProfilePageContributor());
         });
+        Configure<RazorPagesOptions>(options =>
+        {
+
+            options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
+        });
+
+        
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -117,7 +127,14 @@ public class MovieMatchWebModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
+
+            options.ScriptBundles.ConfigureAll(bundle =>
+            {
+                bundle.AddFiles("/libs/twbs-pagination/jquery.twbsPagination.js");
+            });
         });
+
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)

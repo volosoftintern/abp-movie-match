@@ -6,6 +6,6 @@ module.exports = {
 
     ],
     mappings: {
-
+        "@node_modules/twbs-pagination/**/*": "@libs/twbs-pagination/"
     }
 };

@@ -40,6 +40,16 @@ public class MovieMatchMenuContributor : IMenuContributor
                 order: 0
             )
         );
+        context.Menu.Items.Insert(
+            1,
+            new ApplicationMenuItem(
+                MovieMatchMenus.Search,
+                l["Menu:Search"],
+                "/Search",
+                icon: "fa fa-search",
+                order: 1
+            )
+        );
 
         if (MultiTenancyConsts.IsEnabled)
         {

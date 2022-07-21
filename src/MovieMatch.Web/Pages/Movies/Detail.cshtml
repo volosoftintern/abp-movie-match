@@ -1,0 +1,20 @@
+﻿@page
+@model MovieMatch.Web.Pages.Movies.DetailModel
+@{
+}
+
+
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" alt="@Model.MovieDetail.Title">
+  <div class="card-body">
+    <h5 class="card-title">@Model.MovieDetail.Title</h5>
+    <p class="card-text">@Model.MovieDetail.Overview</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">@Model.MovieDetail.VoteAverage</li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
