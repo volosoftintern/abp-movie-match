@@ -2,12 +2,10 @@
 using Microsoft.Extensions.Localization;
 using MovieMatch.Localization;
 using MovieMatch.Web.Components.WatchedBefore;
+using MovieMatch.Web.Components.WatchLater;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Localization;
-using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Account.Web.ProfileManagement;
-using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
-
 public class MovieMatchProfilePageContributor : IProfileManagementPageContributor
 {
     public Task<bool> CheckPermissionsAsync(ProfileManagementPageCreationContext context)
@@ -22,14 +20,14 @@ public class MovieMatchProfilePageContributor : IProfileManagementPageContributo
         context.Groups.Add(
           new ProfileManagementPageGroup(
               "Volo.Abp.Account.WatchLater",
-              l["ProfileTab:MoviesWillWatch"],
+              l["ProfileTab:MoviesIWillWatch"],
               typeof(WatchLaterViewComponent)
           )
       );
         context.Groups.Add(
          new ProfileManagementPageGroup(
             "Volo.Abp.Account.WatchedBefore",
-            l["ProfileTab:MoviesWatchedBefore"],
+            l["ProfileTab:MoviesIWatchedBefore"],
             typeof(WatchedBeforeViewComponent)
         )
       );

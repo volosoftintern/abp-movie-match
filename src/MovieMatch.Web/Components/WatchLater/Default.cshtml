@@ -1,3 +1,20 @@
-﻿<div>
-  <p>Movies Will Watch Page</p>
-</div>
+﻿@using MovieMatch.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<MovieMatchResource> L
+
+<abp-card>
+    <abp-card-header>
+        <h2>@L["ProfileTab:MoviesWillWatch"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+       
+        <abp-table striped-rows="true" id="MoviesWatchLaterTable">
+              
+   
+        </abp-table>
+
+    </abp-card-body>
+</abp-card>
+
+
+

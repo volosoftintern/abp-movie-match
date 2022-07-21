@@ -1,3 +1,19 @@
-﻿<div>
-  <p>Watched Movies Page</p>
-</div>
+﻿
+@using MovieMatch.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<MovieMatchResource> L
+
+
+
+<abp-card>
+    <abp-card-header>
+        <h2>@L["ProfileTab:MoviesWatchedBefore"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="MoviesWatchedBeforeTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+
+
+
+  

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieMatch.Movies;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -37,7 +39,8 @@ public class MovieMatchDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
-
+    public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
+    public DbSet<WatchLater> MoviesWatchLater { get; set; }
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
@@ -81,5 +84,21 @@ public class MovieMatchDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+        builder.Entity<WatchedBefore>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "MoviesWatchedBefore",
+                MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Id).IsRequired().HasMaxLength(128);
+            b.HasKey(y => y.Id);
+        });
+        builder.Entity<WatchLater>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "MoviesWatchLater",
+                MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Id).IsRequired().HasMaxLength(128);
+            b.HasKey(y => y.Id);
+        });
     }
 }

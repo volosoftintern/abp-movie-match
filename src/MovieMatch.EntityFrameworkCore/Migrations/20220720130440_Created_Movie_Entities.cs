@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Created_Movie_Entities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -274,6 +274,32 @@ namespace MovieMatch.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppMoviesWatchedBefore",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", maxLength: 128, nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMoviesWatchedBefore", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppMoviesWatchLater",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", maxLength: 128, nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMoviesWatchLater", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1280,6 +1306,12 @@ namespace MovieMatch.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppMoviesWatchedBefore");
+
+            migrationBuilder.DropTable(
+                name: "AppMoviesWatchLater");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceClaims");

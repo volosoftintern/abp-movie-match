@@ -7,14 +7,14 @@ using Volo.Abp.Domain.Entities;
 
 namespace MovieMatch.Movies
 {
-    public class WatchLater : Entity
+    public class WatchLater : Entity<Guid>
     {
-        public Guid UserId { get; set; }
         public int MovieId { get; set; }
+        public Guid UserId { get; set; }
 
         public override object[] GetKeys()
         {
-            return new object[] { UserId, MovieId };
+            return new object[] { MovieId, UserId };
         }
     }
 }

@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-public class WatchLaterViewComponent : AbpViewComponent
+namespace MovieMatch.Web.Components.WatchLater
 {
-    public virtual IViewComponentResult Invoke()
+    [Widget(
+        ScriptFiles = new[] { "/Components/WatchLater/Default.js" }
+        )]
+    public class WatchLaterViewComponent : AbpViewComponent
     {
-        return View("~/Components/WatchLater/Default.cshtml");
+        public virtual IViewComponentResult Invoke()
+        {
+            return View("~/Components/WatchLater/Default.cshtml");
+        }
     }
+
 }

@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using MovieMatch.Movies;
+using MovieMatch.MoviesWatchedBefore;
+using MovieMatch.MoviesWatchLater;
 
 namespace MovieMatch;
 
@@ -6,8 +9,9 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
 {
     public MovieMatchApplicationAutoMapperProfile()
     {
-        /* You can configure your AutoMapper mapping configuration here.
-         * Alternatively, you can split your mapping configurations
-         * into multiple profile classes for a better organization. */
+        CreateMap<WatchedBefore, WatchedBeforeDto>();
+        CreateMap<WatchLater, WatchLaterDto>();
+        CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
+        CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
     }
 }

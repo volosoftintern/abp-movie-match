@@ -24,6 +24,40 @@ namespace MovieMatch.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("MovieMatch.Movies.WatchedBefore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppMoviesWatchedBefore", (string)null);
+                });
+
+            modelBuilder.Entity("MovieMatch.Movies.WatchLater", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppMoviesWatchLater", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
