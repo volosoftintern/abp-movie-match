@@ -1,18 +1,48 @@
 ﻿$(function () {
+    
+
+    
+
 
     $("#searchMovieForm").on('submit', (e) => {
         e.preventDefault();
 
         const movieName = $("#movie-name").val();
+        const $pagination = $('#pagination');
         const movieList = $("#movie-list");
-        if (isNullOrEmpty(movieName)) return;
+
+        const defaultPaginationOptions = {
+            startPages: 1,
+            totalPages:7,
+            onPageClick: function (event, page) {
+                movieMatch.search.search.getMovies({ name: $("#movie-name").val(), currentPage: page }).done((res) => {
+                    renderResults(res.results, movieList);
+                })
+            }
+        }
+
         
-        movieMatch.search.search.getMovies({ name: movieName }).done((res) => {
+        if (isNullOrEmpty(movieName)) return;
+        $pagination.twbsPagination(defaultPaginationOptions);
+        movieMatch.search.search.getMovies({ name: movieName, currentPage: 1 }).done((response) => {
 
-            movieList.empty();
+            $pagination.twbsPagination('changeTotalPages', response.totalPages, 1);
 
-            res.forEach((val, i) => {
-                movieList.append(`
+            renderResults(response.results, movieList);
+            //
+          
+        });
+
+    });
+
+    isNullOrEmpty = (str) => {
+        return str === null || str.match(/^ *$/) !== null;
+    }
+
+    renderResults = (results, movieList) => {
+        movieList.empty();
+        results.forEach((val, i) => {
+            movieList.append(`
                         <li class="list-group-item">
                             <div class="card" style="width:300px;">
                                 <img style="width:300px" class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
@@ -28,12 +58,7 @@
                             </div>
                         </li>
                     `)
-            })
-        });
-
-    });
-
-    isNullOrEmpty = (str) => {
-        return str === null || str.match(/^ *$/) !== null;
+        })
     }
+
 });

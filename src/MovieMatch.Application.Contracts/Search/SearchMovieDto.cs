@@ -9,5 +9,6 @@ namespace MovieMatch.Search
     {
         [Required]
         public string Name { get; set; }
+        public int CurrentPage { get; set; } = 1;
     }
 }

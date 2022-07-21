@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.Movies;
 using MovieMatch.Movies;
+using MovieMatch.Search;
 
 namespace MovieMatch;
 

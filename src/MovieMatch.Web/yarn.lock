@@ -2445,6 +2445,13 @@ toastr@^2.1.4:
   dependencies:
     jquery ">=1.12.0"
 
+twbs-pagination@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/twbs-pagination/-/twbs-pagination-1.4.2.tgz#db3568923404eb04ce55fc7512875106c24ae815"
+  integrity sha512-BchBdZo+1bvuDECl8FWsuMuvBz2l2ZTWKmsks7a+52qi6chv1RxqwBpRQ02m11EJEerY9FpGnstcwFwaQiM2QQ==
+  dependencies:
+    jquery ">=1.7"
+
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"

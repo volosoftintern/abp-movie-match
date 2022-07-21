@@ -1,37 +1,27 @@
-﻿using DM.MovieApi.MovieDb.Movies;
-using Microsoft.Extensions.Options;
+﻿using DM.MovieApi;
+using DM.MovieApi.MovieDb.Movies;
 using MovieMatch.Movies;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.ObjectMapping;
+using Volo.Abp.Application.Dtos;
 
 namespace MovieMatch.Search
 {
     public class SearchService : MovieMatchAppService, ISearchService
     {
-        private readonly MovieApiService _movieApiService;
-
-        public SearchService(MovieApiService movieApiService)
-        {
-            _movieApiService=movieApiService;
+        
+        private readonly IApiMovieRequest _movieApi;
+        public SearchService()
+        {   
+            _movieApi = MovieDbFactory.Create<IApiMovieRequest>().Value;
         }
 
 
-        public async Task<IReadOnlyList<MovieDto>> GetMovies(SearchMovieDto input)
+        public async Task<SearchResponseDto<MovieDto>> GetMovies(SearchMovieDto input)
         {
-            
-            
-            var result = await _movieApiService.SearchMovieAsync(input.Name);
-            
+            var response= await _movieApi.SearchByTitleAsync(input.Name,input.CurrentPage);
 
-            
-            //if (!string.IsNullOrEmpty(result.ErrorMessage)) throw new UserFriendlyException(result.ErrorMessage);
-
-            return ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(result);
+            return new SearchResponseDto<MovieDto>(response.PageNumber, response.TotalResults, response.TotalPages, ObjectMapper.Map<IReadOnlyList<MovieInfo>,IReadOnlyList<MovieDto>>(response.Results));
 
         }
     }

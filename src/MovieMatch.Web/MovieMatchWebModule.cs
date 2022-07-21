@@ -92,6 +92,8 @@ public class MovieMatchWebModule : AbpModule
 
             options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
         });
+
+        
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -113,7 +115,14 @@ public class MovieMatchWebModule : AbpModule
                     bundle.AddFiles("/global-styles.css");
                 }
             );
+
+            options.ScriptBundles.ConfigureAll(bundle =>
+            {
+                bundle.AddFiles("/libs/twbs-pagination/jquery.twbsPagination.js");
+            });
         });
+
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
