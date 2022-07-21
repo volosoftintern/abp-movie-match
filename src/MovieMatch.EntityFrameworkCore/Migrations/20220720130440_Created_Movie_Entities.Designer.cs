@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMatch.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MovieMatch.Migrations
 {
     [DbContext(typeof(MovieMatchDbContext))]
-    partial class MovieMatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220720130440_Created_Movie_Entities")]
+    partial class Created_Movie_Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,6 @@ namespace MovieMatch.Migrations
 
                     b.ToTable("AppMoviesWatchLater", (string)null);
                 });
-
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {

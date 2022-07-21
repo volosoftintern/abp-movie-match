@@ -4,6 +4,24 @@
     "Menu:Home": "Home",
     "Menu:Search": "Search",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "ProfileTab:MoviesWillWatch": "List of movies i will watch soon",
+    "ProfileTab:MoviesWatchedBefore": "List of movies I've watched before",
+    "ProfileTab:MoviesIWillWatch": "Movies to watch later",
+    "ProfileTab:MoviesIWatchedBefore": "Movies watched before",
+    "Actions": "Actions",
+    "Close": "Close",
+    "Delete": "Delete",
+    "Edit": "Edit",
+    "PublishDate": "Publish date",
+    "NewBook": "New book",
+    "Name": "Name",
+    "Type": "Type",
+    "Price": "Price",
+    "CreationTime": "Creation time",
+    "AreYouSure": "Are you sure?",
+    "MovieId": "Movie Id",
+    "UserId": "User Id",
+    "AreYouSureToDelete": "Are you sure you want to delete this item?"
   }
 }
