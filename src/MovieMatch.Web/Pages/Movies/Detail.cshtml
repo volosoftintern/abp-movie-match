@@ -3,18 +3,30 @@
 @{
 }
 
-
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" alt="@Model.MovieDetail.Title">
-  <div class="card-body">
-    <h5 class="card-title">@Model.MovieDetail.Title</h5>
-    <p class="card-text">@Model.MovieDetail.Overview</p>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">@Model.MovieDetail.VoteAverage</li>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
+<div class="card mb-3" style="max-width: 640px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">@Model.MovieDetail.Title</h5>
+        <p class="card-text">@Model.MovieDetail.Overview</p>
+        <p class="card-text">Director: <span class="badge bg-success">@Model.MovieDetail.Director.Name</span></p>
+        <p class="card-text">Stars:
+            @foreach (var item in Model.MovieDetail.Stars)
+            {
+                <span class="badge bg-primary">@item.Name</span>
+            }
+         </p>
+         <p class="card-text">Genres:
+            @foreach (var item in Model.MovieDetail.Genres)
+            {
+                <span class="badge bg-secondary">@item.Name</span>
+            }
+         </p>         
+        <p class="card-text"><i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")</small></p>
+      </div>
+    </div>
   </div>
 </div>

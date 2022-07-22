@@ -13,5 +13,9 @@ namespace MovieMatch.Movies
         public string Overview { get; set; }
         public string PosterPath { get; set; }
         public double VoteAverage { get; set; }
+
+        public MovieMemeberDto Director { get; set; }
+        public IEnumerable<MovieMemeberDto> Stars { get; set; }
+        public IReadOnlyList<MovieGenreDto> Genres { get; set; }
     }
 }
