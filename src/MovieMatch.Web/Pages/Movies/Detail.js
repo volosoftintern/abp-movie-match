@@ -8,7 +8,7 @@
             );
         });
     }
-
+    
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             abp.notify.success(
@@ -17,6 +17,4 @@
             );
         });
     }
-
-
 });

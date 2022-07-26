@@ -9,7 +9,7 @@ using DM.MovieApi;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using MovieMatch.MoviesWatchedBefore;
-using MovieMatch.MoviesWatchLater
+using MovieMatch.MoviesWatchLater;
 using DM.MovieApi.MovieDb.Genres;
 
 
