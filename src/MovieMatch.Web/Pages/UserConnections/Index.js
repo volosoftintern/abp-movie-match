@@ -1,4 +1,4 @@
-﻿const istrue = true;
+﻿istrue = true;
 $(function () {
     
     var l = abp.localization.getResource('MovieMatch');
@@ -21,13 +21,8 @@ $(function () {
                         
                         data: "id",
                         render: function (data) {
-                            if (istrue)
-                                return `<button type="button" id='${data}'  onclick="followUser('${data}')" class="btn btn-success">Follow User</button>`
-                            else {
-                                return `<button type="button" id='${data}'  onclick="followUser('${data}')" class="btn btn-error">UnFollow User</button>`
-
-                            }
-
+                            
+                            return `<button type="button" id='${data}'  onclick="followUser('${data}')" class="btn btn-success">Follow User</button>`
                             
                             }
                         
@@ -50,7 +45,7 @@ $(function () {
              //   ($(asd).attr("isActive", 'false'));
                 $(asd).text("Unfollow User");
                 istrue = !istrue;
-                abp.notify.success('Unfollow', `Followed user `);
+                abp.notify.success(`Followed user `);
 
             }
             else {
@@ -58,7 +53,7 @@ $(function () {
             //    ($(asd).attr("isActive", 'true'));
                 $(asd).text("follow User");
                 istrue = !istrue;
-                abp.notify.success('Unfollow', `Followed user `);
+                abp.notify.success(`Unfollowed user `);
             }
 
 

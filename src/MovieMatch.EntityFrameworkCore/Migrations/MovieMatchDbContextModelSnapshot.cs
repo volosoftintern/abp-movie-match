@@ -24,20 +24,6 @@ namespace MovieMatch.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
-                {
-                    b.Property<Guid>("FollowerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FollowingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FollowerId", "FollowingId");
-
-                    b.HasIndex("FollowingId");
-
-                    b.ToTable("Connections", (string)null);
-
             modelBuilder.Entity("MovieMatch.Movies.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -95,7 +81,21 @@ namespace MovieMatch.Migrations
                     b.HasIndex("UserId", "MovieId");
 
                     b.ToTable("AppMoviesWatchLater", (string)null);
+                });
 
+            modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
+                {
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("FollowerId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("Connections", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2026,14 +2026,6 @@ namespace MovieMatch.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-
-            modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
-                {
-                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-
             modelBuilder.Entity("MovieMatch.Movies.WatchedBefore", b =>
                 {
                     b.HasOne("MovieMatch.Movies.Movie", null)
@@ -2055,14 +2047,27 @@ namespace MovieMatch.Migrations
                         .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Volo.Abp.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.NoAction)
-
                         .IsRequired();
                 });
 

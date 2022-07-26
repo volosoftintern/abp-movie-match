@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class Set_MovieId : Migration
+    public partial class init_project : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -708,6 +708,28 @@ namespace MovieMatch.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => new { x.FollowerId, x.FollowingId });
+                    table.ForeignKey(
+                        name: "FK_Connections_AbpUsers_FollowerId",
+                        column: x => x.FollowerId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Connections_AbpUsers_FollowingId",
+                        column: x => x.FollowingId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppMoviesWatchedBefore",
                 columns: table => new
                 {
@@ -1276,6 +1298,11 @@ namespace MovieMatch.Migrations
                 columns: new[] { "UserId", "MovieId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Connections_FollowingId",
+                table: "Connections",
+                column: "FollowingId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
                 column: "ClientId");
@@ -1372,6 +1399,9 @@ namespace MovieMatch.Migrations
                 name: "AppMoviesWatchLater");
 
             migrationBuilder.DropTable(
+                name: "Connections");
+
+            migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceClaims");
 
             migrationBuilder.DropTable(
@@ -1441,10 +1471,10 @@ namespace MovieMatch.Migrations
                 name: "AbpRoles");
 
             migrationBuilder.DropTable(
-                name: "AbpUsers");
+                name: "AppMovies");
 
             migrationBuilder.DropTable(
-                name: "AppMovies");
+                name: "AbpUsers");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResources");
