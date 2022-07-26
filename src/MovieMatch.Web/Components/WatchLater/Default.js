@@ -4,39 +4,39 @@
         abp.libs.datatables.normalizeConfiguration({
             serverSide: true,
             paging: true,
-            order: [[1, "asc"]],
+            order: [[0, "asc"]],
             searching: false,
             scrollX: true,
-            ajax: abp.libs.datatables.createAjax(movieMatch.moviesWatchLater.watchLater.getList),
+            ajax: abp.libs.datatables.createAjax(movieMatch.movies.movie.getWatchLaterList),
 
             columnDefs:
                 [
                     {
-                        title: l('MovieId'),
-                        data: "movieId"
+                        title: "Title",
+                        data: "title"
                     },
                     {
-                        title: l('UserId'),
-                        data: "userId",
+                        title: "Overview",
+                        data: "overview",
                     },
                     {
                         title: "Delete movie",
                         data:"id",
                         render: function (data) {
-                            return `<button class='btn far fa-trash-alt' onclick='removeFromList("${data}")'></button>`
+                            return `<button class='btn far fa-trash-alt' onclick='removeFromWatchLaterList("${data}")'></button>`
                         }
                     }
                 ]
         })
     );
 
-    removeFromList = (id) => {
+    removeFromWatchLaterList = (id) => {
 
-        abp.message.confirm('Are you sure to delete the "admin" role?')
+        abp.message.confirm('Are you sure?')
             .then((confirmed)=> {
                 if (confirmed) {
-                    movieMatch.moviesWatchLater.watchLater
-                    .delete(id)
+                    movieMatch.movies.movie
+                        .deleteMoviesWatchLater(id)
                     .then(()=> {
                         abp.notify.info("Successfully deleted!");
                         dataTable.ajax.reload();

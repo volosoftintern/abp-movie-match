@@ -12,6 +12,11 @@ namespace MovieMatch.Movies
         public int MovieId { get; set; }
         public Guid UserId { get; set; }
 
+        public WatchLater(Guid userId, int movieId)
+        {
+            UserId = userId;
+            MovieId = movieId;
+        }
         public override object[] GetKeys()
         {
             return new object[] { MovieId, UserId };

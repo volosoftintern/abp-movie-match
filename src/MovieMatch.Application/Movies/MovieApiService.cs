@@ -25,7 +25,7 @@ namespace MovieMatch.Movies
             return response.Results;
         }
 
-        public async Task<Movie> GetMovieAsync(int id)
+        public async Task<DM.MovieApi.MovieDb.Movies.Movie> GetMovieAsync(int id)
         {
             var response= await _movieApi.FindByIdAsync(id);
             return response.Item;

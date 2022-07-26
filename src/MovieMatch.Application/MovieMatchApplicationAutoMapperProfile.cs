@@ -4,7 +4,6 @@ using MovieMatch.MoviesWatchedBefore;
 using MovieMatch.MoviesWatchLater;
 using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.Movies;
-using MovieMatch.Movies;
 using MovieMatch.Search;
 
 namespace MovieMatch;
@@ -18,7 +17,10 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
         CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
         CreateMap<MovieInfo, MovieDto>();
-        CreateMap<Movie, MovieDetailDto>();
-
+        CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
+        CreateMap<Movies.Movie, MovieDto>();
+        CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
+        CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
+        
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class Created_Movie_Entities : Migration
+    public partial class Set_MovieId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -277,29 +277,17 @@ namespace MovieMatch.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppMoviesWatchedBefore",
+                name: "AppMovies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", maxLength: 128, nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MovieId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PosterPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppMoviesWatchedBefore", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppMoviesWatchLater",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", maxLength: 128, nullable: false),
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppMoviesWatchLater", x => x.Id);
+                    table.PrimaryKey("PK_AppMovies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -715,6 +703,56 @@ namespace MovieMatch.Migrations
                         name: "FK_AbpUserTokens_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppMoviesWatchedBefore",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMoviesWatchedBefore", x => new { x.UserId, x.MovieId });
+                    table.ForeignKey(
+                        name: "FK_AppMoviesWatchedBefore_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppMoviesWatchedBefore_AppMovies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "AppMovies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppMoviesWatchLater",
+                columns: table => new
+                {
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMoviesWatchLater", x => new { x.UserId, x.MovieId });
+                    table.ForeignKey(
+                        name: "FK_AppMoviesWatchLater_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppMoviesWatchLater_AppMovies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "AppMovies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1218,6 +1256,26 @@ namespace MovieMatch.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppMoviesWatchedBefore_MovieId",
+                table: "AppMoviesWatchedBefore",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMoviesWatchedBefore_UserId_MovieId",
+                table: "AppMoviesWatchedBefore",
+                columns: new[] { "UserId", "MovieId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMoviesWatchLater_MovieId",
+                table: "AppMoviesWatchLater",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMoviesWatchLater_UserId_MovieId",
+                table: "AppMoviesWatchLater",
+                columns: new[] { "UserId", "MovieId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
                 column: "ClientId");
@@ -1384,6 +1442,9 @@ namespace MovieMatch.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppMovies");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResources");

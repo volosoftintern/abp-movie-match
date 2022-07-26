@@ -22,6 +22,7 @@
     "AreYouSure": "Are you sure?",
     "MovieId": "Movie Id",
     "UserId": "User Id",
-    "AreYouSureToDelete": "Are you sure you want to delete this item?"
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "MovieMatch:00001": "There is already added a movie with the same title: {title}"
   }
 }
