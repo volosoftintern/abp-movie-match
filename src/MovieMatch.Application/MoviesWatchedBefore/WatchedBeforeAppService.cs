@@ -35,7 +35,7 @@ namespace MovieMatch.MoviesWatchedBefore
             _movieRepository = movieRepository;
             _currentUser = currentUser;
         }
-
+        [Authorize]
         public override async Task<WatchedBeforeDto> CreateAsync(CreateUpdateWatchedBeforeDto input)
         {
             var exist = await _movieRepository.AnyAsync(input.MovieId);

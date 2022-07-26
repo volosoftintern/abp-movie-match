@@ -11,6 +11,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using Volo.Abp.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MovieMatch.MoviesWatchLater
 {
@@ -38,6 +39,7 @@ namespace MovieMatch.MoviesWatchLater
             _movieRepository = movieRepository;
             _currentUser = currentUser;
         }
+        [Authorize]
         public override async Task<WatchLaterDto> CreateAsync(CreateUpdateWatchLaterDto input)
         {
             var exist = await _movieRepository.AnyAsync(input.MovieId);
