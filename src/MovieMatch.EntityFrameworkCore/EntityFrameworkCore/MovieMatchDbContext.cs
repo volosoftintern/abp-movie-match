@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieMatch.UserConnections;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -23,6 +25,8 @@ public class MovieMatchDbContext :
     IIdentityDbContext,
     ITenantManagementDbContext
 {
+    
+    public DbSet<UserConnection> Connections { get; set; }
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     #region Entities from the modules
@@ -52,14 +56,14 @@ public class MovieMatchDbContext :
 
     #endregion
 
-    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options)
-        : base(options)
+    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options): base(options)
     {
-
+        
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        
         base.OnModelCreating(builder);
 
         /* Include modules to your migration db context */
@@ -74,7 +78,26 @@ public class MovieMatchDbContext :
         builder.ConfigureTenantManagement();
 
         /* Configure your own tables/entities inside here */
+        builder.Entity<UserConnection>(
+            b =>
+            {
+                b.ToTable("Connections");
+                b.ConfigureByConvention();
+                b.Property(x => x.FollowerId).IsRequired();
+                b.Property(x => x.FollowingId).IsRequired();
+                b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowingId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+          //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
+
+
+
+
+
+            });
+                
+             
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(MovieMatchConsts.DbTablePrefix + "YourEntities", MovieMatchConsts.DbSchema);

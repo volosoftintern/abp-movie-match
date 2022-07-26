@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Account;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MovieMatch.EntityFrameworkCore;
+using MovieMatch.UserConnections;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -26,6 +29,16 @@ public class MovieMatchApplicationModule : AbpModule
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<MovieMatchApplicationModule>();
+          //  context.Services.AddAbpDbContext<MovieMatchDbContext>();
+           //context.Services.AddAbpDbContext<MovieMatchDbContext>(options =>
+           // {
+           //     options.AddDefaultRepositories(includeAllEntities: true);
+           // });
+            //   context.Services.AddSingleton<IUserConnectionRepository>();
+            // context.Services.AddSingleton<IUserConnectionAppService>();
+            // context.Services.AddSingleton<UserConnectionAppService>();
+
+            //  context.Services.AddSingleton<IUserConnectionRepository>();
         });
     }
 }
