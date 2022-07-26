@@ -1,0 +1,25 @@
+﻿@page
+@model MovieMatch.Web.Pages.Following.IndexModel
+@using Microsoft.Extensions.Localization
+@using MovieMatch.Localization
+@inject IStringLocalizer<MovieMatchResource> L
+
+@section scripts
+{
+    <abp-script src="/Pages/Following/Index.js" />
+}
+
+@section styles{
+    <abp-style src="/Pages/Following/Index.css" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Following"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="FollowingTable">
+
+        </abp-table>
+    </abp-card-body>
+</abp-card>

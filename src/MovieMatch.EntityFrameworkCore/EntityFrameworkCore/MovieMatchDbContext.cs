@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using MovieMatch.UserConnections;
 using MovieMatch.Movies;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -25,6 +26,8 @@ public class MovieMatchDbContext :
     IIdentityDbContext,
     ITenantManagementDbContext
 {
+    
+    public DbSet<UserConnection> Connections { get; set; }
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     #region Entities from the modules
@@ -56,14 +59,14 @@ public class MovieMatchDbContext :
 
     #endregion
 
-    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options)
-        : base(options)
+    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options): base(options)
     {
-
+        
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        
         base.OnModelCreating(builder);
 
         /* Include modules to your migration db context */
@@ -78,7 +81,26 @@ public class MovieMatchDbContext :
         builder.ConfigureTenantManagement();
 
         /* Configure your own tables/entities inside here */
+        builder.Entity<UserConnection>(
+            b =>
+            {
+                b.ToTable("Connections");
+                b.ConfigureByConvention();
+                b.Property(x => x.FollowerId).IsRequired();
+                b.Property(x => x.FollowingId).IsRequired();
+                b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowingId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+          //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
+
+
+
+
+
+            });
+                
+             
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(MovieMatchConsts.DbTablePrefix + "YourEntities", MovieMatchConsts.DbSchema);

@@ -27,9 +27,9 @@ public class MovieMatchMenuContributor : IMenuContributor
 
     private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
-        var administration = context.Menu.GetAdministration();
+        var administration =context.Menu.GetAdministration();
         var l = context.GetLocalizer<MovieMatchResource>();
-
+       
         context.Menu.Items.Insert(
             0,
             new ApplicationMenuItem(
@@ -40,6 +40,25 @@ public class MovieMatchMenuContributor : IMenuContributor
                 order: 0
             )
         );
+
+        context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "MovieMatch",
+        l["Menu:MovieMatch"],
+        icon: "fa fa-userconnection"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "MovieMatch.UserConnections",
+            l["Menu:UserConnections"],
+            url: "/UserConnections"
+        )).AddItem(new ApplicationMenuItem(
+            "MovieMatch.Followers",
+            l["Followers"], url: "/Followers"
+            )
+    ).AddItem(new ApplicationMenuItem(
+                "MovieMatch.Following", l["Following"], url: "/Following"))
+);
+
         context.Menu.Items.Insert(
             1,
             new ApplicationMenuItem(

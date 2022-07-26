@@ -6,6 +6,10 @@ using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.Movies;
 using MovieMatch.Search;
 using DM.MovieApi.MovieDb.Genres;
+using MovieMatch.UserConnections;
+using System;
+using Volo.Abp.Identity;
+
 
 namespace MovieMatch;
 
@@ -13,6 +17,11 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
 {
     public MovieMatchApplicationAutoMapperProfile()
     {
+        CreateMap<UserConnection, UserConnectionDto>();
+        CreateMap<UserConnection,IdentityUserDto >();
+        CreateMap<IdentityUser,UserConnectionDto >();
+        CreateMap<CreateUpdateUserConnectionDto, UserConnection>();
+        //CreateMap<Guid,FollowerDto>();
         CreateMap<WatchedBefore, WatchedBeforeDto>();
         CreateMap<WatchLater, WatchLaterDto>();
         CreateMap<CreateUpdateWatchLaterDto, WatchLater>();

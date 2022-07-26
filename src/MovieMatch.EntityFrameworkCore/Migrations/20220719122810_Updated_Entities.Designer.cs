@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMatch.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MovieMatch.Migrations
 {
     [DbContext(typeof(MovieMatchDbContext))]
-    partial class MovieMatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220719122810_Updated_Entities")]
+    partial class Updated_Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,65 +39,6 @@ namespace MovieMatch.Migrations
                     b.HasIndex("FollowingId");
 
                     b.ToTable("Connections", (string)null);
-
-            modelBuilder.Entity("MovieMatch.Movies.Movie", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Overview")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PosterPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppMovies", (string)null);
-                });
-
-            modelBuilder.Entity("MovieMatch.Movies.WatchedBefore", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "MovieId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("UserId", "MovieId");
-
-                    b.ToTable("AppMoviesWatchedBefore", (string)null);
-                });
-
-            modelBuilder.Entity("MovieMatch.Movies.WatchLater", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "MovieId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("UserId", "MovieId");
-
-                    b.ToTable("AppMoviesWatchLater", (string)null);
-
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2026,43 +1969,18 @@ namespace MovieMatch.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-
             modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
                 {
                     b.HasOne("Volo.Abp.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.NoAction)
-
-            modelBuilder.Entity("MovieMatch.Movies.WatchedBefore", b =>
-                {
-                    b.HasOne("MovieMatch.Movies.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MovieMatch.Movies.WatchLater", b =>
-                {
-                    b.HasOne("MovieMatch.Movies.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-
                         .IsRequired();
 
                     b.HasOne("Volo.Abp.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.NoAction)
-
                         .IsRequired();
                 });
 

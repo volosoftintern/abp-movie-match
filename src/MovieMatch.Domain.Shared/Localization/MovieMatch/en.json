@@ -5,6 +5,8 @@
     "Menu:Search": "Search",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Menu:MovieMatch": "Movie Match",
+    "Menu:UserConnections": "User Connections",
     "ProfileTab:MoviesWillWatch": "List of movies i will watch soon",
     "ProfileTab:MoviesWatchedBefore": "List of movies I've watched before",
     "ProfileTab:MoviesIWillWatch": "Movies to watch later",
@@ -14,15 +16,23 @@
     "Delete": "Delete",
     "Edit": "Edit",
     "PublishDate": "Publish date",
+    "NewConnection": "New connection",
+    "Username": "Username",
     "NewBook": "New book",
     "Name": "Name",
     "Type": "Type",
     "Price": "Price",
     "CreationTime": "Creation time",
     "AreYouSure": "Are you sure?",
+    "Email": "Email",
+    "PhoneNumber": "Phone Number",
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Followers": "Followers",
+    "Following": "Following"
     "MovieId": "Movie Id",
     "UserId": "User Id",
     "AreYouSureToDelete": "Are you sure you want to delete this item?",
     "MovieMatch:00001": "There is already added a movie with the same title: {title}"
   }
+
 }
