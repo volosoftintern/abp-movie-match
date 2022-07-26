@@ -43,14 +43,14 @@
         movieList.empty();
         results.forEach((val, i) => {
             movieList.append(`
-                            <div class="card my-3" style="width:300px;">
-                                <img style="width:300px;display:${isNullOrEmpty(val.posterPath)?'none':'block'}"  class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
+                            <div class="card my-3 movie-card-sm" >
+                                <img style="display:${isNullOrEmpty(val.posterPath)?'none':'block'}"  class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
                                 <div class="card-body">
                                     <h5 class="card-title"><a href="Movies/${val.id}">${val.title}</a></h5>
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
-                                        <button data-id="${val.id}" class="btn btn-primary" onclick="addWatchLater(${val.id},'${abp.currentUser.id}')">Watch Later</a>
-                                        <button data-id="${val.id}" class="btn btn-primary" onclick="addWatchedBefore(${val.id},'${abp.currentUser.id}')">Watched Before</a>
+                                        <button class="btn btn-sm btn-primary" onclick="addWatchLater(${val.id},'${abp.currentUser.id}')">Watch Later</a>
+                                        <button class="btn btn-sm btn-primary" onclick="addWatchedBefore(${val.id},'${abp.currentUser.id}')">Watched Before</a>
                                     </div>
 
                                 </div>

@@ -9,7 +9,9 @@ using DM.MovieApi;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using MovieMatch.MoviesWatchedBefore;
-using MovieMatch.MoviesWatchLater;
+using MovieMatch.MoviesWatchLater
+using DM.MovieApi.MovieDb.Genres;
+
 
 namespace MovieMatch.Movies
 {
@@ -39,7 +41,19 @@ namespace MovieMatch.Movies
         public async Task<MovieDetailDto> GetAsync(int id)
         {
             var response = await _movieApi.FindByIdAsync(id);
-            return ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
+            
+            var credits= await _movieApi.GetCreditsAsync(id);
+            var director = credits.Item.CrewMembers.FirstOrDefault((c) => c.Job == "Director");
+            var stars = credits.Item.CastMembers.Take(3);//stars
+            
+            var movieDetail=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
+            
+            movieDetail.Director = ObjectMapper.Map<MovieCrewMember,MovieMemeberDto>(director);
+            movieDetail.Stars= ObjectMapper.Map<IEnumerable<MovieCastMember>, IEnumerable<MovieMemeberDto>>(stars);
+            //movieDetail.Genres= ObjectMapper.Map<IReadOnlyList<Genre>, IReadOnlyList<MovieGenreDto>>(response.Item.Genres);
+
+
+            return movieDetail;
         }
 
         public async Task<MovieDto> CreateAsync(CreateMovieDto input)

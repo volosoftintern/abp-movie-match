@@ -5,6 +5,7 @@ using MovieMatch.MoviesWatchLater;
 using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.Movies;
 using MovieMatch.Search;
+using DM.MovieApi.MovieDb.Genres;
 
 namespace MovieMatch;
 
@@ -21,6 +22,8 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<Movies.Movie, MovieDto>();
         CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
         CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
-        
+        CreateMap<Genre, MovieGenreDto>();
+        CreateMap<MovieCrewMember, MovieMemeberDto>();
+        CreateMap<MovieCastMember, MovieMemeberDto>();
     }
 }
