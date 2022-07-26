@@ -41,6 +41,7 @@ public class MovieMatchDbContext :
      */
     public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
     public DbSet<WatchLater> MoviesWatchLater { get; set; }
+    public DbSet<Movie> Movies { get; set; }
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
@@ -84,21 +85,39 @@ public class MovieMatchDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+        builder.Entity<Movie>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Movies" + MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.HasKey(x => x.Id);
+            
+
+        });
         builder.Entity<WatchedBefore>(b =>
         {
             b.ToTable(MovieMatchConsts.DbTablePrefix + "MoviesWatchedBefore",
                 MovieMatchConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Id).IsRequired().HasMaxLength(128);
-            b.HasKey(y => y.Id);
+            b.Property(x => x.MovieId).IsRequired();
+            b.Property(x => x.UserId).IsRequired();
+            b.HasKey(x => new {x.UserId,x.MovieId});
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.UserId).IsRequired();
+            b.HasOne<Movie>().WithMany().HasForeignKey(c => c.MovieId).IsRequired();
+            b.HasIndex(x => new { x.UserId, x.MovieId });
         });
         builder.Entity<WatchLater>(b =>
         {
             b.ToTable(MovieMatchConsts.DbTablePrefix + "MoviesWatchLater",
                 MovieMatchConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Id).IsRequired().HasMaxLength(128);
-            b.HasKey(y => y.Id);
+            b.Property(x => x.MovieId).IsRequired();
+            b.Property(x => x.UserId).IsRequired();
+            b.HasKey(x => new { x.UserId, x.MovieId });
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(y => y.UserId).IsRequired();
+            b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
+            b.HasIndex(x => new {x.UserId,x.MovieId});
         });
     }
 }

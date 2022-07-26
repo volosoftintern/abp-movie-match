@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MovieMatch.MoviesWatchedBefore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

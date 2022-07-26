@@ -18,10 +18,12 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
         CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
         CreateMap<MovieInfo, MovieDto>();
+        CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
+        CreateMap<Movies.Movie, MovieDto>();
+        CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
+        CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
         CreateMap<Genre, MovieGenreDto>();
         CreateMap<MovieCrewMember, MovieMemeberDto>();
         CreateMap<MovieCastMember, MovieMemeberDto>();
-        CreateMap<Movie, MovieDetailDto>();
-
     }
 }
