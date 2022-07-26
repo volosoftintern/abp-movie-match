@@ -1,7 +1,15 @@
-﻿using AutoMapper;
+using AutoMapper;
+using MovieMatch.Movies;
+using MovieMatch.MoviesWatchedBefore;
+using MovieMatch.MoviesWatchLater;
+using DM.MovieApi.ApiResponse;
+using DM.MovieApi.MovieDb.Movies;
+using MovieMatch.Search;
+using DM.MovieApi.MovieDb.Genres;
 using MovieMatch.UserConnections;
 using System;
 using Volo.Abp.Identity;
+
 
 namespace MovieMatch;
 
@@ -14,9 +22,17 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<IdentityUser,UserConnectionDto >();
         CreateMap<CreateUpdateUserConnectionDto, UserConnection>();
         //CreateMap<Guid,FollowerDto>();
-       
-        /* You can configure your AutoMapper mapping configuration here.
-         * Alternatively, you can split your mapping configurations
-         * into multiple profile classes for a better organization. */
+        CreateMap<WatchedBefore, WatchedBeforeDto>();
+        CreateMap<WatchLater, WatchLaterDto>();
+        CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
+        CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
+        CreateMap<MovieInfo, MovieDto>();
+        CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
+        CreateMap<Movies.Movie, MovieDto>();
+        CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
+        CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
+        CreateMap<Genre, MovieGenreDto>();
+        CreateMap<MovieCrewMember, MovieMemeberDto>();
+        CreateMap<MovieCastMember, MovieMemeberDto>();
     }
 }

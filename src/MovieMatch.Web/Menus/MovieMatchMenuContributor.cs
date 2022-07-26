@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using MovieMatch.Localization;
 using MovieMatch.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.TenantManagement.Web.Navigation;
@@ -10,6 +14,7 @@ namespace MovieMatch.Web.Menus;
 
 public class MovieMatchMenuContributor : IMenuContributor
 {
+
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
         if (context.Menu.Name == StandardMenus.Main)
@@ -18,7 +23,9 @@ public class MovieMatchMenuContributor : IMenuContributor
         }
     }
 
-    private async  Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+   
+
+    private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var administration =context.Menu.GetAdministration();
         var l = context.GetLocalizer<MovieMatchResource>();
@@ -33,6 +40,7 @@ public class MovieMatchMenuContributor : IMenuContributor
                 order: 0
             )
         );
+
         context.Menu.AddItem(
     new ApplicationMenuItem(
         "MovieMatch",
@@ -51,7 +59,16 @@ public class MovieMatchMenuContributor : IMenuContributor
                 "MovieMatch.Following", l["Following"], url: "/Following"))
 );
 
-
+        context.Menu.Items.Insert(
+            1,
+            new ApplicationMenuItem(
+                MovieMatchMenus.Search,
+                l["Menu:Search"],
+                "/Search",
+                icon: "fa fa-search",
+                order: 1
+            )
+        );
 
         if (MultiTenancyConsts.IsEnabled)
         {

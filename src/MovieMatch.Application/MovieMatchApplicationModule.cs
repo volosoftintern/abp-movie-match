@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+
+using Microsoft.Extensions.DependencyInjection;
 using MovieMatch.EntityFrameworkCore;
 using MovieMatch.UserConnections;
+using DM.MovieApi;
+using MovieMatch.Movies;
+
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
@@ -40,5 +44,7 @@ public class MovieMatchApplicationModule : AbpModule
 
             //  context.Services.AddSingleton<IUserConnectionRepository>();
         });
+
+        MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
     }
 }

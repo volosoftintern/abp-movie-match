@@ -1,0 +1,46 @@
+﻿@page
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@model MovieMatch.Web.Pages.Movies.DetailModel
+
+@section styles{
+    <abp-style src="/Pages/Movies/Detail.css"/>
+}
+@section scripts{
+ 
+    <abp-script src="/Pages/Movies/Detail.js" />
+}
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-4 d-flex flex-column justify-content-between">
+      <img src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
+      <div class="d-flex justify-content-around actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchLater(@Model.MovieId,'@CurrentUser.Id')">Watch Later</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchedBefore(@Model.MovieId,'@CurrentUser.Id')">Watched Before</button>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body position-relative">
+        <h5 class="card-title">@Model.MovieDetail.Title</h5>
+        <p class="card-text">@Model.MovieDetail.Overview</p>
+        <p class="card-text">Director: <span class="badge bg-success">@Model.MovieDetail.Director.Name</span></p>
+        <p class="card-text">Stars:
+            @foreach (var item in Model.MovieDetail.Stars)
+            {
+                <span class="badge bg-primary">@item.Name</span>
+            }
+         </p>
+         <p class="card-text">Genres:
+            @foreach (var item in Model.MovieDetail.Genres)
+            {
+                <span class="badge bg-secondary">@item.Name</span>
+            }
+         </p>         
+        <p class="card-text position-absolute mb-3">
+            <i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")</small>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

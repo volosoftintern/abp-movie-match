@@ -1,0 +1,19 @@
+﻿.card {
+    width: 720px;
+}
+
+.row{
+    min-height:480px;
+}
+
+.card-body {
+    height: 100%;
+}
+
+.card-text {
+    bottom: 0;
+}
+
+.actions {
+    margin-bottom:12px;
+}
