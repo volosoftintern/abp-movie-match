@@ -14,7 +14,7 @@
 <div class="card mb-3">
   <div class="row g-0">
     <div class="col-md-4 d-flex flex-column justify-content-between">
-      <img src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
+      <img style="display:{@string.IsNullOrEmpty(Model.MovieDetail.PosterPath)?'none':'block'}" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
       <div class="d-flex justify-content-around actions">
           <button type="button" class="btn btn-primary btn-sm" onclick="addWatchLater(@Model.MovieId,'@CurrentUser.Id')">Watch Later</button>
           <button type="button" class="btn btn-primary btn-sm" onclick="addWatchedBefore(@Model.MovieId,'@CurrentUser.Id')">Watched Before</button>
