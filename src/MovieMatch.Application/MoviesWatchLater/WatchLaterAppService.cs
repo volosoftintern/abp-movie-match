@@ -68,38 +68,10 @@ namespace MovieMatch.MoviesWatchLater
             }
             return null;
         }
-        public override async Task<PagedResultDto<WatchLaterDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<int> GetCountAsync(Guid id)
         {
-            var queryable = await Repository.GetQueryableAsync();
-
-            var query = from watchLater in queryable
-                        select new { watchLater };
-
-            query = query
-               .Skip(input.SkipCount)
-               .Take(input.MaxResultCount);
-
-            var queryResult = await AsyncExecuter.ToListAsync(query);
-
-            //Convert the query result to a list of WatchLaterDto objects
-            var watchLaterDtos = queryResult.Select(x =>
-            {
-                var watchLaterDto = ObjectMapper.Map<WatchLater, WatchLaterDto>(x.watchLater);
-                watchLaterDto.UserId = x.watchLater.UserId;
-                watchLaterDto.MovieId = x.watchLater.MovieId;
-                watchLaterDto.Id=x.watchLater.Id;
-
-                return watchLaterDto;
-            }).Where(x=>x.UserId==_currentUser.Id).ToList();
-
-            //Get the total count with another query
-            var totalCount = await Repository.GetCountAsync();
-
-            return new PagedResultDto<WatchLaterDto>(
-             totalCount,
-             watchLaterDtos
-         );
-
+            var movies=await _watchLaterRepository.GetListAsync(x => x.UserId == id);
+            return movies.Count;
         }
 
 

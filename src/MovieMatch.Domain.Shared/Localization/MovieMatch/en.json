@@ -9,8 +9,8 @@
     "Menu:UserConnections": "User Connections",
     "ProfileTab:MoviesWillWatch": "List of movies i will watch soon",
     "ProfileTab:MoviesWatchedBefore": "List of movies I've watched before",
-    "ProfileTab:MoviesIWillWatch": "Movies to watch later",
-    "ProfileTab:MoviesIWatchedBefore": "Movies watched before",
+    "ProfileTab:MoviesIWillWatch": "Movies to watch later ({0})",
+    "ProfileTab:MoviesIWatchedBefore": "Movies watched before ({0})",
     "Actions": "Actions",
     "Close": "Close",
     "Delete": "Delete",
@@ -31,7 +31,6 @@
     "Following": "Following",
     "MovieId": "Movie Id",
     "UserId": "User Id",
-    "AreYouSureToDelete": "Are you sure you want to delete this item?",
     "MovieMatch:00001": "There is already added a movie with the same title: {title}"
   }
 

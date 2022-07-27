@@ -89,9 +89,7 @@ namespace MovieMatch.Movies
             var totalCount = moviesWatchedBefore.Count();
 
 
-            moviesWatchedBefore = moviesWatchedBefore
-               .Skip(input.SkipCount)
-               .Take(input.MaxResultCount).ToList();
+          
 
             //var queryResult = await AsyncExecuter.ToListAsync(moviesWatchedBefore);
 
@@ -104,6 +102,10 @@ namespace MovieMatch.Movies
                 }
 
             }
+
+            moviesWatchedBefore = moviesWatchedBefore
+             .Skip(input.SkipCount)
+             .Take(input.MaxResultCount).ToList();
             //Convert the query result to a list of movieDto objects
             var movieDtos = ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
 
@@ -124,10 +126,7 @@ namespace MovieMatch.Movies
             var totalCount = moviesWatchLater.Count();
 
 
-            moviesWatchLater = moviesWatchLater
-               .Skip(input.SkipCount)
-               .Take(input.MaxResultCount).ToList();
-
+          
            // var queryResult = await AsyncExecuter.ToListAsync(moviesWatchLater);
 
             foreach (var item in moviesWatchLater)
@@ -139,6 +138,12 @@ namespace MovieMatch.Movies
                 }
                 
             }
+
+            moviesWatchLater = moviesWatchLater
+             .Skip(input.SkipCount)
+             .Take(input.MaxResultCount).
+               ToList();
+
             //Convert the query result to a list of movieDto objects
             var movieDtos =ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
             

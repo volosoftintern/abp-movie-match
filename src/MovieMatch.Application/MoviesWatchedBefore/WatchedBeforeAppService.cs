@@ -64,5 +64,11 @@ namespace MovieMatch.MoviesWatchedBefore
             }
             return null;
         }
+
+        public async Task<int> GetCountAsync(Guid id)
+        {
+            var movies=await _watchedBeforeRepository.GetListAsync(x=>x.UserId==id);
+            return movies.Count;
+        }
     }
 }
