@@ -4,7 +4,7 @@
         abp.libs.datatables.normalizeConfiguration({
             serverSide: true,
             paging: true,
-            order: [[0, "asc"]],
+            order: [[1, "asc"]],
             searching: false,
             scrollX: true,
             ajax: abp.libs.datatables.createAjax(movieMatch.movies.movie.getWatchedBeforeList),

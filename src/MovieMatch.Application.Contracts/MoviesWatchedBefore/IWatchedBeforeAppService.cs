@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -13,6 +14,6 @@ namespace MovieMatch.MoviesWatchedBefore
             PagedAndSortedResultRequestDto, //Used for paging/sorting
             CreateUpdateWatchedBeforeDto> //Used to create/update a WatchedBefore
     {
-
+        int GetCount(Guid id);
     }
 }
