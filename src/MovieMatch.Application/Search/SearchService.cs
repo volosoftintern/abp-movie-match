@@ -24,5 +24,12 @@ namespace MovieMatch.Search
             return new SearchResponseDto<MovieDto>(response.PageNumber, response.TotalResults, response.TotalPages, ObjectMapper.Map<IReadOnlyList<MovieInfo>,IReadOnlyList<MovieDto>>(response.Results));
 
         }
+
+        public async Task<SearchResponseDto<MovieDto>> GetPopularMovies(PopularMovieDto input)
+        {
+            var response=await _movieApi.GetPopularAsync(input.CurrentPage);
+
+            return new SearchResponseDto<MovieDto>(response.PageNumber, response.TotalResults, response.TotalPages, ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results));
+        }
     }
 }
