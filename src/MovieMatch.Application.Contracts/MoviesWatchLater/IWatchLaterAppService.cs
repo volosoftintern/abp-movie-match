@@ -14,6 +14,6 @@ namespace MovieMatch.MoviesWatchLater
             PagedAndSortedResultRequestDto, //Used for paging/sorting
             CreateUpdateWatchLaterDto> //Used to create/update a WatchLater
     {
-        int GetCount(Guid id);
+        Task<int> GetCountAsync(Guid id);
     }
 }

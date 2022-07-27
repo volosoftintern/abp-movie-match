@@ -14,6 +14,6 @@ namespace MovieMatch.MoviesWatchedBefore
             PagedAndSortedResultRequestDto, //Used for paging/sorting
             CreateUpdateWatchedBeforeDto> //Used to create/update a WatchedBefore
     {
-        int GetCount(Guid id);
+        Task<int> GetCountAsync(Guid id);
     }
 }

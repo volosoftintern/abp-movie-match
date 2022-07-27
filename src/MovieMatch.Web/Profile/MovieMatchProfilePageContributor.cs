@@ -21,14 +21,14 @@ public class MovieMatchProfilePageContributor : IProfileManagementPageContributo
         return Task.FromResult(true);
     }
 
-    public Task ConfigureAsync(ProfileManagementPageCreationContext context)
+    public async Task ConfigureAsync(ProfileManagementPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MovieMatchResource>>();
         var watchedBeforeService=context.ServiceProvider.GetRequiredService<IWatchedBeforeAppService>();
         var watchLaterService=context.ServiceProvider.GetRequiredService<IWatchLaterAppService>();
         var currentUser=context.ServiceProvider.GetRequiredService<ICurrentUser>();
-        var watchedBeforeCount = watchedBeforeService.GetCount((Guid)currentUser.Id);
-        var watchLaterCount = watchLaterService.GetCount((Guid)currentUser.Id);
+        var watchedBeforeCount = await watchedBeforeService.GetCountAsync((Guid)currentUser.Id);
+        var watchLaterCount = await watchLaterService.GetCountAsync((Guid)currentUser.Id);
         context.Groups.Add(
           new ProfileManagementPageGroup(
               "Volo.Abp.Account.WatchLater",
@@ -44,7 +44,7 @@ public class MovieMatchProfilePageContributor : IProfileManagementPageContributo
         )
       );
 
-        return Task.CompletedTask;
+        //return Task.CompletedTask;
     }
 
 
