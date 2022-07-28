@@ -155,17 +155,19 @@ namespace MovieMatch.Movies
 
         }
 
-        public async Task<PersonDto> GetDirector(int directorId)
+        public async Task<DirectorDto> GetDirector(int directorId)
         {
             var response= await _peopleApi.FindByIdAsync(directorId);
             
-            return ObjectMapper.Map<Person, PersonDto>(response.Item);
-            
+            var director=ObjectMapper.Map<Person, PersonDto>(response.Item);
+            var movies = new List<MovieDto>();
+
+
             //get director movies
             //paramBuilder.WithCrew(directorId);
-            //_discoverApi.DiscoverMovies(paraBuilder);
+            //_discoverApi.DiscoverMovies(paramBuilder);
 
-
+            return new DirectorDto(director,movies);
         }
 
 

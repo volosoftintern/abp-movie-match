@@ -9,7 +9,7 @@ namespace MovieMatch.Web.Pages.Movies
     {
         [BindProperty(SupportsGet = true)]
         public int DirectorId { get; set; }
-        public PersonDto DirectorDetail { get; set; }
+        public DirectorDto DirectorDetail { get; set; }
 
         private IMovieAppService _movieAppService;
 

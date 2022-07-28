@@ -13,6 +13,6 @@ namespace MovieMatch.Movies
         Task<MovieDto> CreateAsync(CreateMovieDto movie);
         Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(PagedAndSortedResultRequestDto input);
         Task<PagedResultDto<MovieDto>> GetWatchLaterListAsync(PagedAndSortedResultRequestDto input);
-        Task<PersonDto> GetDirector(int directorId);
+        Task<DirectorDto> GetDirector(int directorId);
     }
 }
