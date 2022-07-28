@@ -28,7 +28,7 @@
       <div class="card-body position-relative">
         <h5 class="card-title">@Model.MovieDetail.Title</h5>
         <p class="card-text">@Model.MovieDetail.Overview</p>
-        <p class="card-text">Director: <span class="badge bg-success">@Model.MovieDetail.Director.Name</span></p>
+        <p class="card-text">Director: <a href="/Movies/Director/@Model.MovieDetail.Director.PersonId"><span class="badge bg-success"> @Model.MovieDetail.Director.Name</span></a></p>
         <p class="card-text">Stars:
             @foreach (var item in Model.MovieDetail.Stars)
             {

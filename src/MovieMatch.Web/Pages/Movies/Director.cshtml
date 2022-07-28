@@ -14,17 +14,17 @@
 
 <div class="card mb-3">
   <div class="row g-0">
-    <div class="col-md-4 d-flex flex-column justify-content-between">
+    <div class="col-md-2 d-flex flex-column justify-content-between">
     @if (!string.IsNullOrEmpty(Model.DirectorDetail.ProfilePath))
     {
         <img src="https://image.tmdb.org/t/p/original/@Model.DirectorDetail.ProfilePath" class="img-fluid rounded-start" alt="@Model.DirectorDetail.Name"/>          
     }
     </div>
-    <div class="col-md-8">
+    <div class="col-md-10">
       <div class="card-body position-relative">
         <h5 class="card-title">@Model.DirectorDetail.Name</h5>
         
-        <p class="card-text">@Model.DirectorDetail.Biography</p>
+        <p class="card-text limited-text">@Model.DirectorDetail.Biography</p>
         <p class="card-text">Birth Day:<span class="badge bg-success">@Model.DirectorDetail.BirthDay.ToShortDateString()</span></p>
         @if ((Model.DirectorDetail.DeathDay)!=null)
         {

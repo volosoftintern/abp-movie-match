@@ -1,9 +1,9 @@
 ﻿.card {
-    width: 720px;
+    width: 100%;
 }
 
 .row {
-    /*min-height: 480px;*/
+    max-height:280px;
 }
 
 .card-body {
@@ -16,4 +16,13 @@
 
 .actions {
     margin-bottom: 12px;
+}
+
+.limited-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
