@@ -11,5 +11,7 @@ namespace MovieMatch.Movies
         public string Title { get; set; }
         public string PosterPath { get; set; }
         public string Overview { get; set; }
+        public bool IsActiveWatchLater { get; set; }
+        public bool IsActiveWatchedBefore { get; set; }
     }
 }

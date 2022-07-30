@@ -1,6 +1,5 @@
 ﻿$(function () {
     var l = abp.localization.getResource('MovieMatch');
-    debugger;
     var dataTable = $('#MoviesWatchLaterTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
             serverSide: false,

@@ -10,9 +10,9 @@ namespace MovieMatch.Movies
 {
     public class MovieManager:DomainService
     {
-        public Movie Create(int id,string title,string posterPath,string overView)
+        public Movie Create(int id,string title,string posterPath,string overView,bool isActive)
          {
-            return new Movie(id,title,posterPath,overView);
+            return new Movie(id,title,posterPath,overView, isActive);
          } 
     }
 }
