@@ -93,11 +93,6 @@ public class MovieMatchDbContext :
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowingId).IsRequired().OnDelete(DeleteBehavior.NoAction);
           //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
-
-
-
-
-
             });
                 
              

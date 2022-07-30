@@ -55,9 +55,6 @@ namespace MovieMatch.UserConnections
             var follower = await _userConnectionManager.CreateAsync(id);
             if(isActive)
             {
-                
-
-
                 var result = await _userConnectionRepository.InsertAsync(follower);
                 //isActive = true;
                 return true;
