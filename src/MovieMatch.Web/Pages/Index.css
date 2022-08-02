@@ -1,3 +1,59 @@
-body {
-    
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+    .rating > input {
+        display: none;
+        background-color: darkblue;
+    }
+
+    .rating > label {
+        position: relative;
+        width: 1em;
+        font-size: 30px;
+        color: #FFD600;
+        cursor: pointer;
+    }
+
+        .rating > label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0;
+        }
+
+        .rating > label:hover:before,
+        .rating > label:hover ~ label:before {
+            opacity: 1 !important;
+        }
+
+    .rating > input:checked ~ label:before {
+        opacity: 1;
+    }
+
+    .rating:hover > input:checked ~ label:before {
+        opacity: 0.4;
+    }
+
+h1, p {
+    text-align: center;
+}
+
+h1 {
+    margin-top: 150px;
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 12px;
+    }
 }

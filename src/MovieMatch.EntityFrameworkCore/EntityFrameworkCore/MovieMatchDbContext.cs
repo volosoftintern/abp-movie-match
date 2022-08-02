@@ -15,6 +15,8 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.CmsKit.EntityFrameworkCore;
+using MovieMatch.Posts;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -45,6 +47,8 @@ public class MovieMatchDbContext :
     public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
     public DbSet<WatchLater> MoviesWatchLater { get; set; }
     public DbSet<Movie> Movies { get; set; }
+    public DbSet<Post> Posts { get; set; }
+
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
@@ -79,6 +83,9 @@ public class MovieMatchDbContext :
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
+        
+        builder.ConfigureCmsKit();
+        
 
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
@@ -140,6 +147,22 @@ public class MovieMatchDbContext :
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(y => y.UserId).IsRequired();
             b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
             b.HasIndex(x => new {x.UserId,x.MovieId});
+        });
+
+        builder.Entity<Post>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Posts",
+                MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+            //b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.Property(x => x.UserId).IsRequired();
+            b.Property(x => x.MovieId).IsRequired();
+            b.Property(x => x.Rate).IsRequired();
+            b.Property(x => x.Comment).IsRequired();
+            b.Property(x => x.UserId).IsRequired();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x=>x.UserId);
+            b.HasOne<Movie>().WithMany().HasForeignKey(x => x.MovieId);
+            b.HasIndex(x => x.Id);
         });
     }
 }

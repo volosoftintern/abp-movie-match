@@ -41,6 +41,12 @@ namespace MovieMatch.Movies
             _watchLaterRepository = watchLaterRepository;
         }
 
+        public async Task<MovieDto> GetFromDbAsync(int id)
+        {
+            var movie = await _movieRepository.GetAsync(id);
+            return ObjectMapper.Map<Movie, MovieDto>(movie);
+        }
+
         public async Task<MovieDetailDto> GetAsync(int id)
         {
             var response = await _movieApi.FindByIdAsync(id);
@@ -154,7 +160,6 @@ namespace MovieMatch.Movies
          );
 
         }
-
         public async Task<DirectorDto> GetDirector(int directorId)
         {
             var response= await _peopleApi.FindByIdAsync(directorId);
@@ -170,9 +175,9 @@ namespace MovieMatch.Movies
             return new DirectorDto(director,movies);
         }
 
-
-
-
-
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await _movieRepository.AnyAsync(id);
+        }
     }
 }
