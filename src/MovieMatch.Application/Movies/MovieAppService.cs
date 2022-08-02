@@ -38,6 +38,12 @@ namespace MovieMatch.Movies
             _watchLaterRepository = watchLaterRepository;
         }
 
+        public async Task<MovieDto> GetFromDbAsync(int id)
+        {
+            var movie = await _movieRepository.GetAsync(id);
+            return ObjectMapper.Map<Movie, MovieDto>(movie);
+        }
+
         public async Task<MovieDetailDto> GetAsync(int id)
         {
             var response = await _movieApi.FindByIdAsync(id);
@@ -152,5 +158,9 @@ namespace MovieMatch.Movies
 
         }
 
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await _movieRepository.AnyAsync(id);
+        }
     }
 }
