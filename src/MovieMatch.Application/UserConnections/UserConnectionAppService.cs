@@ -46,13 +46,13 @@ namespace MovieMatch.UserConnections
 
 
 
-            foreach (var item in filteredUsers)
-            {
-                var result = await _userConnectionRepository.InsertAsync(follower);
-                //isActive = true;
-                return true;
-                item.IsActive = false;
-            }
+            //foreach (var item in filteredUsers)
+            //{
+            //    var result = await _userConnectionRepository.InsertAsync(follower);
+            //    //isActive = true;
+            //    return true;
+            //    item.IsActive = false;
+            //}
 
             var currentUserFollowing =await GetFirstAsync();
             foreach (var item in currentUserFollowing)
