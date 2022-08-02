@@ -45,6 +45,7 @@ using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 
 namespace MovieMatch.Web;
@@ -95,6 +96,14 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        context.Services.AddLogging(b =>
+        {
+            b.AddConsole();
+            b.SetMinimumLevel(LogLevel.Debug);
+        });
+   
+
+
     }
 
     private void ConfigureUrls(IConfiguration configuration)

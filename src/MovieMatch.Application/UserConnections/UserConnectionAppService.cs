@@ -62,31 +62,29 @@ namespace MovieMatch.UserConnections
                         
                             user.IsActive = true;
 
-        }
+                    }
+                    
+     
 
-        public async Task<bool> AddFollowerAsync(Guid id,bool isActive)
-        {
-            var follower = await _userConnectionManager.CreateAsync(id);
-            if(isActive)
-            {
-                
-
-
-                var result = await _userConnectionRepository.InsertAsync(follower);
-                //isActive = true;
-                return true;
-            }
-            else
-            {
-                var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
-                if (result != null)
-                {
-                    await _userConnectionRepository.DeleteAsync(result, true);
                 }
-            //    isActive = false;
-                return false;
             }
-            }
+           
+            return new PagedResultDto<IdentityUserDto>(filteredUsers.Count(),filteredUsers.ToList());
+                           
+         
+    
+        }
+        public async Task<List<Guid>> GetFirstAsync()
+        {
+            var res = await _userConnectionRepository.GetListAsync();
+            var response =res.Where(n => n.FollowerId == _currentUser.Id).Select(c => (c.FollowingId)).ToList();
+            return response;
+
+        }
+        [DisableValidation]
+        public async Task FollowAsync(Guid id,bool isActive)
+        {
+            var follower = await _userConnectionManager.CreateAsync(id,true);
 
 
              await _userConnectionRepository.InsertAsync(follower,true);
