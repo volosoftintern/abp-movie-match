@@ -9,6 +9,7 @@ using DM.MovieApi.MovieDb.Genres;
 using MovieMatch.UserConnections;
 using System;
 using Volo.Abp.Identity;
+using DM.MovieApi.MovieDb.People;
 using MovieMatch.Posts;
 
 namespace MovieMatch;
@@ -34,7 +35,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<Genre, MovieGenreDto>();
         CreateMap<MovieCrewMember, MovieMemeberDto>();
         CreateMap<MovieCastMember, MovieMemeberDto>();
+        CreateMap<Person, PersonDto>();
         CreateMap<Post, PostDto>();
-
     }
 }
