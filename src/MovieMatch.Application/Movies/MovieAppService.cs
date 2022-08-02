@@ -160,7 +160,7 @@ namespace MovieMatch.Movies
             var response= await _peopleApi.FindByIdAsync(directorId);
             
             var director=ObjectMapper.Map<Person, PersonDto>(response.Item);
-            var movies = new List<MovieDto>();
+            var movies = ObjectMapper.Map<List<Movie>,List<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
 
 
             //get director movies

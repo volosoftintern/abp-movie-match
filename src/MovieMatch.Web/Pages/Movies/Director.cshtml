@@ -35,10 +35,11 @@
   </div>
 </div>
 
-<abp-carousel>
+<abp-carousel class="mb-3">
+    
     @foreach (var item in Model.DirectorDetail.Movies)
    {
-       <abp-carousel-item caption-title="@item.Title" src="@item.PosterPath"></abp-carousel-item>
+        <abp-carousel-item class="" caption-title="@item.Title" src="https://image.tmdb.org/t/p/original/@item.PosterPath"></abp-carousel-item>
    }
     
 </abp-carousel>
