@@ -14,8 +14,9 @@ namespace MovieMatch.UserConnections
         Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input);
         Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetIdentityUsersInput input);
         Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetIdentityUsersInput input);
-        Task<bool> AddFollowerAsync(Guid id,bool isActive);
-     //   Task<bool> RemoveFollowerAsync(Guid id, bool isActive);
+        Task<List<Guid>> GetFirstAsync();
+        Task FollowAsync(Guid id, bool isActive);
+        Task UnFollowAsync(Guid id, bool isActive);
 
     }
 }

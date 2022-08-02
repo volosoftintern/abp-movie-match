@@ -15,11 +15,13 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 
 namespace MovieMatch.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
 [ReplaceDbContext(typeof(ITenantManagementDbContext))]
+
 [ConnectionStringName("Default")]
 public class MovieMatchDbContext :
     AbpDbContext<MovieMatchDbContext>,
@@ -80,6 +82,7 @@ public class MovieMatchDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
 
+      
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
             b =>
@@ -88,6 +91,7 @@ public class MovieMatchDbContext :
                 b.ConfigureByConvention();
                 b.Property(x => x.FollowerId).IsRequired();
                 b.Property(x => x.FollowingId).IsRequired();
+                b.Property(x => x.isFollowed).IsRequired();
                 b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
@@ -137,4 +141,6 @@ public class MovieMatchDbContext :
             b.HasIndex(x => new {x.UserId,x.MovieId});
         });
     }
+        builder.ConfigureBlobStoring();
+        }
 }

@@ -1,4 +1,5 @@
 ﻿$(function () {
+    console.log("asd");
     var l = abp.localization.getResource('MovieMatch');
     var dataTable = $('#FollowersTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
@@ -20,3 +21,4 @@
         })
     );
 })
+

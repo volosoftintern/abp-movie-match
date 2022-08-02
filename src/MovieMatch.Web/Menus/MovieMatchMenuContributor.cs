@@ -51,12 +51,7 @@ public class MovieMatchMenuContributor : IMenuContributor
             "MovieMatch.UserConnections",
             l["Menu:UserConnections"],
             url: "/UserConnections"
-        )).AddItem(new ApplicationMenuItem(
-            "MovieMatch.Followers",
-            l["Followers"], url: "/Followers"
-            )
-    ).AddItem(new ApplicationMenuItem(
-                "MovieMatch.Following", l["Following"], url: "/Following"))
+        ))
 );
 
         context.Menu.Items.Insert(

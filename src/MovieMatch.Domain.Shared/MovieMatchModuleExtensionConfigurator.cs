@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
@@ -37,6 +38,14 @@ public static class MovieMatchModuleExtensionConfigurator
 
     private static void ConfigureExtraProperties()
     {
+        ObjectExtensionManager.Instance.Modules()
+    .ConfigureIdentity(identity =>
+    {
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
+        });
+    });
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
          *

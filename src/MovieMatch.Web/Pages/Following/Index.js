@@ -2,6 +2,7 @@
     var l = abp.localization.getResource('MovieMatch');
     var dataTable = $('#FollowingTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
+            
             serverSide: true,
             paging: true,
             order: [[0, 'asc']],

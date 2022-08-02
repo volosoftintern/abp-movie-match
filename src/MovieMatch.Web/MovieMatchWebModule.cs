@@ -51,6 +51,7 @@ namespace MovieMatch.Web;
 
 [DependsOn(
     typeof(MovieMatchHttpApiModule),
+    
     typeof(MovieMatchApplicationModule),
     typeof(MovieMatchEntityFrameworkCoreModule),
     typeof(AbpAutofacModule),
@@ -94,18 +95,6 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
-
-        Configure<ProfileManagementPageOptions>(options =>
-        {
-            options.Contributors.Add(new MovieMatchProfilePageContributor());
-        });
-        Configure<RazorPagesOptions>(options =>
-        {
-
-            options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
-        });
-
-        
     }
 
     private void ConfigureUrls(IConfiguration configuration)
