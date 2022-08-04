@@ -17,8 +17,15 @@
       <button id="search-movie" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 
     </form>
-    <div id="movie-list" class="d-flex flex-wrap justify-content-around">
 
+    
+    <div class="spinner-border loader" role="status" style="display:none">
+            <span class="sr-only">Loading...</span>
+        </div>
+    <h2 class="movie-list-title" style="display:none">Popular Movies</h2>
+
+    <div id="movie-list" class="d-flex flex-wrap justify-content-around">
+        
     </div>
     <div id="pagination-popular"></div>
     <div id="pagination-search"></div>

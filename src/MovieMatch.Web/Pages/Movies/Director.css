@@ -27,6 +27,13 @@
     -webkit-box-orient: vertical;
 }
 
-.carousel-inner {
-    width: 300px;
+
+.swiper-slide img{
+    height:300px;
 }
+
+.movie-carousel{
+    height:350px;
+
+}
+
