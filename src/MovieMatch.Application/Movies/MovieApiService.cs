@@ -30,6 +30,5 @@ namespace MovieMatch.Movies
             var response= await _movieApi.FindByIdAsync(id);
             return response.Item;
         }
-
     }
 }

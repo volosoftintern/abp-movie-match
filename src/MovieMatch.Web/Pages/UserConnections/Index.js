@@ -1,5 +1,4 @@
-﻿istrue = true;
-$(function () {
+﻿$(function () {
     
     var l = abp.localization.getResource('MovieMatch');
     var dataTable = $('#UserConnectionsTable').DataTable(
@@ -29,12 +28,13 @@ $(function () {
                     },
                     
                 ]
+
         })
     );
    // asd = true;
-    
     followUser = (id) => {
         (asd) = document.getElementById(id);
+
         //followeUser
         movieMatch.userConnections.userConnection.addFollower(id, istrue).done((res) => {
             if (!res) {

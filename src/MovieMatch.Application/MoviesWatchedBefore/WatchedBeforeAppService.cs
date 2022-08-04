@@ -46,7 +46,8 @@ namespace MovieMatch.MoviesWatchedBefore
                     existingMovieFromApi.Result.Id,
                     existingMovieFromApi.Result.Title,
                     existingMovieFromApi.Result.PosterPath,
-                    existingMovieFromApi.Result.Overview);
+                    existingMovieFromApi.Result.Overview,
+                    true);
                 await _movieAppService.CreateAsync(createMovieDto);
             }
             var isExistMovieInMyList = await _watchedBeforeRepository.FindByIdAsync(input.MovieId);
@@ -63,6 +64,12 @@ namespace MovieMatch.MoviesWatchedBefore
                 throw new MovieAlreadyExistsException(movie.Title);
             }
             return null;
+        }
+
+        public async Task<int> GetCountAsync(Guid id)
+        {
+            var movies=await _watchedBeforeRepository.GetListAsync(x=>x.UserId==id);
+            return movies.Count;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace MovieMatch.Movies
         private readonly IWatchedBeforeRepository _watchedBeforeRepository;
         private readonly IWatchLaterRepository _watchLaterRepository;
         private readonly List<Movie> _movieList;
+
         public MovieAppService(
             IMovieRepository movieRepository,
             MovieManager movieManager,
@@ -67,7 +68,7 @@ namespace MovieMatch.Movies
 
         public async Task<MovieDto> CreateAsync(CreateMovieDto input)
         {
-            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview);
+            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview,input.IsActive);
             try
             {
                 await _movieRepository.InsertAsync(movie,true);
@@ -96,12 +97,6 @@ namespace MovieMatch.Movies
             var queryable = await _movieRepository.GetQueryableAsync();
 
             var totalCount = moviesWatchedBefore.Count();
-
-            
-            moviesWatchedBefore = moviesWatchedBefore
-               .Skip(input.SkipCount)
-               .Take(input.MaxResultCount).ToList();
-
             //var queryResult = await AsyncExecuter.ToListAsync(moviesWatchedBefore);
 
             foreach (var item in moviesWatchedBefore)
@@ -113,6 +108,10 @@ namespace MovieMatch.Movies
                 }
 
             }
+
+            moviesWatchedBefore = moviesWatchedBefore
+             .Skip(input.SkipCount)
+             .Take(input.MaxResultCount).ToList();
             //Convert the query result to a list of movieDto objects
             var movieDtos = ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
 
@@ -133,10 +132,7 @@ namespace MovieMatch.Movies
             var totalCount = moviesWatchLater.Count();
 
 
-            moviesWatchLater = moviesWatchLater
-               .Skip(input.SkipCount)
-               .Take(input.MaxResultCount).ToList();
-
+          
            // var queryResult = await AsyncExecuter.ToListAsync(moviesWatchLater);
 
             foreach (var item in moviesWatchLater)
@@ -148,6 +144,12 @@ namespace MovieMatch.Movies
                 }
                 
             }
+
+            moviesWatchLater = moviesWatchLater
+             .Skip(input.SkipCount)
+             .Take(input.MaxResultCount).
+               ToList();
+
             //Convert the query result to a list of movieDto objects
             var movieDtos =ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
             

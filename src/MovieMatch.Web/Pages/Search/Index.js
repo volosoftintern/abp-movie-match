@@ -1,6 +1,6 @@
 ﻿$(function () {
     $paginationPopular = $('#pagination-popular');
-    $paginationSearch= $('#pagination-search');
+    $paginationSearch = $('#pagination-search');
 
     fetchPopularMovies = (event, page) => {
 
@@ -20,7 +20,7 @@
         $paginationPopular.show();
 
         movieMatch.search.search.getPopularMovies({ currentPage: 1 }).done((response) => {
-            
+
             $paginationPopular.twbsPagination({
                 currentPage: 1,
                 totalPages: response.totalPages,
@@ -46,7 +46,7 @@
 
         })
     }
-    
+
 
     $("#searchMovieForm").on('submit', (e) => {
 
@@ -60,6 +60,7 @@
         $paginationSearch.show();
 
         movieMatch.search.search.getMovies({ name: movieName, currentPage: 1 }).done((response) => {
+
 
             $("#movie-list").empty();
 
@@ -85,7 +86,7 @@
     isNullOrEmpty = (str) => {
         return str === null || str.match(/^ *$/) !== null;
     }
-
+  
     renderResults = (results, movieList) => {
 
         results.forEach((val, i) => {
@@ -96,35 +97,101 @@
                                     <h5 class="card-title"><a href="Movies/${val.id}">${val.title}</a></h5>
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
-                                        <button class="btn btn-sm btn-primary" onclick="addWatchLater(${val.id},'${abp.currentUser.id}')">Watch Later</a>
-                                        <button class="btn btn-sm btn-primary" onclick="addWatchedBefore(${val.id},'${abp.currentUser.id}')">Watched Before</a>
+                                        
+                                        <button class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
+                                        <button class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
                                     </div>
 
                                 </div>
                             </div>
 
+
                     `)
+
+            $(`#${val.id}.btn-watch-later`).data('isactivewatchlater', val.isActiveWatchLater)
+            $(`#${val.id}.btn-watch-later`).on('click', () => {
+                const isActiveWatchLater = $(`#${val.id}.btn-watch-later`).data('isactivewatchlater');
+                if (isActiveWatchLater == false) {
+                    addWatchLater(val.id, abp.currentUser.id)
+                }
+                else {
+                    removeFromWatchLaterList(val.id)
+                }
+            })
+            $(`#${val.id}.btn-watched-before`).data('isactivewatchedbefore', val.isActiveWatchedBefore)
+            $(`#${val.id}.btn-watched-before`).on('click', () => {
+                const isActiveWatchedBefore = $(`#${val.id}.btn-watched-before`).data('isactivewatchedbefore');
+                if (isActiveWatchedBefore == false) {
+                    addWatchedBefore(val.id, abp.currentUser.id)
+                }
+                else {
+                    removeFromWatchedBeforeList(val.id)
+                }
+             })
         })
     }
-
+    
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
+            $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
+            $(`#${movieId}.btn-watch-later`).css("background-color", "red");
+            $(`#${movieId}.btn-watch-later`).text("UnWatch");
             abp.notify.success(
-                'Movie added watch later list.',
-                'Success'
-            );
+                    'Movie added watch later list.',
+                    'Success'
+            );   
+        });
+    }
+    addWatchedBefore = (movieId, userId) => {
+        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            debugger;
+            $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
+            $(`#${movieId}.btn-watched-before`).css("background-color", "red");
+            $(`#${movieId}.btn-watched-before`).text("UnWatch");
+            abp.notify.success(
+                    'Movie added watched before list.',
+                    'Success'
+            );   
         });
     }
 
-    addWatchedBefore = (movieId, userId) => {
-        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
-            abp.notify.success(
-                'Movie added watch later list.',
-                'Success'
-            );
-        });
-    }
+    removeFromWatchLaterList = (id) => {
+        abp.message.confirm('Are you sure?')
+            .then((confirmed) => {
+                if (confirmed) {
+                    movieMatch.movies.movie
+                        .deleteMoviesWatchLater(id)
+                        .then(() => {
+                            $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
+                            abp.notify.info("Successfully deleted!");
+                            $(`#${id}.btn-watch-later`).css("background-color", "blue");
+                            $(`#${id}.btn-watch-later`).text("Watch Later");
+                            dataTable.ajax.reload();
+                        })
+                }
+            });
+    };
+    removeFromWatchedBeforeList = (id) => {
+        abp.message.confirm('Are you sure?')
+            .then((confirmed) => {
+                if (confirmed) {
+                    movieMatch.movies.movie
+                        .deleteMoviesWatchedBefore(id)
+                        .then(() => {
+                            $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
+                            abp.notify.info("Successfully deleted!");
+                            $(`#${id}.btn-watched-before`).css("background-color", "grey");
+                            $(`#${id}.btn-watched-before`).text("Watched Before");
+                            dataTable.ajax.reload();
+                        })
+                }
+            });
+    };
 
     getPopularMovies($paginationPopular, $('#movie-list'));
 
+
 });
+
+//getAddWatchLaterFcuntion = (val) => {
+    //    return `addWatchLater("${val.id}", "${abp.currentUser.id }")`
+    //}

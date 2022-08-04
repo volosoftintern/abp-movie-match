@@ -12,7 +12,7 @@
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             abp.notify.success(
-                'Movie added watch later list.',
+                'Movie added watched before list.',
                 'Success'
             );
         });
