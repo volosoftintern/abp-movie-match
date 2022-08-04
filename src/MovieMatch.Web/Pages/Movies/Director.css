@@ -1,0 +1,32 @@
+﻿.card {
+    width: 100%;
+}
+
+.row {
+    max-height:280px;
+}
+
+.card-body {
+    height: 100%;
+}
+
+.card-text {
+    bottom: 0;
+}
+
+.actions {
+    margin-bottom: 12px;
+}
+
+.limited-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.carousel-inner {
+    width: 300px;
+}

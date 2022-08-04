@@ -11,13 +11,15 @@ using Volo.Abp.Application.Dtos;
 using MovieMatch.MoviesWatchedBefore;
 using MovieMatch.MoviesWatchLater;
 using DM.MovieApi.MovieDb.Genres;
-
+using DM.MovieApi.ApiResponse;
+using DM.MovieApi.MovieDb.People;
 
 namespace MovieMatch.Movies
 {
     public class MovieAppService : MovieMatchAppService, IMovieAppService
     {
         private readonly IApiMovieRequest _movieApi;
+        private readonly IApiPeopleRequest _peopleApi;
         private readonly IMovieRepository _movieRepository;
         private readonly MovieManager _movieManager;
         private readonly IWatchedBeforeRepository _watchedBeforeRepository;
@@ -33,10 +35,17 @@ namespace MovieMatch.Movies
         {
             _movieList= new List<Movie>();
             _movieApi = MovieDbFactory.Create<IApiMovieRequest>().Value;
+            _peopleApi = MovieDbFactory.Create<IApiPeopleRequest>().Value;
             _movieRepository = movieRepository;
             _movieManager = movieManager;
             _watchedBeforeRepository = watchedBeforeRepository;
             _watchLaterRepository = watchLaterRepository;
+        }
+
+        public async Task<MovieDto> GetFromDbAsync(int id)
+        {
+            var movie = await _movieRepository.GetAsync(id);
+            return ObjectMapper.Map<Movie, MovieDto>(movie);
         }
 
         public async Task<MovieDetailDto> GetAsync(int id)
@@ -88,7 +97,6 @@ namespace MovieMatch.Movies
             var queryable = await _movieRepository.GetQueryableAsync();
 
             var totalCount = moviesWatchedBefore.Count();
-
             //var queryResult = await AsyncExecuter.ToListAsync(moviesWatchedBefore);
 
             foreach (var item in moviesWatchedBefore)
@@ -107,7 +115,7 @@ namespace MovieMatch.Movies
             //Convert the query result to a list of movieDto objects
             var movieDtos = ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
 
-
+            
             //Get the total count with another query
 
             return new PagedResultDto<MovieDto>(
@@ -154,6 +162,24 @@ namespace MovieMatch.Movies
          );
 
         }
+        public async Task<DirectorDto> GetDirector(int directorId)
+        {
+            var response= await _peopleApi.FindByIdAsync(directorId);
+            
+            var director=ObjectMapper.Map<Person, PersonDto>(response.Item);
+            var movies = ObjectMapper.Map<List<Movie>,List<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
 
+
+            //get director movies
+            //paramBuilder.WithCrew(directorId);
+            //_discoverApi.DiscoverMovies(paramBuilder);
+
+            return new DirectorDto(director,movies);
+        }
+
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await _movieRepository.AnyAsync(id);
+        }
     }
 }

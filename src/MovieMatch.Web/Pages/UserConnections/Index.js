@@ -33,7 +33,8 @@
     );
    // asd = true;
     followUser = (id) => {
-        (asd) = document.getElementById(id);  
+        (asd) = document.getElementById(id);
+
         //followeUser
         movieMatch.userConnections.userConnection.addFollower(id, istrue).done((res) => {
             if (!res) {
@@ -51,7 +52,6 @@
                 istrue = !istrue;
                 abp.notify.success(`Unfollowed user `);
             }
-        });   
+        });    
     }
-        
 });
