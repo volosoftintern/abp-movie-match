@@ -35,9 +35,6 @@ $(function () {
     
     followUser = (id) => {
         (asd) = document.getElementById(id);
-
-        
-            
         //followeUser
         movieMatch.userConnections.userConnection.addFollower(id, istrue).done((res) => {
             if (!res) {
@@ -55,24 +52,6 @@ $(function () {
                 istrue = !istrue;
                 abp.notify.success(`Unfollowed user `);
             }
-
-
-        });
-                
-                    
-                      
-                
-              
-            }
-        
-      
-            
-
-           
-        
-
-      
-    
-
-
+        });    
+    }
 });

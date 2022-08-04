@@ -51,6 +51,7 @@ namespace MovieMatch.Posts
             post = await _repository.InsertAsync(post, true);
             var postDto=ObjectMapper.Map<Post, PostDto>(post);
             postDto.MovieTitle = input.MovieTitle;
+            postDto.Username = _currentUser.UserName;
 
             return postDto;
 

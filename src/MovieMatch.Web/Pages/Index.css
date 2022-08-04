@@ -57,3 +57,7 @@ p {
         font-size: 12px;
     }
 }
+
+.post-container{
+    row-gap:10px;
+}

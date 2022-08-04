@@ -36,12 +36,14 @@ $(function () {
         }
 
         movieMatch.posts.post.create(post).done((res) => {
-            $('#post-list').append(`
+
+            $('#post-list').prepend(`
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">${res.movieTitle}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${res.rate}</h6>
+                        <h5 class="card-title">${res.username}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${res.movieTitle}</h6>
                         <p class="card-text">${res.comment}</p>
+                        <p class="card-text"><i class="fas fa-star"></i> ${res.rate}</p>
                     </div>
                 </div>
             `)
