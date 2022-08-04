@@ -46,8 +46,7 @@ namespace MovieMatch.MoviesWatchedBefore
                     existingMovieFromApi.Result.Id,
                     existingMovieFromApi.Result.Title,
                     existingMovieFromApi.Result.PosterPath,
-                    existingMovieFromApi.Result.Overview,
-                    true);
+                    existingMovieFromApi.Result.Overview);
                 await _movieAppService.CreateAsync(createMovieDto);
             }
             var isExistMovieInMyList = await _watchedBeforeRepository.FindByIdAsync(input.MovieId);
