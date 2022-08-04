@@ -77,7 +77,12 @@
 
 
             $("#movie-list").empty();
-            $('.movie-list-title').text(`Total ${response.totalResults} results for "${$("#movie-name").val()}"`);
+            if (response.totalResults > 0) {
+                $('.movie-list-title').text(`Total ${response.totalResults} results for "${$("#movie-name").val()}"`);
+            } else {
+                $('.movie-list-title').text(`No result for "${$("#movie-name").val()}"`);
+            }
+                
 
             $('.loader').fadeOut();
             $('.movie-list-title').fadeIn();
