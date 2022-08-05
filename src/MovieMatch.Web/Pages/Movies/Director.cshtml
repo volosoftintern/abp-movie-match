@@ -9,7 +9,7 @@
     <abp-style src="/Pages/Movies/Director.css" />
 }
 @section scripts{
- 
+    <abp-script src="/Pages/Movies/Director.js" />
 }
 
 <div class="card mb-3">
@@ -35,11 +35,25 @@
   </div>
 </div>
 
-<abp-carousel class="mb-3">
-    
+<h3>Director's Movies (@Model.DirectorDetail.Movies.Count)</h3>
+<div class="swiper movie-carousel" >
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+        
     @foreach (var item in Model.DirectorDetail.Movies)
-   {
-        <abp-carousel-item class="" caption-title="@item.Title" src="https://image.tmdb.org/t/p/original/@item.PosterPath"></abp-carousel-item>
-   }
-    
-</abp-carousel>
+    {
+
+        <div class="swiper-slide">
+            <img alt="@item.Title"  src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+        </div>
+    }
+    ...
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>

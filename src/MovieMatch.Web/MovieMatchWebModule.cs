@@ -128,12 +128,15 @@ namespace MovieMatch.Web;
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
+                    bundle.AddFiles("/libs/swiper/css/swiper-bundle.min.css");
                 }
             );
 
             options.ScriptBundles.ConfigureAll(bundle =>
             {
                 bundle.AddFiles("/libs/twbs-pagination/jquery.twbsPagination.js");
+                bundle.AddFiles("/libs/swiper/js/swiper-bundle.min.js");
+
             });
         });
 

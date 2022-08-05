@@ -68,7 +68,7 @@ namespace MovieMatch.Movies
 
         public async Task<MovieDto> CreateAsync(CreateMovieDto input)
         {
-            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview,input.IsActive);
+            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview);
             try
             {
                 await _movieRepository.InsertAsync(movie,true);

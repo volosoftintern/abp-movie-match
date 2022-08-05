@@ -67,8 +67,13 @@ $(function () {
 
     getPosts = () => {
         movieMatch.posts.post.getFeed({ userId: `${abp.currentUser.id}` }).done((res) => {
-            //render results
-            renderResults(res.items);
+            if (res.items.length> 0) {
+                //render results
+                renderResults(res.items);
+            } else {
+                $('#post-list').append('<h2> No Post Data</h2>');
+            }
+            
         });
     }
 
