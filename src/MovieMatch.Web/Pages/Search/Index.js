@@ -21,7 +21,7 @@
         $paginationSearch.hide();
         $paginationPopular.show();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: 1 }).done((response) => {
+        movieMatch.search.search.getMovies({currentPage: 1 }).done((response) => {
 
             $paginationPopular.twbsPagination({
                 currentPage: 1,

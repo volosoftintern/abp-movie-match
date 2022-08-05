@@ -7,7 +7,7 @@ namespace MovieMatch.Search
 {
     public class SearchMovieDto
     {
-        [Required]
+
         public string Name { get; set; }
         public int CurrentPage { get; set; } = 1;
     }
