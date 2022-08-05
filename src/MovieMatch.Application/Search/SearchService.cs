@@ -1,4 +1,5 @@
 ﻿using DM.MovieApi;
+using DM.MovieApi.ApiResponse;
 using DM.MovieApi.MovieDb.Movies;
 using MovieMatch.Movies;
 using MovieMatch.MoviesWatchedBefore;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 
 namespace MovieMatch.Search
 {
@@ -15,24 +17,42 @@ namespace MovieMatch.Search
         private readonly IWatchLaterRepository _watchLaterRepository;
         private readonly IWatchedBeforeRepository _watchedBeforeRepository;
         private readonly IApiMovieRequest _movieApi;
+        private readonly IMovieAppService _movieAppService;
+        
         public SearchService(IWatchLaterRepository watchLaterRepository,
-            IWatchedBeforeRepository watchedBeforeRepository)
+            IWatchedBeforeRepository watchedBeforeRepository,IMovieAppService movieAppService)
         {
             _watchedBeforeRepository = watchedBeforeRepository;
             _watchLaterRepository = watchLaterRepository;
             _movieApi = MovieDbFactory.Create<IApiMovieRequest>().Value;
+            _movieAppService = movieAppService;
         }
 
 
         public async Task<SearchResponseDto<MovieDto>> GetMovies(SearchMovieDto input)
         {
-            var response= await _movieApi.SearchByTitleAsync(input.Name,input.CurrentPage);
-            var userMoviesWatchLater = await _watchLaterRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-            var userMoviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-            
-            var result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
+            IReadOnlyList<MovieDto> result;
+            ApiSearchResponse<MovieInfo> response;
 
-            foreach (var item in result)
+            if (string.IsNullOrEmpty(input.Name))
+            {
+                response = await _movieApi.GetPopularAsync(input.CurrentPage);
+            }
+            else
+            {
+                response = await _movieApi.SearchByTitleAsync(input.Name, input.CurrentPage);
+            }
+            
+            result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
+
+            await BackupMoviesAsync(result);
+
+            //Before
+            /*
+            
+              var userMoviesWatchLater = await _watchLaterRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
+              var userMoviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
+              foreach (var item in result)
             {
                 var check = userMoviesWatchLater.FirstOrDefault(x => x.MovieId == item.Id);
                 if (check!=null) {
@@ -52,47 +72,34 @@ namespace MovieMatch.Search
                     item.IsActiveWatchedBefore = false;
                 }
             }
+             
+             
+             */
 
+            //Now
+            foreach (var item in result)
+            {
+                item.IsActiveWatchLater = (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.UserId == CurrentUser.Id && x.MovieId==item.Id);
+                item.IsActiveWatchedBefore = (await _watchedBeforeRepository.GetQueryableAsync()).Any(x => x.UserId == CurrentUser.Id && x.MovieId == item.Id);
+            } 
 
             return new SearchResponseDto<MovieDto>(response.PageNumber, response.TotalResults, response.TotalPages,result);
 
         }
 
-        public async Task<SearchResponseDto<MovieDto>> GetPopularMovies(PopularMovieDto input)
+        private async Task BackupMoviesAsync(IReadOnlyList<MovieDto> movies)
         {
-            var response=await _movieApi.GetPopularAsync(input.CurrentPage);
-
-            var userMoviesWatchLater = await _watchLaterRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-            var userMoviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-
-            var result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
-
-            foreach (var item in result)
+            foreach (var item in movies)
             {
-                var check = userMoviesWatchLater.FirstOrDefault(x => x.MovieId == item.Id);
-                if (check != null)
+                if(!(await _movieAppService.AnyAsync(item.Id)))
                 {
-                    item.IsActiveWatchLater = true;
-                }
-                else
-                {
-                    item.IsActiveWatchLater = false;
+                    await _movieAppService.CreateAsync(
+                        new CreateMovieDto(item.Id,item.Title,item.PosterPath,item.Overview)
+                        );
                 }
             }
-            foreach (var item in result)
-            {
-                var check = userMoviesWatchedBefore.FirstOrDefault(x => x.MovieId == item.Id);
-                if (check != null)
-                {
-                    item.IsActiveWatchedBefore = true;
-                }
-                else
-                {
-                    item.IsActiveWatchedBefore = false;
-                }
-            }
-
-            return new SearchResponseDto<MovieDto>(response.PageNumber, response.TotalResults, response.TotalPages, result);
         }
+
+
     }
 }
