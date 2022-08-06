@@ -4,44 +4,44 @@
 @using System.Globalization;
 
 @inject ICurrentUser CurrentUser
-@model MovieMatch.Web.Pages.Movies.DirectorModel
+@model MovieMatch.Web.Pages.Movies.ActorModel
 @section styles{
-    <abp-style src="/Pages/Movies/Director.css" />
+    <abp-style src="/Pages/Movies/Actor.css" />
 }
 @section scripts{
-    <abp-script src="/Pages/Movies/Director.js" />
+    <abp-script src="/Pages/Movies/Actor.js" />
 }
 
 <div class="card mb-3">
   <div class="row g-0">
     <div class="col-md-2 d-flex flex-column justify-content-between">
-    @if (!string.IsNullOrEmpty(Model.Director.ProfilePath))
+    @if (!string.IsNullOrEmpty(Model.Actor.ProfilePath))
     {
-        <img src="https://image.tmdb.org/t/p/original/@Model.Director.ProfilePath" class="img-fluid rounded-start" alt="@Model.Director.Name"/>          
+        <img src="https://image.tmdb.org/t/p/original/@Model.Actor.ProfilePath" class="img-fluid rounded-start" alt="@Model.Actor.Name"/>          
     }
     </div>
     <div class="col-md-10">
       <div class="card-body position-relative">
-        <h5 class="card-title">@Model.Director.Name</h5>
+        <h5 class="card-title">@Model.Actor.Name</h5>
         
-        <p class="card-text limited-text">@Model.Director.Biography</p>
-        <p class="card-text">Birth Day:<span class="badge bg-success">@Model.Director.BirthDay.ToShortDateString()</span></p>
-        @if ((Model.Director.DeathDay)!=null)
+        <p class="card-text limited-text">@Model.Actor.Biography</p>
+        <p class="card-text">Birth Day:<span class="badge bg-success">@Model.Actor.BirthDay.ToShortDateString()</span></p>
+        @if ((Model.Actor.DeathDay)!=null)
         {
-            <p class="card-text">Death Day: <span class="badge bg-danger"> @((DateTime)Model.Director.DeathDay).ToShortDateString()</span></p>
+            <p class="card-text">Death Day: <span class="badge bg-danger"> @((DateTime)Model.Actor.DeathDay).ToShortDateString()</span></p>
         }
       </div>
     </div>
   </div>
 </div>
 
-<h3>Director's Movies (@Model.Director.Movies.Count)</h3>
+<h3>Actor's Movies (@Model.Actor.Movies.Count)</h3>
 <div class="swiper movie-carousel" >
   <!-- Additional required wrapper -->
   <div class="swiper-wrapper">
     <!-- Slides -->
         
-    @foreach (var item in Model.Director.Movies)
+    @foreach (var item in Model.Actor.Movies)
     {
 
         <div class="swiper-slide">

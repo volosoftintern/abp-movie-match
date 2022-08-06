@@ -32,7 +32,7 @@
         <p class="card-text">Stars:
             @foreach (var item in Model.MovieDetail.Stars)
             {
-                <span class="badge bg-primary">@item.Name</span>
+                <a href="/Movies/Actor/@item.PersonId"><span class="badge bg-primary">@item.Name</span></a>
             }
          </p>
          <p class="card-text">Genres:

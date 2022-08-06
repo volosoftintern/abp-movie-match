@@ -8,7 +8,7 @@
 
         event.preventDefault();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: page }).done((response) => {
+        movieMatch.search.search.getMovies({ currentPage: page }).done((response) => {
             $("#movie-list").empty();
             renderResults(response.results, $("#movie-list"));
             //$paginationPopular.twbsPagination('changeTotalPages', { totalPages: response.totalPages, currentPage: 1 });
