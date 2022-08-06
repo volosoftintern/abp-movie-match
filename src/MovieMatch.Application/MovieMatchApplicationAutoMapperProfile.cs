@@ -9,7 +9,7 @@ using DM.MovieApi.MovieDb.Genres;
 using MovieMatch.UserConnections;
 using System;
 using Volo.Abp.Identity;
-
+using Volo.CmsKit.Public.Ratings;
 
 namespace MovieMatch;
 
@@ -35,5 +35,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<Genre, MovieGenreDto>();
         CreateMap<MovieCrewMember, MovieMemeberDto>();
         CreateMap<MovieCastMember, MovieMemeberDto>();
+        CreateMap<IdentityUser,IdentityUserDto>();
+        CreateMap<Volo.CmsKit.Ratings.Rating,RatingDto>();
     }
 }

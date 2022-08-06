@@ -15,6 +15,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.CmsKit.EntityFrameworkCore;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -79,6 +80,9 @@ public class MovieMatchDbContext :
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
+        builder.ConfigureCmsKit();
+      
+        
 
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
@@ -136,5 +140,6 @@ public class MovieMatchDbContext :
             b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
             b.HasIndex(x => new {x.UserId,x.MovieId});
         });
-    }
+        builder.ConfigureCmsKit();
+        }
 }

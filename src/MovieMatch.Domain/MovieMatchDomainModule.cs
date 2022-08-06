@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MovieMatch.MultiTenancy;
 using Volo.Abp.AuditLogging;
@@ -13,6 +13,10 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.CmsKit;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
 
 namespace MovieMatch;
 
@@ -29,7 +33,8 @@ namespace MovieMatch;
     typeof(AbpTenantManagementDomainModule),
     typeof(AbpEmailingModule)
 )]
-public class MovieMatchDomainModule : AbpModule
+[DependsOn(typeof(CmsKitDomainModule))]
+    public class MovieMatchDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -37,6 +42,17 @@ public class MovieMatchDomainModule : AbpModule
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
+
+        Configure<CmsKitCommentOptions>(options =>
+        {
+            options.EntityTypes.Add(new CommentEntityTypeDefinition("Movie"));
+        });
+        Configure<CmsKitRatingOptions>(options =>
+        {
+            options.EntityTypes.Add(new RatingEntityTypeDefinition("Movie"));
+        });
+
+
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

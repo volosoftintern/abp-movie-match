@@ -1,5 +1,8 @@
 ﻿@page
+@using MovieMatch.Movies
+@using MovieMatch.Web.Components.Commenting
 @using Volo.Abp.Users
+@using MovieMatch.Web.Components.Rating
 @inject ICurrentUser CurrentUser
 @model MovieMatch.Web.Pages.Movies.DetailModel
 
@@ -15,6 +18,11 @@
   <div class="row g-0">
     <div class="col-md-4 d-flex flex-column justify-content-between">
       <img style="display:{@string.IsNullOrEmpty(Model.MovieDetail.PosterPath)?'none':'block'}" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
+       @await Component.InvokeAsync(typeof(RatingViewComponent), new
+        {
+        entityType = "Movie",
+        entityId = Model.MovieId.ToString(),
+        })
       <div class="d-flex justify-content-around actions">
           <button type="button" class="btn btn-primary btn-sm" onclick="addWatchLater(@Model.MovieId,'@CurrentUser.Id')">Watch Later</button>
           <button type="button" class="btn btn-primary btn-sm" onclick="addWatchedBefore(@Model.MovieId,'@CurrentUser.Id')">Watched Before</button>
@@ -38,9 +46,36 @@
             }
          </p>         
         <p class="card-text position-absolute mb-3">
-            <i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")</small>
+            <i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")-IMDB</small>
         </p>
       </div>
     </div>
   </div>
 </div>
+
+  
+
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist" style="width:310px">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Comments</button>
+    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="watchersList(@Model.MovieId)">Watcher Profiles</button>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent" style="width:310px">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        @await Component.InvokeAsync(typeof(CommentingViewComponent),
+        new {
+        entityType = "Movie",
+        entityId = Model.MovieId.ToString(),
+        })
+       
+    </div>
+
+    <div class="nav-tabe fade" type="button" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                 
+    </div>    
+</div>
+
+ 
+    

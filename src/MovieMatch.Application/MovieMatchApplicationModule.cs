@@ -13,6 +13,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.BlobStoring;
+using Volo.CmsKit;
 
 namespace MovieMatch;
 
@@ -26,7 +28,8 @@ namespace MovieMatch;
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpSettingManagementApplicationModule)
     )]
-public class MovieMatchApplicationModule : AbpModule
+[DependsOn(typeof(CmsKitApplicationModule))]
+    public class MovieMatchApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -46,5 +49,13 @@ public class MovieMatchApplicationModule : AbpModule
         });
 
         MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
+
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                //TODO...
+            });
+        });
     }
 }

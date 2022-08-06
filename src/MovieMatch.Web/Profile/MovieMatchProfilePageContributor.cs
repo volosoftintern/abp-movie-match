@@ -43,8 +43,6 @@ public class MovieMatchProfilePageContributor : IProfileManagementPageContributo
             typeof(WatchedBeforeViewComponent)
         )
       );
-
-        //return Task.CompletedTask;
     }
 
 
