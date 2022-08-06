@@ -162,19 +162,20 @@ namespace MovieMatch.Movies
          );
 
         }
-        public async Task<DirectorDto> GetDirector(int directorId)
+        public async Task<PersonDto> GetPersonAsync(int personId)
         {
-            var response= await _peopleApi.FindByIdAsync(directorId);
+            var response= await _peopleApi.FindByIdAsync(personId);
             
-            var director=ObjectMapper.Map<Person, PersonDto>(response.Item);
-            var movies = ObjectMapper.Map<List<Movie>,List<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
+            var person=ObjectMapper.Map<Person, PersonDto>(response.Item);
 
+            var movies = ObjectMapper.Map<IReadOnlyList<Movie>, IReadOnlyList<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
+            person.Movies = movies;
 
             //get director movies
             //paramBuilder.WithCrew(directorId);
             //_discoverApi.DiscoverMovies(paramBuilder);
 
-            return new DirectorDto(director,movies);
+            return person;
         }
 
         public async Task<bool> AnyAsync(int id)
