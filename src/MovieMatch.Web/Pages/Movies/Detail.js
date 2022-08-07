@@ -1,10 +1,33 @@
 ﻿$(function () {
 
+    //$(`idWatchLater`).data('isactivewatchlater', val.isActiveWatchLater)
+    $(`#idWatchLater`).on('click', (e) => {
+        const isActiveWatchLater = $(`#idWatchLater`).attr("data-content");
+        const id = $(`#idWatchLater`).attr("data-id");
+        if (isActiveWatchLater == "False") {
+            addWatchLater(id, abp.currentUser.id)
+        }
+        else {
+            removeFromWatchLaterList(id)
+        }
+    });
+
+    $(`#idWatchedBefore`).on('click', (e) => {
+        const isActiveWatchedBefore = $(`#idWatchedBefore`).attr("data-content");
+        const id = $(`#idWatchedBefore`).attr("data-id");
+        if (isActiveWatchedBefore == "False") {
+            addWatchedBefore(id, abp.currentUser.id)
+        }
+        else {
+            removeFromWatchedBeforeList(id)
+        }
+    });
+
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
-            $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
-            $(`#${movieId}.btn-watch-later`).css("background-color", "red");
-            $(`#${movieId}.btn-watch-later`).text("UnWatch");
+            $(`#idWatchLater`).attr("data-content", "True");
+            $(`#idWatchLater`).css("background-color", "red");
+            $(`#idWatchLater`).text("UnWatch");
             abp.notify.success(
                 'Movie added watch later list.',
                 'Success'
@@ -14,9 +37,9 @@
     
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
-            $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
-            $(`#${movieId}.btn-watched-before`).css("background-color", "red");
-            $(`#${movieId}.btn-watched-before`).text("UnWatch");
+            $(`#idWatchedBefore`).attr("data-content", "True");
+            $(`#idWatchedBefore`).css("background-color", "red");
+            $(`#idWatchedBefore`).text("UnWatch");
             abp.notify.success(
                 'Movie added watched before list.',
                 'Success'
@@ -24,17 +47,53 @@
         });
     }
 
+    removeFromWatchLaterList = (id) => {
+        abp.message.confirm('Are you sure?')
+            .then((confirmed) => {
+                if (confirmed) {
+                    movieMatch.movies.movie
+                        .deleteMoviesWatchLater(id)
+                        .then(() => {
+                            $(`#idWatchLater`).attr("data-content", "False");
+                            abp.notify.info("Successfully deleted!");
+                            $(`#idWatchLater`).css("background-color", "blue");
+                            $(`#idWatchLater`).text("Watch Later");
+                            dataTable.ajax.reload();
+                        })
+                }
+            });
+    };
+
+    removeFromWatchedBeforeList = (id) => {
+        abp.message.confirm('Are you sure?')
+            .then((confirmed) => {
+                if (confirmed) {
+                    movieMatch.movies.movie
+                        .deleteMoviesWatchedBefore(id)
+                        .then(() => {
+                            $(`#idWatchedBefore`).attr("data-content", "False");
+                            abp.notify.info("Successfully deleted!");
+                            $(`#idWatchedBefore`).css("background-color", "grey");
+                            $(`#idWatchedBefore`).text("Watched Before");
+                            dataTable.ajax.reload();
+                        })
+                }
+            });
+    };
+
     watchersList = (movieId) => {
         var list = $("#nav-profile");
         list.empty();
-        movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async(res) => {
-            
-            for (var element of res) {
-                var count = 0;
-                await getCount(element.id).then((c) => {
-                    count = c;
-                });
-                list.append(`
+        movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
+            debugger;
+            if (res.length == 0) list.append(` <div style = "position:relative; left:133px; top:49px;font-style: oblique;font-size: 25px;">no watchers yet</div>`)
+            else {
+                for (var element of res) {
+                    var count = 0;
+                    await getCount(element.id).then((c) => {
+                        count = c;
+                    });
+                    list.append(`
                 <div class="card mb-3">
                   <div class="row g-0" style="min-height:50px">
                      <div class="col-md-2 d-flex flex-column justify-content-between">
@@ -42,7 +101,7 @@
                        </div>
                     <div class="col-md-5">
                        <div class="card-body position-relative">              
-                           <p class="card-text"><span class="badge bg-light" style="font-size:20px; width:113px; border-radius:40%; font-style:oblique;color:dodgerblue">${element.userName} </span></p>
+                           <p class="card-text"><span class="badge bg-light" style="font-size:20px; width:113px; border-radius:40%; font-style:oblique;color:darkslategray">${element.userName} </span></p>
                           <div style = "position:relative; left:11px; top:35px;">
                         <p>${count} movie watched</p>
                          </div>
@@ -51,14 +110,16 @@
                    </div>
                     <div class="col-md-5">
                       <div style = "position:relative; left:200px; top:35px;">
-                        <button type="button" class="btn btn-outline-dark">takip et</button>
+                        ${abp.currentUser.userName == element.userName ? '' : '<button type="button" class="btn btn-outline-dark">takip et</button>'}
                          </div>
                     </div>
                   </div>
                 </div>
                 `);
 
+                }
             }
+            
         });
         
     }
@@ -80,35 +141,3 @@
 
 });
 
-
-
-    //abp.widgets.CmsRating = function ($widget) {
-//    debugger;
-//    var widgetManager = $widget.data("abp-widget-manager");
-//    function registerUndoLink() {
-//        $widget.find(".rating-undo-link").each(function () {
-//            $(this).on('click', '', function (e) {
-//                e.preventDefault();
-
-//                abp.message.confirm("RatingUndoMessage"), function (ok) {
-//                    if (ok) {
-//                        volo.cmsKit.public.ratings.ratingPublic.delete(
-//                            $ratingArea.attr("data-entity-type"),
-//                            $ratingArea.attr("data-entity-id")
-//                        ).then(function () {
-//                            widgetManager.refresh($widget);
-//                        })
-//                    }
-//                }
-//            })
-//        }
-//        )
-//    }
-//}
-//function init() {
-//    registerUndoLink();
-//}
-
-//return {
-//    init: init,
-//}

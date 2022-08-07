@@ -155,5 +155,23 @@ namespace MovieMatch.Movies
 
         }
 
+
+
+        public async Task<MovieDto> GetMovieAsync(int id)
+        {
+            var api= await _movieApi.FindByIdAsync(id);
+            var findMovie = api.Item;
+            var movie=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>(findMovie);
+
+            var userMovieWL = await _watchLaterRepository.FindByIdAsync(id);
+            if(userMovieWL != null)    movie.IsActiveWatchLater = true;
+            else    movie.IsActiveWatchLater = false;
+
+            var userMovieWB = await _watchedBeforeRepository.FindByIdAsync(id);
+            if (userMovieWB != null) movie.IsActiveWatchedBefore = true;
+            else movie.IsActiveWatchedBefore = false;
+
+            return movie;
+        }
     }
 }

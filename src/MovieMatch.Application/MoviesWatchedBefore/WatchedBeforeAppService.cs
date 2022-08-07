@@ -81,6 +81,7 @@ namespace MovieMatch.MoviesWatchedBefore
         public async Task<List<IdentityUserDto>> ListOfUsers(int movieId)
         {
             var usersWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.MovieId == movieId);
+            if(usersWatchedBefore==null) return null;
             foreach (var item in usersWatchedBefore)
             {
                 var users=await _usersService.FindAsync(item.UserId);

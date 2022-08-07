@@ -24,8 +24,18 @@
         entityId = Model.MovieId.ToString(),
         })
       <div class="d-flex justify-content-around actions">
-          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchLater(@Model.MovieId,'@CurrentUser.Id')">Watch Later</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchedBefore(@Model.MovieId,'@CurrentUser.Id')">Watched Before</button>
+          @if(@Model.Movie.IsActiveWatchLater){
+          <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-danger">UnWatch</button>
+          }
+          else{
+            <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-primary">Watch Later</button>
+          }
+          @if(@Model.Movie.IsActiveWatchedBefore){
+          <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-danger">UnWatch</button>
+          }
+          else{
+            <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-secondary">Watched Before</button>
+          }
       </div>
     </div>
     <div class="col-md-8">

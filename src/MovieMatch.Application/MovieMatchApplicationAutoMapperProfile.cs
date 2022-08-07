@@ -37,5 +37,6 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<MovieCastMember, MovieMemeberDto>();
         CreateMap<IdentityUser,IdentityUserDto>();
         CreateMap<Volo.CmsKit.Ratings.Rating,RatingDto>();
+        CreateMap<ApiQueryResponse<DM.MovieApi.MovieDb.Movies.Movie>, MovieDto>();
     }
 }
