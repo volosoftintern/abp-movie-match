@@ -1,6 +1,8 @@
 ﻿$(function () {
+
     $paginationPopular = $('#pagination-popular');
     $paginationSearch = $('#pagination-search');
+    
 
     fetchPopularMovies = (event, page) => {
 
@@ -16,11 +18,11 @@
 
 
     getPopularMovies = (pagination, movieList) => {
-
+        $('.loader').fadeIn();
         $paginationSearch.hide();
         $paginationPopular.show();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: 1 }).done((response) => {
+        movieMatch.search.search.getMovies({currentPage: 1 }).done((response) => {
 
             $paginationPopular.twbsPagination({
                 currentPage: 1,
@@ -31,7 +33,8 @@
             $("#movie-list").empty();
 
             renderResults(response.results, $("#movie-list"));
-
+            $('.loader').fadeOut();
+            $('.movie-list-title').fadeIn();
             //pagination.twbsPagination('changeTotalPages', response.totalPages, 1);
 
         });
@@ -39,12 +42,22 @@
 
     searchMovies = (ev, page) => {
         event.preventDefault();
+        $('.movie-list-title').fadeOut();
+        $('.loader').fadeIn();
+
+
+        console.log(`SearchMovies: ${$("#movie-name").val()}`);
 
         movieMatch.search.search.getMovies({ name: $("#movie-name").val(), currentPage: page }).done((res) => {
 
             $("#movie-list").empty();
-            renderResults(res.results, $("#movie-list"));
+            $('.movie-list-title').text(`Total ${res.totalResults} results for "${$("#movie-name").val()}"`);
 
+            $('.loader').fadeOut();
+            $('.movie-list-title').fadeIn();
+
+            renderResults(res.results, $("#movie-list"));
+            
         })
     }
 
@@ -63,23 +76,40 @@
         movieMatch.search.search.getMovies({ name: movieName, currentPage: 1 }).done((response) => {
 
 
+
             $("#movie-list").empty();
+            if (response.totalResults > 0) {
+                $('.movie-list-title').text(`Total ${response.totalResults} results for "${$("#movie-name").val()}"`);
+            } else {
+                $('.movie-list-title').text(`No result for "${$("#movie-name").val()}"`);
+            }
+                
+
+            $('.loader').fadeOut();
+            $('.movie-list-title').fadeIn();
+
+            renderResults(response.results, $("#movie-list"));
 
 
-            $paginationSearch.twbsPagination({
-                currentPage: 1,
-                totalPages: response.totalPages,
-                onPageClick: searchMovies
-            });
-
-            $paginationSearch.twbsPagination({
-
+            $('#pagination-search').twbsPagination({
+                currentPage:1,
                 startPage: 1,
-
                 totalPages: response.totalPages,
-
                 onPageClick: searchMovies
             })
+            //$('#pagination-search').twbsPagination('show', 1);
+            $('#pagination-search').twbsPagination('changeTotalPages', response.totalPages,1);
+
+            //$paginationSearch.twbsPagination({
+
+            //    startPage: 1,
+
+            //    totalPages: response.totalPages,
+
+            //    onPageClick: searchMovies
+            //})
+
+
 
         });
     })
@@ -104,7 +134,9 @@
                                     </div>
                                 </div>
                             </div>
+
                     `)
+
 
             $(`#${val.id}.btn-watch-later`).data('isactivewatchlater', val.isActiveWatchLater)
             $(`#${val.id}.btn-watch-later`).on('click', () => {
@@ -188,9 +220,4 @@
 
     getPopularMovies($paginationPopular, $('#movie-list'));
 
-
 });
-
-//getAddWatchLaterFcuntion = (val) => {
-    //    return `addWatchLater("${val.id}", "${abp.currentUser.id }")`
-    //}

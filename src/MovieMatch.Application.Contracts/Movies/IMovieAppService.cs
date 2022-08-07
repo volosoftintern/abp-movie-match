@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -14,5 +11,9 @@ namespace MovieMatch.Movies
         Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(PagedAndSortedResultRequestDto input);
         Task<PagedResultDto<MovieDto>> GetWatchLaterListAsync(PagedAndSortedResultRequestDto input);
         Task<MovieDto> GetMovieAsync(int id);
+        Task<DirectorDto> GetDirector(int directorId);
+        Task<bool> AnyAsync(int id);
+        Task<MovieDto> GetFromDbAsync(int id);
+
     }
 }

@@ -1,0 +1,59 @@
+﻿@page
+@using Volo.Abp.Users
+@using System;
+@using System.Globalization;
+
+@inject ICurrentUser CurrentUser
+@model MovieMatch.Web.Pages.Movies.DirectorModel
+@section styles{
+    <abp-style src="/Pages/Movies/Director.css" />
+}
+@section scripts{
+    <abp-script src="/Pages/Movies/Director.js" />
+}
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2 d-flex flex-column justify-content-between">
+    @if (!string.IsNullOrEmpty(Model.DirectorDetail.Person.ProfilePath))
+    {
+        <img src="https://image.tmdb.org/t/p/original/@Model.DirectorDetail.Person.ProfilePath" class="img-fluid rounded-start" alt="@Model.DirectorDetail.Person.Name"/>          
+    }
+    </div>
+    <div class="col-md-10">
+      <div class="card-body position-relative">
+        <h5 class="card-title">@Model.DirectorDetail.Person.Name</h5>
+        
+        <p class="card-text limited-text">@Model.DirectorDetail.Person.Biography</p>
+        <p class="card-text">Birth Day:<span class="badge bg-success">@Model.DirectorDetail.Person.BirthDay.ToShortDateString()</span></p>
+        @if ((Model.DirectorDetail.Person.DeathDay)!=null)
+        {
+            <p class="card-text">Death Day: <span class="badge bg-danger"> @((DateTime)Model.DirectorDetail.Person.DeathDay).ToShortDateString()</span></p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Director's Movies (@Model.DirectorDetail.Movies.Count)</h3>
+<div class="swiper movie-carousel" >
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+        
+    @foreach (var item in Model.DirectorDetail.Movies)
+    {
+
+        <div class="swiper-slide">
+            <img alt="@item.Title"  src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+        </div>
+    }
+    ...
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>

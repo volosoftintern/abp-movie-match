@@ -19,11 +19,13 @@ public static class MovieMatchGlobalFeatureConfigurator
              * https://docs.abp.io/en/abp/latest/Global-Features
              */
 
+
             GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
             {
                 cmsKit.Comments.Enable();
                 cmsKit.Ratings.Enable();
                 cmsKit.User.Enable();
+
             });
 
         });

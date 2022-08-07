@@ -12,20 +12,18 @@ namespace MovieMatch.Movies
         public string Title { get; set; }
         public string PosterPath { get; set; }
         public string Overview { get; set; }
-        public bool IsActive { get; set; }
 
         private Movie()
         {
 
         }
 
-        public Movie(int id,string title,string posterPath,string overview,bool isActive)
+        public Movie(int id,string title,string posterPath,string overview)
         {
             Id = id;
             Title = title;  
             PosterPath = posterPath;
             Overview = overview;
-            IsActive = isActive;
         }
     }
 }

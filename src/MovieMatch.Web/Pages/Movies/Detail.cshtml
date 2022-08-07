@@ -17,6 +17,7 @@
 <div class="card mb-3">
   <div class="row g-0" style="min-height: 411px;">
     <div class="col-md-4 d-flex flex-column justify-content-between">
+
       <img style="display:{@string.IsNullOrEmpty(Model.MovieDetail.PosterPath)?'none':'block'}" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
        @await Component.InvokeAsync(typeof(RatingViewComponent), new
         {
@@ -24,12 +25,23 @@
         entityId = Model.MovieId.ToString(),
         })
 
+
+        @if (!string.IsNullOrEmpty(Model.MovieDetail.PosterPath))
+        {
+            <img src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title"/>          
+        }
+
+      <div class="d-flex justify-content-around actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchLater(@Model.MovieId,'@CurrentUser.Id')">Watch Later</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="addWatchedBefore(@Model.MovieId,'@CurrentUser.Id')">Watched Before</button>
+      </div>
+
     </div>
     <div class="col-md-8">
       <div class="card-body position-relative">
         <h5 class="card-title">@Model.MovieDetail.Title</h5>
         <p class="card-text">@Model.MovieDetail.Overview</p>
-        <p class="card-text">Director: <span class="badge bg-success">@Model.MovieDetail.Director.Name</span></p>
+        <p class="card-text">Director: <a href="/Movies/Director/@Model.MovieDetail.Director.PersonId"><span class="badge bg-success"> @Model.MovieDetail.Director.Name</span></a></p>
         <p class="card-text">Stars:
             @foreach (var item in Model.MovieDetail.Stars)
             {

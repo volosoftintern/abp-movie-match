@@ -48,6 +48,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Comments;
 
+
 namespace MovieMatch.Web;
 
 [DependsOn(
@@ -62,9 +63,10 @@ namespace MovieMatch.Web;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(CmsKitWebModule)
     )]
-[DependsOn(typeof(CmsKitWebModule))]
+
     public class MovieMatchWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -105,6 +107,7 @@ namespace MovieMatch.Web;
         {
 
             options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
+            options.Conventions.AddPageRoute("/Movies/Director", "Movies/Director/{DirectorId}");
         });
        
 
@@ -127,12 +130,15 @@ namespace MovieMatch.Web;
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
+                    bundle.AddFiles("/libs/swiper/css/swiper-bundle.min.css");
                 }
             );
 
             options.ScriptBundles.ConfigureAll(bundle =>
             {
                 bundle.AddFiles("/libs/twbs-pagination/jquery.twbsPagination.js");
+                bundle.AddFiles("/libs/swiper/js/swiper-bundle.min.js");
+
             });
         });
 

@@ -6,7 +6,7 @@ namespace MovieMatch.Movies
 {
     public class MovieMemeberDto
     {
-        public int Id { get; set; } 
+        public int PersonId { get; set; } 
         public string Name { get; set; }
     }
 }

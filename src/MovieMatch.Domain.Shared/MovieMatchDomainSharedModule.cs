@@ -2,6 +2,7 @@ using MovieMatch.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
@@ -13,6 +14,8 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit;
+using Volo.Abp.BlobStoring;
+
 
 namespace MovieMatch;
 
@@ -24,9 +27,13 @@ namespace MovieMatch;
     typeof(AbpIdentityServerDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)
+    typeof(AbpTenantManagementDomainSharedModule),
+    typeof(CmsKitDomainSharedModule),
+    typeof(AbpBlobStoringModule)
     )]
+
 [DependsOn(typeof(CmsKitDomainSharedModule))]
+
     public class MovieMatchDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -56,5 +63,6 @@ namespace MovieMatch;
         {
             options.MapCodeNamespace("MovieMatch", typeof(MovieMatchResource));
         });
+
     }
 }

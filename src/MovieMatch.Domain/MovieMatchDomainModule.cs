@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MovieMatch.MultiTenancy;
+using MovieMatch.Posts;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
@@ -43,6 +44,7 @@ namespace MovieMatch;
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
+
         Configure<CmsKitCommentOptions>(options =>
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("Movie"));
@@ -51,6 +53,8 @@ namespace MovieMatch;
         {
             options.EntityTypes.Add(new RatingEntityTypeDefinition("Movie"));
         });
+
+
 
 
 

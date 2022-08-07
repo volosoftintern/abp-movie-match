@@ -12,8 +12,8 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.FileSystem;
-using Volo.Abp.BlobStoring;
 using Volo.CmsKit.EntityFrameworkCore;
+using Volo.Abp.BlobStoring;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -27,10 +27,14 @@ namespace MovieMatch.EntityFrameworkCore;
     typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule)
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(CmsKitEntityFrameworkCoreModule)
     )]
+
 [DependsOn(typeof(AbpBlobStoringFileSystemModule))]
     [DependsOn(typeof(CmsKitEntityFrameworkCoreModule))]
+
+
     public class MovieMatchEntityFrameworkCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
