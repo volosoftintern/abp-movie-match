@@ -15,7 +15,7 @@
 }
 
 <div class="card mb-3">
-  <div class="row g-0">
+  <div class="row g-0" style="min-height: 411px;">
     <div class="col-md-4 d-flex flex-column justify-content-between">
       <img style="display:{@string.IsNullOrEmpty(Model.MovieDetail.PosterPath)?'none':'block'}" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
        @await Component.InvokeAsync(typeof(RatingViewComponent), new
@@ -23,20 +23,7 @@
         entityType = "Movie",
         entityId = Model.MovieId.ToString(),
         })
-      <div class="d-flex justify-content-around actions">
-          @if(@Model.Movie.IsActiveWatchLater){
-          <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-danger">UnWatch</button>
-          }
-          else{
-            <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-primary">Watch Later</button>
-          }
-          @if(@Model.Movie.IsActiveWatchedBefore){
-          <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-danger">UnWatch</button>
-          }
-          else{
-            <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-secondary">Watched Before</button>
-          }
-      </div>
+
     </div>
     <div class="col-md-8">
       <div class="card-body position-relative">
@@ -55,9 +42,23 @@
                 <span class="badge bg-secondary">@item.Name</span>
             }
          </p>         
-        <p class="card-text position-absolute mb-3">
+        <p class="card-text position-absolute mb-3" style="position: relative;top: 372px;left: -56px;">
             <i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")-IMDB</small>
         </p>
+              <div class="d-flex justify-content-around actions" style="top: 89px;position: relative;width: 414px;left: 13px;">
+          @if(@Model.Movie.IsActiveWatchLater){
+          <button type="button" id="idWatchLater"  data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" style="font-size:13px" class="btn btn-danger">Remove from watch later list</button>
+          }
+          else{
+            <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-primary">Add to watch later list</button>
+          }
+          @if(@Model.Movie.IsActiveWatchedBefore){
+          <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" style="font-size:13px" class="btn btn-danger">Remove from watched before list</button>
+          }
+          else{
+            <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-secondary">Add to watched before list</button>
+          }
+      </div>
       </div>
     </div>
   </div>

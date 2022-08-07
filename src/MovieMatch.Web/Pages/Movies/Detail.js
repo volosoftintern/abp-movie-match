@@ -26,8 +26,9 @@
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#idWatchLater`).attr("data-content", "True");
-            $(`#idWatchLater`).css("background-color", "red");
-            $(`#idWatchLater`).text("UnWatch");
+            $(`#idWatchLater`).css({ "background-color": "red", "font-size": "13px" });
+            $(`#idWatchLater`).text("Remove from watch later list");
+            $(`#idWatchLater`).css("text-size", "13px");
             abp.notify.success(
                 'Movie added watch later list.',
                 'Success'
@@ -38,8 +39,8 @@
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#idWatchedBefore`).attr("data-content", "True");
-            $(`#idWatchedBefore`).css("background-color", "red");
-            $(`#idWatchedBefore`).text("UnWatch");
+            $(`#idWatchedBefore`).css({ "background-color": "red", "font-size": "13px" });
+            $(`#idWatchedBefore`).text("Remove from watched before list");
             abp.notify.success(
                 'Movie added watched before list.',
                 'Success'
@@ -57,7 +58,8 @@
                             $(`#idWatchLater`).attr("data-content", "False");
                             abp.notify.info("Successfully deleted!");
                             $(`#idWatchLater`).css("background-color", "blue");
-                            $(`#idWatchLater`).text("Watch Later");
+                            $(`#idWatchLater`).text("Add to watch later list");
+                            
                             dataTable.ajax.reload();
                         })
                 }
@@ -74,7 +76,8 @@
                             $(`#idWatchedBefore`).attr("data-content", "False");
                             abp.notify.info("Successfully deleted!");
                             $(`#idWatchedBefore`).css("background-color", "grey");
-                            $(`#idWatchedBefore`).text("Watched Before");
+                            $(`#idWatchedBefore`).text("Add to watched before list");
+                            
                             dataTable.ajax.reload();
                         })
                 }

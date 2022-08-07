@@ -7,8 +7,8 @@
 @inject IHtmlLocalizer<CmsKitResource> L
 
 <div class="row row" style="min-height:27px">
-        <div class="col">
-            <div class="cms-rating-area" data-entity-type="@Model.EntityType" style="position: relative; left: 34px;" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
+        <div class="col" style="top: 24px; position: relative;">
+            <div class="cms-rating-area" data-entity-type="@Model.EntityType" style="position: relative; left: 20px;top: -33px;" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
                 @if (CurrentUser.IsAuthenticated)
                 {
                     @if (Model.CurrentRating != null)
