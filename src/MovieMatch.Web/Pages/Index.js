@@ -65,8 +65,16 @@ $(function () {
 
     
 
-    getPosts = () => {
-        movieMatch.posts.post.getFeed({ userId: `${abp.currentUser.id}` }).done((res) => {
+    getPosts = async () => {
+        await $('.loader').fadeIn().promise();
+
+        await $('.post-list').fadeOut().promise();
+        
+        movieMatch.posts.post.getFeed({ userId: `${abp.currentUser.id}` }).done(async (res) => {
+            await $('.loader').fadeOut().promise;
+
+            await $('.post-list').fadeIn().promise();
+            
             if (res.items.length> 0) {
                 //render results
                 renderResults(res.items);
