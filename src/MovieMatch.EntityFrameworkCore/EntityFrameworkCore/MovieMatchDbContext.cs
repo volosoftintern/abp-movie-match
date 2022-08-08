@@ -102,13 +102,6 @@ public class MovieMatchDbContext :
           //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
             });
                 
-             
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(MovieMatchConsts.DbTablePrefix + "YourEntities", MovieMatchConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
         builder.Entity<Movie>(b =>
         {
             b.ToTable(MovieMatchConsts.DbTablePrefix + "Movies" + MovieMatchConsts.DbSchema);
@@ -143,9 +136,6 @@ public class MovieMatchDbContext :
             b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
             b.HasIndex(x => new {x.UserId,x.MovieId});
         });
-        builder.ConfigureCmsKit();
-        }
-
 
         builder.Entity<Post>(b =>
         {
@@ -158,9 +148,11 @@ public class MovieMatchDbContext :
             b.Property(x => x.Rate).IsRequired();
             b.Property(x => x.Comment).IsRequired();
             b.Property(x => x.UserId).IsRequired();
-            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x=>x.UserId);
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId);
             b.HasOne<Movie>().WithMany().HasForeignKey(x => x.MovieId);
             b.HasIndex(x => x.Id);
         });
+
+        
     }
 }

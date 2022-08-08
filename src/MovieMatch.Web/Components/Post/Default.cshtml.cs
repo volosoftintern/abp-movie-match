@@ -16,9 +16,10 @@ namespace MovieMatch.Web.Components.Post
         private readonly IPostService _postService;
         private readonly ICurrentUser _curentUser;
 
-        public DefaultModel(IPostService postService)
+        public DefaultModel(IPostService postService,ICurrentUser currentUser)
         {
             _postService = postService;
+            _curentUser = currentUser;
         }
 
         public async Task OnGetAsync()
