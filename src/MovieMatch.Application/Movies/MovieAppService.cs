@@ -162,39 +162,22 @@ namespace MovieMatch.Movies
          );
 
         }
-        public async Task<DirectorDto> GetDirector(int directorId)
+        public async Task<PersonDto> GetPersonAsync(int personId)
         {
-            var response= await _peopleApi.FindByIdAsync(directorId);
+            var response= await _peopleApi.FindByIdAsync(personId);
             
-            var director=ObjectMapper.Map<Person, PersonDto>(response.Item);
-            var movies = ObjectMapper.Map<List<Movie>,List<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
+            var person=ObjectMapper.Map<Person, PersonDto>(response.Item);
 
+            var movies = ObjectMapper.Map<IReadOnlyList<Movie>, IReadOnlyList<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
+            person.Movies = movies;
 
             //get director movies
             //paramBuilder.WithCrew(directorId);
             //_discoverApi.DiscoverMovies(paramBuilder);
 
-            return new DirectorDto(director,movies);
-
+            return person;
         }
-        public async Task<MovieDto> GetMovieAsync(int id)
-        {
-            var api= await _movieApi.FindByIdAsync(id);
-            var findMovie = api.Item;
-            var movie=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>(findMovie);
-
-            var userMovieWL = await _watchLaterRepository.FindByIdAsync(id);
-            if(userMovieWL != null)    movie.IsActiveWatchLater = true;
-            else    movie.IsActiveWatchLater = false;
-
-            var userMovieWB = await _watchedBeforeRepository.FindByIdAsync(id);
-            if (userMovieWB != null) movie.IsActiveWatchedBefore = true;
-            else movie.IsActiveWatchedBefore = false;
-
-            return movie;
-            
-        }
-
+        
         public async Task<bool> AnyAsync(int id)
         {
             return await _movieRepository.AnyAsync(id);

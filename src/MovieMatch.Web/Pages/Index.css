@@ -58,6 +58,15 @@ p {
     }
 }
 
-.post-container{
-    row-gap:10px;
+.post-container {
+    row-gap: 10px;
+
+}
+
+.post-list {
+    display:none;
+}
+
+.loader{
+    display:none;
 }

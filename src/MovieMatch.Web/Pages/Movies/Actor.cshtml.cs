@@ -5,18 +5,19 @@ using System.Threading.Tasks;
 
 namespace MovieMatch.Web.Pages.Movies
 {
-    public class DirectorModel : PageModel
+    public class ActorModel : PageModel
     {
         [BindProperty(SupportsGet = true)]
-        public int DirectorId { get; set; }
-        public PersonDto Director{ get; set; }
+        public int ActorId { get; set; }
+        public PersonDto Actor { get; set; }
 
         private IMovieAppService _movieAppService;
 
-        public DirectorModel(IMovieAppService movieAppService)
+        public ActorModel(IMovieAppService movieAppService)
         {
             _movieAppService = movieAppService;
         }
+
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
@@ -26,7 +27,7 @@ namespace MovieMatch.Web.Pages.Movies
 
         private async Task GetDataAsync()
         {
-            Director= await _movieAppService.GetPersonAsync(DirectorId);
+            Actor = await _movieAppService.GetPersonAsync(ActorId);
         }
     }
 }

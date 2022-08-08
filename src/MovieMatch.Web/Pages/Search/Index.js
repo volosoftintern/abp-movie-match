@@ -9,7 +9,7 @@
 
         event.preventDefault();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: page }).done((response) => {
+        movieMatch.search.search.getMovies({ currentPage: page }).done((response) => {
             $("#movie-list").empty();
             renderResults(response.results, $("#movie-list"));
             //$paginationPopular.twbsPagination('changeTotalPages', { totalPages: response.totalPages, currentPage: 1 });
@@ -17,12 +17,13 @@
     }
 
 
-    getPopularMovies = (pagination, movieList) => {
-        $('.loader').fadeIn();
+    getPopularMovies =async (pagination, movieList) => {
+        await $('.loader').fadeIn().promise();
+
         $paginationSearch.hide();
         $paginationPopular.show();
 
-        movieMatch.search.search.getMovies({currentPage: 1 }).done((response) => {
+        movieMatch.search.search.getMovies({currentPage: 1 }).done(async (response) => {
 
             $paginationPopular.twbsPagination({
                 currentPage: 1,
@@ -33,8 +34,8 @@
             $("#movie-list").empty();
 
             renderResults(response.results, $("#movie-list"));
-            $('.loader').fadeOut();
-            $('.movie-list-title').fadeIn();
+            await $('.loader').fadeOut().promise();
+            await $('.movie-list-title').fadeIn().promise();
             //pagination.twbsPagination('changeTotalPages', response.totalPages, 1);
 
         });
