@@ -43,9 +43,10 @@
         
     @foreach (var item in Model.Actor.Movies)
     {
-
         <div class="swiper-slide">
-            <img alt="@item.Title"  src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+            <a href="/Movies/@item.Id">
+                <img alt="@item.Title" src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+            </a>
         </div>
     }
 

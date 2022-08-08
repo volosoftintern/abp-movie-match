@@ -5,6 +5,7 @@
         spaceBetween: 10,
         centeredSlides: true,
         allowTouchMove: true,
+        allowClick:true,
         loop: true,
         direction: 'horizontal',
         autoHeight: true,
@@ -19,4 +20,10 @@
         },
     });
 
+
+    //swiper.on('click', (element, event) => {
+    //    const id = ($(event.target).data('id'))
+
+        
+    //})
 });
