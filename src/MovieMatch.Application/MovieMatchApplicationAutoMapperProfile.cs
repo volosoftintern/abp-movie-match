@@ -32,6 +32,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<MovieInfo, MovieDto>();
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>();
+        CreateMap<MovieDetailDto, MovieDto>();
         CreateMap<Movies.Movie, MovieDto>();
         CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
         CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();

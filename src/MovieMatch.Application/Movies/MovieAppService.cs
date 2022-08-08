@@ -48,6 +48,13 @@ namespace MovieMatch.Movies
             return ObjectMapper.Map<Movie, MovieDto>(movie);
         }
 
+        public async Task<MovieDto> GetMovieAsync(int id)
+        {
+            var movie = await GetAsync(id);
+
+            return ObjectMapper.Map<MovieDetailDto, MovieDto>(movie);
+        }
+
         public async Task<MovieDetailDto> GetAsync(int id)
         {
             var response = await _movieApi.FindByIdAsync(id);
