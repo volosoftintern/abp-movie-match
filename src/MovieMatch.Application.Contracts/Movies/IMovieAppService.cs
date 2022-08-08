@@ -13,5 +13,6 @@ namespace MovieMatch.Movies
         Task<PersonDto> GetPersonAsync(int directorId);
         Task<bool> AnyAsync(int id);
         Task<MovieDto> GetFromDbAsync(int id);
+        Task<MovieDto> GetMovieAsync(int id);
     }
 }
