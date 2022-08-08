@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MovieMatch.Migrations
 {
     [DbContext(typeof(MovieMatchDbContext))]
-    [Migration("20220805085801_id_changed")]
-    partial class id_changed
+    [Migration("20220808113625_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,9 +30,6 @@ namespace MovieMatch.Migrations
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Overview")
                         .HasColumnType("nvarchar(max)");
@@ -86,6 +83,38 @@ namespace MovieMatch.Migrations
                     b.HasIndex("UserId", "MovieId");
 
                     b.ToTable("AppMoviesWatchLater", (string)null);
+                });
+
+            modelBuilder.Entity("MovieMatch.Posts.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppPosts", (string)null);
                 });
 
             modelBuilder.Entity("MovieMatch.UserConnections.UserConnection", b =>
@@ -2207,6 +2236,21 @@ namespace MovieMatch.Migrations
                 });
 
             modelBuilder.Entity("MovieMatch.Movies.WatchLater", b =>
+                {
+                    b.HasOne("MovieMatch.Movies.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieMatch.Posts.Post", b =>
                 {
                     b.HasOne("MovieMatch.Movies.Movie", null)
                         .WithMany()
