@@ -17,6 +17,7 @@ using Volo.Abp.TenantManagement;
 using Volo.CmsKit;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
 
 namespace MovieMatch;
 
@@ -43,15 +44,19 @@ namespace MovieMatch;
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
-        Configure<CmsKitRatingOptions>(options =>
-        {
-            options.EntityTypes.Add(new RatingEntityTypeDefinition(nameof(Post)));
-        });
 
         Configure<CmsKitCommentOptions>(options =>
         {
-            options.EntityTypes.Add(new CommentEntityTypeDefinition(nameof(Post)));
+            options.EntityTypes.Add(new CommentEntityTypeDefinition("Movie"));
         });
+        Configure<CmsKitRatingOptions>(options =>
+        {
+            options.EntityTypes.Add(new RatingEntityTypeDefinition("Movie"));
+        });
+
+
+
+
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

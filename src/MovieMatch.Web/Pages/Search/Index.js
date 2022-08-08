@@ -6,6 +6,7 @@
 
     fetchPopularMovies = (event, page) => {
 
+
         event.preventDefault();
 
         movieMatch.search.search.getMovies({ currentPage: page }).done((response) => {
@@ -122,7 +123,7 @@
 
         results.forEach((val, i) => {
             movieList.append(`
-                            <div class="card my-3 movie-card-sm" >
+                            <div class="card my-3 movie-card-sm">
                                 <img style="display:${isNullOrEmpty(val.posterPath)?'none':'block'}"  class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.posterPath}" alt="${val.title}">
                                 <div class="card-body">
                                     <h5 class="card-title"><a href="Movies/${val.id}">${val.title}</a></h5>
@@ -132,10 +133,11 @@
                                         <button class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
                                         <button class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
                                     </div>
-
                                 </div>
                             </div>
-            `)
+
+                    `)
+
 
             $(`#${val.id}.btn-watch-later`).data('isactivewatchlater', val.isActiveWatchLater)
             $(`#${val.id}.btn-watch-later`).on('click', () => {
@@ -146,6 +148,7 @@
                 else {
                     removeFromWatchLaterList(val.id)
                 }
+                
             })
             $(`#${val.id}.btn-watched-before`).data('isactivewatchedbefore', val.isActiveWatchedBefore)
             $(`#${val.id}.btn-watched-before`).on('click', () => {
@@ -172,7 +175,7 @@
         });
     }
     addWatchedBefore = (movieId, userId) => {
-        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            debugger;
+        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            
             $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
             $(`#${movieId}.btn-watched-before`).css("background-color", "red");
             $(`#${movieId}.btn-watched-before`).text("UnWatch");

@@ -13,6 +13,7 @@ namespace MovieMatch.Web.Pages.Movies
         public int MovieId { get; set; }
 
         public MovieDetailDto MovieDetail { get; set; }
+        public MovieDto Movie { get; set; }
 
         public DetailModel(IMovieAppService movieAppService)
         {
@@ -29,6 +30,7 @@ namespace MovieMatch.Web.Pages.Movies
         private async Task GetDataAsync()
         {
             MovieDetail = await _movieAppService.GetAsync(MovieId);
+            Movie=await _movieAppService.GetMovieAsync(MovieId);
         }
     }
 }

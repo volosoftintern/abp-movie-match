@@ -9,6 +9,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.BlobStoring;
+using Volo.CmsKit;
 using Volo.CmsKit;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.BlobStoring;
@@ -28,6 +30,8 @@ namespace MovieMatch;
     typeof(AbpBlobStoringFileSystemModule)
     )]
 
+[DependsOn(typeof(CmsKitApplicationModule))]
+
     public class MovieMatchApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -37,19 +41,15 @@ namespace MovieMatch;
             options.AddMaps<MovieMatchApplicationModule>();
         });
 
-        Configure<AbpBlobStoringOptions>(options =>
-        {
-
-            options.Containers.ConfigureDefault(container =>
-            {
-                container.UseFileSystem(fileSystem =>
-                {
-                    fileSystem.BasePath = "C:\\my-files";
-                });
-            });
-        });
-
 
         MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
+
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                //TODO...
+            });
+        });
     }
 }

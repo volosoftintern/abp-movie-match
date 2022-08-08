@@ -16,6 +16,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit;
 using Volo.Abp.BlobStoring;
 
+
 namespace MovieMatch;
 
 [DependsOn(
@@ -30,6 +31,9 @@ namespace MovieMatch;
     typeof(CmsKitDomainSharedModule),
     typeof(AbpBlobStoringModule)
     )]
+
+[DependsOn(typeof(CmsKitDomainSharedModule))]
+
     public class MovieMatchDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
