@@ -18,6 +18,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
 using MovieMatch.Posts;
 
+
 namespace MovieMatch.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
@@ -83,7 +84,6 @@ public class MovieMatchDbContext :
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-        
         builder.ConfigureCmsKit();
         
 
@@ -143,6 +143,9 @@ public class MovieMatchDbContext :
             b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
             b.HasIndex(x => new {x.UserId,x.MovieId});
         });
+        builder.ConfigureCmsKit();
+        }
+
 
         builder.Entity<Post>(b =>
         {

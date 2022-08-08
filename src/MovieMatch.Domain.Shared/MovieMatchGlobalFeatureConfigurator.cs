@@ -24,6 +24,8 @@ public static class MovieMatchGlobalFeatureConfigurator
             {
                 cmsKit.Comments.Enable();
                 cmsKit.Ratings.Enable();
+                cmsKit.User.Enable();
+
             });
 
         });

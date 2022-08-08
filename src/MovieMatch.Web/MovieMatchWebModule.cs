@@ -46,6 +46,7 @@ using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.CmsKit.Web;
+using Volo.CmsKit.Comments;
 
 
 namespace MovieMatch.Web;
@@ -62,9 +63,10 @@ namespace MovieMatch.Web;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(CmsKitWebModule)
     )]
-[DependsOn(typeof(CmsKitWebModule))]
+
     public class MovieMatchWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -107,8 +109,8 @@ namespace MovieMatch.Web;
             options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
             options.Conventions.AddPageRoute("/Movies/Director", "Movies/Director/{DirectorId}");
         });
+       
 
-        
     }
 
     private void ConfigureUrls(IConfiguration configuration)
