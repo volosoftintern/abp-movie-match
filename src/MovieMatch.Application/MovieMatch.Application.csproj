@@ -10,7 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MovieMatch.Domain\MovieMatch.Domain.csproj" />
     <ProjectReference Include="..\MovieMatch.Application.Contracts\MovieMatch.Application.Contracts.csproj" />
-    <ProjectReference Include="..\MovieMatch.EntityFrameworkCore\MovieMatch.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

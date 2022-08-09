@@ -17,7 +17,6 @@ using Volo.Abp.TenantManagement;
 using Volo.CmsKit;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Ratings;
-using Volo.CmsKit.Reactions;
 
 namespace MovieMatch;
 
@@ -32,9 +31,9 @@ namespace MovieMatch;
     typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpTenantManagementDomainModule),
-    typeof(AbpEmailingModule)
+    typeof(AbpEmailingModule),
+    typeof(CmsKitDomainModule)
 )]
-[DependsOn(typeof(CmsKitDomainModule))]
     public class MovieMatchDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

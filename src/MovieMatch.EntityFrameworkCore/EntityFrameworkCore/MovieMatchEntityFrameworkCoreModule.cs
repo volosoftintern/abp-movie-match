@@ -32,9 +32,6 @@ namespace MovieMatch.EntityFrameworkCore;
     )]
 
 [DependsOn(typeof(AbpBlobStoringFileSystemModule))]
-    [DependsOn(typeof(CmsKitEntityFrameworkCoreModule))]
-
-
     public class MovieMatchEntityFrameworkCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

@@ -31,10 +31,7 @@ namespace MovieMatch;
     typeof(CmsKitDomainSharedModule),
     typeof(AbpBlobStoringModule)
     )]
-
-[DependsOn(typeof(CmsKitDomainSharedModule))]
-
-    public class MovieMatchDomainSharedModule : AbpModule
+public class MovieMatchDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

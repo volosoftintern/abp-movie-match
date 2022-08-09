@@ -53,6 +53,7 @@ namespace MovieMatch.Web;
 
 [DependsOn(
     typeof(MovieMatchHttpApiModule),
+    
     typeof(MovieMatchApplicationModule),
     typeof(MovieMatchEntityFrameworkCoreModule),
     typeof(AbpAutofacModule),
@@ -98,10 +99,14 @@ namespace MovieMatch.Web;
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
-
         Configure<ProfileManagementPageOptions>(options =>
         {
             options.Contributors.Add(new MovieMatchProfilePageContributor());
+        });
+        context.Services.AddLogging(b =>
+        {
+            b.AddConsole();
+            b.SetMinimumLevel(LogLevel.Debug);
         });
         Configure<RazorPagesOptions>(options =>
         {

@@ -24,11 +24,7 @@ namespace MovieMatch.UserConnections
 
 
         }
-        public async Task<IQueryable<UserConnection>> GetListAsync(Guid userId)
-        {
-            var dbSet = await GetDbSetAsync();
-            return dbSet;
-        }
+     
 
         public async Task<IQueryable<UserConnection>> GetFollowersAsync(Guid userId)
         {

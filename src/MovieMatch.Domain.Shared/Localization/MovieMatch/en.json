@@ -7,6 +7,7 @@
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
     "Menu:MovieMatch": "Movie Match",
     "Menu:UserConnections": "User Connections",
+    "UserConnections": "Users",
     "ProfileTab:MoviesWillWatch": "List of movies i will watch soon",
     "ProfileTab:MoviesWatchedBefore": "List of movies I've watched before",
     "ProfileTab:MoviesIWillWatch": "Movies to watch later ({0})",

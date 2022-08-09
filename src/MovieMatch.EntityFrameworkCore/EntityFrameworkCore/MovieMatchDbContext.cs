@@ -23,6 +23,7 @@ namespace MovieMatch.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
 [ReplaceDbContext(typeof(ITenantManagementDbContext))]
+
 [ConnectionStringName("Default")]
 public class MovieMatchDbContext :
     AbpDbContext<MovieMatchDbContext>,
@@ -85,7 +86,7 @@ public class MovieMatchDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
         builder.ConfigureCmsKit();
-        
+        builder.ConfigureBlobStoring();
 
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
@@ -95,6 +96,7 @@ public class MovieMatchDbContext :
                 b.ConfigureByConvention();
                 b.Property(x => x.FollowerId).IsRequired();
                 b.Property(x => x.FollowingId).IsRequired();
+                b.Property(x => x.isFollowed).IsRequired();
                 b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
@@ -155,4 +157,6 @@ public class MovieMatchDbContext :
 
         
     }
+        
+        
 }
