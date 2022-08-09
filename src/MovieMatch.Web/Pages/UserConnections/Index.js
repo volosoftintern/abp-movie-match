@@ -16,6 +16,17 @@
             columnDefs:
                 [
                     {
+                        data: "extraProperties.Photo",
+                        render: function (data) {
+                            if (data != null) {
+                                return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                            }
+                            else {
+                                return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                            }
+                        }
+                    },
+                    {
                         title: l('Username'),
                         data: "userName"
                     },
@@ -29,12 +40,11 @@
 
 
                             if (isActive === false) {
-                                return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-success">Follow User</button>`
-
+                                return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">Follow User</button>`
 
                             }
                             else {
-                                return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-danger">UnFollow User</button>`
+                                return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-outline-info">UnFollow User</button>`
 
                             }
 
@@ -58,23 +68,42 @@
 
         if ((btn).attr("isActive") == 'false') {
              movieMatch.userConnections.userConnection.follow(btn.attr("id"),btn.attr("isActive")).done(() => {
-                (btn).attr("class", "btn btn-danger");
+                 (btn).attr("class", "btn btn-outline-info");
                
                 (btn).text("UnFollow User");
-                 (btn).attr("isActive",'true');
-               
+                 (btn).attr("isActive", 'true');
+                 $('#UserConnectionsTable').DataTable().ajax.reload();
                  abp.notify.success('Followed user');
+
+                 var following = document.getElementById('following');
+                 var number = parseInt(following.innerText);
+                 value = number + 1;
+                 following.innerText = value;
                 
              });
             }
             else {
                 movieMatch.userConnections.userConnection.unFollow(id,isActive).done(() => {
-                    (btn).attr("class", "btn btn-success");
-                             
+                    (btn).attr("class", "btn btn-outline-info");
                     (btn).attr("isActive", 'false');
+                    $('#UserConnectionsTable').DataTable().ajax.reload();
                     (btn).text("Follow User");
-                 
+                    
                     abp.notify.success(`UnFollowed user`);
+                    var following = document.getElementById('following');
+                    var number = parseInt(following.innerText);
+                    value = number - 1;
+                    following.innerText = value;
+                    
+                    
+
+
+                    
+
+
+
+
+
                 });
         }
     }
@@ -119,7 +148,7 @@ abp.modals.FollowersInfo = function () {
             abp.libs.datatables.normalizeConfiguration({
                 serverSide: true,
                 paging: true,
-                order: [[0, 'desc']],
+                order: [[1, 'asc']],
                 searching: true,
                 scrollX: true,
                 ajax: abp.libs.datatables.createAjax(movieMatch.userConnections.userConnection.getFollowers),
@@ -127,33 +156,23 @@ abp.modals.FollowersInfo = function () {
                 columnDefs:
                     [
                         {
+                            data: "path",
+                            render: function (data) {
+                                if (data != null) {
+                                    return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                                }
+                                else {
+                                    return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                                }
+                            }
+                        },
+
+                        {
                             title: l('Username'),
                             data: "name"
                         },
 
-                     {
-
-
-                            data: "isActive",
-                            render: function (data, type, row) {
-                                isActive = row.isActive; var id = row.id;
-
-
-                                if (isActive === false) {
-                                    return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-success">Follow User</button>`
-
-
-                                }
-                                else {
-                                    return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-danger">UnFollow User</button>`
-
-                                }
-
-
-
-                            }
-
-                        }
+                  
 
 
                     ]
@@ -183,13 +202,24 @@ abp.modals.FollowingInfo = function () {
             abp.libs.datatables.normalizeConfiguration({
                 serverSide: true,
                 paging: true,
-                order: [[0, 'desc']],
+                order: [[1, 'asc']],
                 searching: true,
                 scrollX: true,
                 ajax: abp.libs.datatables.createAjax(movieMatch.userConnections.userConnection.getFollowing),
 
                 columnDefs:
                     [
+                        {
+                            data: "path",
+                            render: function (data) {
+                                if (data != null) {
+                                    return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                                }
+                                else {
+                                    return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                                }
+                            }
+                        },
                         {
                             title: l('Username'),
                             data: "name"
@@ -206,12 +236,12 @@ abp.modals.FollowingInfo = function () {
 
 
                                 if (isActive === false) {
-                                    return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-success">Follow User</button>`
+                                    return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">Follow User</button>`
 
 
                                 }
                                 else {
-                                    return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-danger">UnFollow User</button>`
+                                    return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-outline-info">UnFollow User</button>`
 
                                 }
 
@@ -232,7 +262,17 @@ abp.modals.FollowingInfo = function () {
     return {
         initModal: initModal
     };
+
+
+
 };
+
+
+(function () {
+    $('#btn').click(function (event) {
+        event.preventDefault;
+    })
+})
 
 
 

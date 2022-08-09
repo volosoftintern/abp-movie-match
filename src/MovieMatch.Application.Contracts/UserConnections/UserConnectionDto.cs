@@ -1,8 +1,10 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
 using Volo.Abp.Identity;
 
 namespace MovieMatch.UserConnections
@@ -13,6 +15,8 @@ namespace MovieMatch.UserConnections
         public Guid FollowersId { get; set; }
         [Required]
         public Guid FollowingId { get; set; }
+        [CanBeNull]
+        public RemoteStreamContent ProfilePictureStreamContent { get; set; }
 
     }
 
@@ -31,6 +35,7 @@ namespace MovieMatch.UserConnections
         }
 
         public Guid Id { get; set; }
-        public String name { get; set; }
+        public string name { get; set; }
+        public string path { get; set; }
     }
 }
