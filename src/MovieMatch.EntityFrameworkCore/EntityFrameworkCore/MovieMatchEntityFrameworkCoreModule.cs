@@ -11,7 +11,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.FileSystem;
+using Volo.CmsKit.EntityFrameworkCore;
+using Volo.Abp.BlobStoring;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -25,9 +27,11 @@ namespace MovieMatch.EntityFrameworkCore;
     typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
-    typeof(AbpFeatureManagementEntityFrameworkCoreModule)
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(CmsKitEntityFrameworkCoreModule)
     )]
-[DependsOn(typeof(BlobStoringDatabaseEntityFrameworkCoreModule))]
+
+[DependsOn(typeof(AbpBlobStoringFileSystemModule))]
     public class MovieMatchEntityFrameworkCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -50,5 +54,16 @@ namespace MovieMatch.EntityFrameworkCore;
                  * See also MovieMatchMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                container.UseFileSystem(fileSystem =>
+                {
+                    fileSystem.BasePath = "C:\\my-files";
+                });
+            });
+        });
+
     }
 }

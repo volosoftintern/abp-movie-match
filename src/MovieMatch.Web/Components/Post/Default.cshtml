@@ -1,0 +1,70 @@
+﻿@using MovieMatch.Posts
+@model MovieMatch.Web.Components.Post.DefaultModel;
+
+<form onsubmit="return false;">
+  <div class="form-group">
+    <div class="row">
+        <div class="col-md-5">
+            <input type="text" class="form-control" id="movieName" placeholder="Search Movie">
+        </div>
+        <div class="col-md-1">
+             <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <div class="row">
+            <div class="col-md-6">
+                <label for="movieList">Select Movie</label>
+                <select class="form-control" id="movieList">
+                </select>
+            </div>
+      </div>    
+  </div>
+
+  <div class="form-group">
+     <div class="row">
+        <div class="col-md-6">
+            <label for="movieComment">Comment</label>
+            <textarea class="form-control" id="movieComment" rows="3"></textarea>
+        </div>
+     </div>
+  </div>
+
+  <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+            <label for="movieRating">Rating</label>
+            <div class="rating" id="rating">
+                <input type="radio" name="rating" value="10" id="10"><label for="10">☆</label>
+                <input type="radio" name="rating" value="9" id="9"><label for="9">☆</label>
+                <input type="radio" name="rating" value="8" id="8"><label for="8">☆</label>
+                <input type="radio" name="rating" value="7" id="7"><label for="7">☆</label>
+                <input type="radio" name="rating" value="6" id="6"><label for="6">☆</label>
+                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+            </div>
+        </div>
+    </div>
+  </div>
+</form>
+
+<button type="button" id="shareBtn" class="btn btn-primary">Share</button>
+
+
+@foreach (var item in Model.ListResultDto.Items)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+        <h5 class="card-title">Title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+}

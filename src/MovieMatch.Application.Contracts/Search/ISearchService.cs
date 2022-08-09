@@ -11,6 +11,5 @@ namespace MovieMatch.Search
     public interface ISearchService:IApplicationService
     {
         Task<SearchResponseDto<MovieDto>> GetMovies(SearchMovieDto input);
-        Task<SearchResponseDto<MovieDto>> GetPopularMovies(PopularMovieDto input);
     }
 }
