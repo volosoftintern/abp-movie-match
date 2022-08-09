@@ -44,7 +44,7 @@ namespace MovieMatch;
         });
 
             //  context.Services.AddSingleton<IUserConnectionRepository>();
-        });
+        
         Configure<AbpBlobStoringOptions>(options =>
         {
             options.Containers.ConfigureDefault(container =>
@@ -67,3 +67,4 @@ namespace MovieMatch;
         });
     }
 }
+

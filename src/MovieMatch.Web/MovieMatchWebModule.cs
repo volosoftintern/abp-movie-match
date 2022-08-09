@@ -103,11 +103,7 @@ namespace MovieMatch.Web;
         {
             options.Contributors.Add(new MovieMatchProfilePageContributor());
         });
-        context.Services.AddLogging(b =>
-        {
-            b.AddConsole();
-            b.SetMinimumLevel(LogLevel.Debug);
-        });
+      
         Configure<RazorPagesOptions>(options =>
         {
 

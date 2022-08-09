@@ -86,7 +86,6 @@ public class MovieMatchDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
         builder.ConfigureCmsKit();
-        builder.ConfigureBlobStoring();
 
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
