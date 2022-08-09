@@ -28,8 +28,7 @@ namespace MovieMatch;
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpSettingManagementApplicationModule),
-    typeof(CmsKitApplicationModule),
-    typeof(AbpBlobStoringFileSystemModule)
+    typeof(CmsKitApplicationModule)
     )]
 
 [DependsOn(typeof(CmsKitApplicationModule))]
@@ -51,20 +50,14 @@ namespace MovieMatch;
             {
                 container.UseFileSystem(fileSystem =>
                 {
-                    fileSystem.BasePath = @"C:\Users\cagat\source\repos\abp-movie-match\src\MovieMatch.Web\wwwroot\images\";
+                    fileSystem.BasePath = "wwwroot/images";
                 });
             });
         });
 
         MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
 
-        Configure<AbpBlobStoringOptions>(options =>
-        {
-            options.Containers.ConfigureDefault(container =>
-            {
-                //TODO...
-            });
-        });
+       
     }
 }
 

@@ -19,7 +19,7 @@
                         data: "extraProperties.Photo",
                         render: function (data) {
                             if (data != null) {
-                                return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                                return `<img class="profile" src="/images/host/my-file-container/${data}"/>`
                             }
                             else {
                                 return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
@@ -159,7 +159,7 @@ abp.modals.FollowersInfo = function () {
                             data: "path",
                             render: function (data) {
                                 if (data != null) {
-                                    return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                                    return `<img class="profile" src="/images/host/my-file-container/${data}"/>`
                                 }
                                 else {
                                     return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
@@ -213,7 +213,7 @@ abp.modals.FollowingInfo = function () {
                             data: "path",
                             render: function (data) {
                                 if (data != null) {
-                                    return `<img class="profile" src="images/host/my-file-container/${data}"/>`
+                                    return `<img class="profile" src="/images/host/my-file-container/${data}"/>`
                                 }
                                 else {
                                     return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
@@ -272,9 +272,81 @@ abp.modals.FollowingInfo = function () {
     $('#btn').click(function (event) {
         event.preventDefault;
     })
+   
+    
+
 })
 
+    $('#img').click(function (e) {
+        e.preventDefault();
+        //
+        $('#UploadFileDto_File').click();
+    });
 
+    $("#UploadFileDto_File").on('change', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        var fileInput = document.getElementById('UploadFileDto_File');
+        formData.append("Content", fileInput.files[0]);
+        formData.append("Name", $('#UploadFileDto_Name').val());
+        //formData = FillNewEventFormData(formData);
+        console.log(fileInput);
+        var httpMetod = 'POST'
+
+        $.ajax({
+            //xhr: function () {
+            //    var xhr = new window.XMLHttpRequest();
+            //    xhr.upload.addEventListener("progress", function (evt) {
+            //        if (evt.lengthComputable) {
+            //            var percentComplete = evt.loaded / evt.total;
+            //            percentComplete = parseInt(percentComplete * 100);
+            //            if (percentComplete !== 100) {
+            //                $('#upload').prop("disabled", true);
+            //            }
+            //        }
+            //    }, false);
+
+            //    return xhr;
+            //},
+            url: '/file/upload',
+            data: formData,
+            type: httpMetod,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#img').attr('src', '/images/host/my-file-container/'+ response);
+                $('#upload').click();
+                //if (eventIdInput.val().length === 36) {
+                //    abp.notify.success('Updated event');
+                //} else {
+                //    abp.notify.success('Created event as a draft', '', toastr.options.timeOut = 2500);
+                //    //eventIdInput.val(response.id);
+                //    //eventUrlCodeInput.val(response.urlCode);
+                //}
+                //    SwitchToTrackCreation()
+            },
+            error: function (errorRaw) {
+                abp.notify.error(errorRaw.responseJSON.error.message, 'Error',
+                    toastr.options = {
+                        timeOut: 2500,
+                        progressBar: true,
+                        positionClass: "toast-bottom-right"
+                    }
+                );
+            }
+        });
+
+    
+
+    });
+   
+    
+
+    
+
+
+    
 
 
 

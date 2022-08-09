@@ -54,16 +54,16 @@ namespace MovieMatch.EntityFrameworkCore;
                  * See also MovieMatchMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
-        Configure<AbpBlobStoringOptions>(options =>
-        {
-            options.Containers.ConfigureDefault(container =>
-            {
-                container.UseFileSystem(fileSystem =>
-                {
-                    fileSystem.BasePath = "C:\\my-files";
-                });
-            });
-        });
+        //Configure<AbpBlobStoringOptions>(options =>
+        //{
+        //    options.Containers.ConfigureDefault(container =>
+        //    {
+        //        container.UseFileSystem(fileSystem =>
+        //        {
+        //            fileSystem.BasePath = "wwwroot/images/";
+        //        });
+        //    });
+        //});
 
     }
 }
