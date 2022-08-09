@@ -17,6 +17,7 @@ public static class MovieMatchModuleExtensionConfigurator
         {
             ConfigureExistingProperties();
             ConfigureExtraProperties();
+            
         });
     }
 
@@ -44,11 +45,11 @@ public static class MovieMatchModuleExtensionConfigurator
     {
         identity.ConfigureUser(user =>
         {
-            user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
+       //     user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
         });
         identity.ConfigureUser(user =>
         {
-            user.AddOrUpdateProperty<IFormFile>("Photo");
+         //   user.AddOrUpdateProperty<IFormFile>("Photo");
         });
     });
         /* You can configure extra properties for the
