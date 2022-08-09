@@ -35,7 +35,7 @@ namespace MovieMatch.UserConnections
         }
 
         public Guid Id { get; set; }
-        public string name { get; set; }
-        public string path { get; set; }
+        public string Name { get; set; }
+        public string Path { get; set; }
     }
 }

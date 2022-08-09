@@ -81,8 +81,9 @@ public class MovieMatchDbContext :
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
+        builder.ConfigureBlobStoring();
 
-      
+
         /* Configure your own tables/entities inside here */
         builder.Entity<UserConnection>(
             b =>
@@ -141,6 +142,4 @@ public class MovieMatchDbContext :
             b.HasIndex(x => new {x.UserId,x.MovieId});
         });
     }
-        builder.ConfigureBlobStoring();
-        }
 }
