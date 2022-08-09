@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
+using Microsoft.AspNetCore.Http;
 
 namespace MovieMatch;
 
@@ -44,6 +45,10 @@ public static class MovieMatchModuleExtensionConfigurator
         identity.ConfigureUser(user =>
         {
             user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
+        });
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<IFormFile>("Photo");
         });
     });
         /* You can configure extra properties for the

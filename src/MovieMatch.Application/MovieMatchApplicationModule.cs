@@ -1,4 +1,6 @@
 
+using Microsoft.Extensions.DependencyInjection;
+using MovieMatch.UserConnections;
 using DM.MovieApi;
 using MovieMatch.Movies;
 using Volo.Abp.Account;
@@ -16,7 +18,9 @@ using Volo.Abp.BlobStoring.FileSystem;
 namespace MovieMatch;
 
 [DependsOn(
+
     typeof(MovieMatchDomainModule),
+    typeof(AbpBlobStoringFileSystemModule),
     typeof(AbpAccountApplicationModule),
     typeof(MovieMatchApplicationContractsModule),
     typeof(AbpIdentityApplicationModule),
@@ -39,6 +43,18 @@ namespace MovieMatch;
             options.AddMaps<MovieMatchApplicationModule>();
         });
 
+            //  context.Services.AddSingleton<IUserConnectionRepository>();
+        });
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                container.UseFileSystem(fileSystem =>
+                {
+                    fileSystem.BasePath = @"C:\Users\cagat\source\repos\abp-movie-match\src\MovieMatch.Web\wwwroot\images\";
+                });
+            });
+        });
 
         MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
 
