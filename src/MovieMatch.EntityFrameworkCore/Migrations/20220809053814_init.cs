@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class init_project : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -62,6 +62,21 @@ namespace MovieMatch.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpBlobContainers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobContainers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,6 +276,8 @@ namespace MovieMatch.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfilePictureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -283,7 +300,8 @@ namespace MovieMatch.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PosterPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -526,6 +544,29 @@ namespace MovieMatch.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBlobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", maxLength: 2147483647, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBlobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpBlobs_AbpBlobContainers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "AbpBlobContainers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpOrganizationUnitRoles",
                 columns: table => new
                 {
@@ -712,7 +753,8 @@ namespace MovieMatch.Migrations
                 columns: table => new
                 {
                     FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    isFollowed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1145,6 +1187,21 @@ namespace MovieMatch.Migrations
                 columns: new[] { "IsAbandoned", "NextTryTime" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobContainers_TenantId_Name",
+                table: "AbpBlobContainers",
+                columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_ContainerId",
+                table: "AbpBlobs",
+                column: "ContainerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_TenantId_ContainerId_Name",
+                table: "AbpBlobs",
+                columns: new[] { "TenantId", "ContainerId", "Name" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -1348,6 +1405,9 @@ namespace MovieMatch.Migrations
                 name: "AbpBackgroundJobs");
 
             migrationBuilder.DropTable(
+                name: "AbpBlobs");
+
+            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
@@ -1457,6 +1517,9 @@ namespace MovieMatch.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityServerPersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "AbpBlobContainers");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");

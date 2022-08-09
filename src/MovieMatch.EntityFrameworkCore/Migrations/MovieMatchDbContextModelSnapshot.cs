@@ -866,6 +866,9 @@ namespace MovieMatch.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("PhoneNumberConfirmed");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("ProfilePictureId")
                         .HasColumnType("uniqueidentifier");
 
