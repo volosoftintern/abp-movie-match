@@ -23,7 +23,17 @@ namespace MovieMatch.Controllers
             var fileDto = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = fileName });
             return File(fileDto.Content, "application/octet-stream", fileDto.Name);
 
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadAsync(SaveBlobInputDto input)
+        {
+            input.Name = Guid.NewGuid().ToString()+input.Content.FileName;
+            await _fileAppService.SaveBlobAsync(input);
+
+            return Ok();
+
         }
     }
-    
 }

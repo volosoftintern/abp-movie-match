@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,8 +11,10 @@ namespace MovieMatch.Web.Pages.Files
 {
     public class Index : AbpPageModel
     {
-        [BindProperty]
-        public UploadFileDto UploadFileDto { get; set; }
+        [BindProperty] 
+        public UploadFileDto UploadFileDto{get;set;}
+        public bool Uploaded {get;set;}=false;
+
         private readonly IFileAppService _fileAppService;
 
         public Index(IFileAppService fileAppService)
@@ -19,26 +22,30 @@ namespace MovieMatch.Web.Pages.Files
             _fileAppService = fileAppService;
         }
 
-        public bool Uploaded { get; set; } = false;
         
         public void OnGet()
         {
         }
-        public async Task<IActionResult> OnPostAsync()
-        {
-            using(var memoryStream=new MemoryStream())
-            {
-                await UploadFileDto.File.CopyToAsync(memoryStream);
-                await _fileAppService.SaveBlobAsync(
-                    new SaveBlobInputDto
-                    {
-                        Name = UploadFileDto.Name,
-                        Content = memoryStream.ToArray()
-                    });
-            }
-            return Page();
-        }
+       
 
+            //public async Task<IActionResult> OnPostAsync()
+            //{
+            //    using (var memoryStream = new MemoryStream())
+            //    {
+            //        await UploadFileDto.File.CopyToAsync(memoryStream);
+
+            //        await _fileAppService.SaveBlobAsync(
+            //            new SaveBlobInputDto
+            //            {
+            //                Name = UploadFileDto.Name,
+            //                Content = memoryStream.ToArray()
+            //            }
+            //        );
+            //    }
+
+            //    return Page();
+            //}
+        
 
 
     }
@@ -55,6 +62,7 @@ namespace MovieMatch.Web.Pages.Files
             [Display(Name = "Filename")]
             public string Name { get; set; }
         }
+   
     
 
 
