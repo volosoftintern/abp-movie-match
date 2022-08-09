@@ -263,5 +263,6 @@ src/MovieMatch.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
+**/wwwroot/images/*
 
 tempkey.jwk
