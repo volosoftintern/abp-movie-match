@@ -17,5 +17,7 @@ namespace MovieMatch.Movies
         public MovieMemeberDto Director { get; set; }
         public IEnumerable<MovieMemeberDto> Stars { get; set; }
         public IReadOnlyList<MovieGenreDto> Genres { get; set; }
+        public bool IsActiveWatchLater { get; set; }
+        public bool IsActiveWatchedBefore { get; set; }
     }
 }

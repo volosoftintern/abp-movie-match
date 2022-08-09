@@ -58,8 +58,7 @@ namespace MovieMatch.MoviesWatchLater
                     existingMovieFromApi.Id,
                     existingMovieFromApi.Title,
                     existingMovieFromApi.PosterPath,
-                    existingMovieFromApi.Overview,
-                    true
+                    existingMovieFromApi.Overview
                     );
                 await _movieAppService.CreateAsync(createMovieDto);
             }

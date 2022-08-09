@@ -8,3 +8,11 @@
 .movie-card-sm{
     width:250px;
 }
+
+.loader{
+    display:none;
+}
+
+.movie-list-title{
+    display:none;
+}

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class init_project : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -288,6 +288,64 @@ namespace MovieMatch.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppMovies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsComments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    RepliedCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsComments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsRatings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EntityType = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    StarCount = table.Column<short>(type: "smallint", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsRatings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CmsUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CmsUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -773,6 +831,34 @@ namespace MovieMatch.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AppMoviesWatchLater_AppMovies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "AppMovies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppPosts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppPosts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppPosts_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppPosts_AppMovies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "AppMovies",
                         principalColumn: "Id",
@@ -1298,6 +1384,46 @@ namespace MovieMatch.Migrations
                 columns: new[] { "UserId", "MovieId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppPosts_Id",
+                table: "AppPosts",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppPosts_MovieId",
+                table: "AppPosts",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppPosts_UserId",
+                table: "AppPosts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsComments_TenantId_EntityType_EntityId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "EntityType", "EntityId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsComments_TenantId_RepliedCommentId",
+                table: "CmsComments",
+                columns: new[] { "TenantId", "RepliedCommentId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsRatings_TenantId_EntityType_EntityId_CreatorId",
+                table: "CmsRatings",
+                columns: new[] { "TenantId", "EntityType", "EntityId", "CreatorId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_Email",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "Email" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CmsUsers_TenantId_UserName",
+                table: "CmsUsers",
+                columns: new[] { "TenantId", "UserName" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Connections_FollowingId",
                 table: "Connections",
                 column: "FollowingId");
@@ -1397,6 +1523,18 @@ namespace MovieMatch.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppMoviesWatchLater");
+
+            migrationBuilder.DropTable(
+                name: "AppPosts");
+
+            migrationBuilder.DropTable(
+                name: "CmsComments");
+
+            migrationBuilder.DropTable(
+                name: "CmsRatings");
+
+            migrationBuilder.DropTable(
+                name: "CmsUsers");
 
             migrationBuilder.DropTable(
                 name: "Connections");
