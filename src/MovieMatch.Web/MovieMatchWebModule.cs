@@ -45,7 +45,8 @@ using Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Account.Web.ProfileManagement;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using Volo.CmsKit.Web;
+using Volo.CmsKit.Comments;
 
 
 namespace MovieMatch.Web;
@@ -63,9 +64,11 @@ namespace MovieMatch.Web;
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(CmsKitWebModule)
     )]
-public class MovieMatchWebModule : AbpModule
+
+    public class MovieMatchWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -96,13 +99,23 @@ public class MovieMatchWebModule : AbpModule
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureSwaggerServices(context.Services);
+        Configure<ProfileManagementPageOptions>(options =>
+        {
+            options.Contributors.Add(new MovieMatchProfilePageContributor());
+        });
         context.Services.AddLogging(b =>
         {
             b.AddConsole();
             b.SetMinimumLevel(LogLevel.Debug);
         });
-   
+        Configure<RazorPagesOptions>(options =>
+        {
 
+            options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
+            options.Conventions.AddPageRoute("/Movies/Director", "Movies/Director/{DirectorId}");
+            options.Conventions.AddPageRoute("/Movies/Actor", "Movies/Actor/{ActorId}");
+        });
+       
 
     }
 
@@ -123,12 +136,15 @@ public class MovieMatchWebModule : AbpModule
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
+                    bundle.AddFiles("/libs/swiper/css/swiper-bundle.min.css");
                 }
             );
 
             options.ScriptBundles.ConfigureAll(bundle =>
             {
                 bundle.AddFiles("/libs/twbs-pagination/jquery.twbsPagination.js");
+                bundle.AddFiles("/libs/swiper/js/swiper-bundle.min.js");
+
             });
         });
 

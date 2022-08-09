@@ -1,0 +1,62 @@
+﻿@page
+@using Volo.Abp.Users
+@using System;
+@using System.Globalization;
+
+@inject ICurrentUser CurrentUser
+@model MovieMatch.Web.Pages.Movies.DirectorModel
+@section styles{
+    <abp-style src="/Pages/Movies/Director.css" />
+}
+@section scripts{
+    <abp-script src="/Pages/Movies/Director.js" />
+}
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2 d-flex flex-column justify-content-between">
+    @if (!string.IsNullOrEmpty(Model.Director.ProfilePath))
+    {
+        <img src="https://image.tmdb.org/t/p/original/@Model.Director.ProfilePath" class="img-fluid rounded-start" alt="@Model.Director.Name"/>          
+    }
+    </div>
+    <div class="col-md-10">
+      <div class="card-body position-relative">
+        <h5 class="card-title">@Model.Director.Name</h5>
+        
+        <p class="card-text limited-text">@Model.Director.Biography</p>
+        <p class="card-text">Birth Day:<span class="badge bg-success">@Model.Director.BirthDay.ToShortDateString()</span></p>
+        @if ((Model.Director.DeathDay)!=null)
+        {
+            <p class="card-text">Death Day: <span class="badge bg-danger"> @((DateTime)Model.Director.DeathDay).ToShortDateString()</span></p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Director's Movies (@Model.Director.Movies.Count)</h3>
+<div class="swiper movie-carousel" >
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+        
+    @foreach (var item in Model.Director.Movies)
+    {
+
+        <div class="swiper-slide">
+            <a href="/Movies/@item.Id">
+                <img alt="@item.Title"  src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+            </a>
+            
+        </div>
+    }
+
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>

@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieMatch.UserConnections;
 using DM.MovieApi;
 using MovieMatch.Movies;
-
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
@@ -13,6 +12,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.BlobStoring;
+using Volo.CmsKit;
 using Volo.Abp.BlobStoring.FileSystem;
 
 namespace MovieMatch;
@@ -27,23 +27,21 @@ namespace MovieMatch;
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule)
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(CmsKitApplicationModule),
+    typeof(AbpBlobStoringFileSystemModule)
     )]
-public class MovieMatchApplicationModule : AbpModule
+
+[DependsOn(typeof(CmsKitApplicationModule))]
+
+    public class MovieMatchApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<MovieMatchApplicationModule>();
-          //  context.Services.AddAbpDbContext<MovieMatchDbContext>();
-           //context.Services.AddAbpDbContext<MovieMatchDbContext>(options =>
-           // {
-           //     options.AddDefaultRepositories(includeAllEntities: true);
-           // });
-            //   context.Services.AddSingleton<IUserConnectionRepository>();
-            // context.Services.AddSingleton<IUserConnectionAppService>();
-            // context.Services.AddSingleton<UserConnectionAppService>();
+        });
 
             //  context.Services.AddSingleton<IUserConnectionRepository>();
         });
@@ -59,5 +57,13 @@ public class MovieMatchApplicationModule : AbpModule
         });
 
         MovieDbFactory.RegisterSettings(MovieApiConstants.ApiKey);
+
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                //TODO...
+            });
+        });
     }
 }
