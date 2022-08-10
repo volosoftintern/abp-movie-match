@@ -111,7 +111,7 @@ namespace MovieMatch.UserConnections
              await _userConnectionRepository.InsertAsync(follower,true);
              var res= await _userConnectionRepository.GetListAsync();
           
-            res.Where(x => x.FollowerId == _currentUser.Id && x.FollowingId == id).FirstOrDefault().isFollowed = true;
+            res.Where(x => x.FollowerId == _currentUser.Id && x.FollowingId == id).FirstOrDefault().IsFollowed = true;
            var finduser= await _identityUserRepository.GetAsync(id);
             finduser.SetIsActive(!isActive);
 
@@ -125,7 +125,7 @@ namespace MovieMatch.UserConnections
 
 
             var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
-            result.isFollowed = false;
+            result.IsFollowed = false;
 
             if (result != null)
                           {
