@@ -16,70 +16,19 @@
 
 }
 
-    <div class="container d-flex align-items-center flex-column">
-@*
-        <form onsubmit="return false;">
-            <div class="form-group">
-                <div class="row justify-content-center">
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" id="movieName" placeholder="Search Movie">
-                    </div>
-                    <div class="col-md-1">
-                        <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-            </div>
+    <div class="container d-flex align-items-center flex-column mb-3">
+        <div id="post-list" class="post-list d-flex flex-column align-items-center my-3 post-container">
+        </div>
 
-            <div class="form-group">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <label for="movieList">Select Movie</label>
-                        <select class="form-control" id="movieList">
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <label for="movieComment">Comment</label>
-                        <textarea class="form-control" id="movieComment" rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col-md-5">
-                        <label for="movieRating">Rating</label>
-                        <div class="rating" id="rating">
-                            <input type="radio" name="rating" value="10" id="10"><label for="10">☆</label>
-                            <input type="radio" name="rating" value="9" id="9"><label for="9">☆</label>
-                            <input type="radio" name="rating" value="8" id="8"><label for="8">☆</label>
-                            <input type="radio" name="rating" value="7" id="7"><label for="7">☆</label>
-                            <input type="radio" name="rating" value="6" id="6"><label for="6">☆</label>
-                            <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                            <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                        </div>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" id="shareBtn" class="btn btn-primary">Share</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-        *@
         <div class="spinner-border loader" role="status">
             <span class="sr-only">Loading...</span>
         </div>
-        <div id="post-list" class="post-list d-flex flex-column align-items-center my-3 post-container">
-        </div>
-</div>
-        <div id="post-list" class="d-flex flex-column align-items-center my-3 post-container">  
-    </div>
-</div>
 
+        <h2 class="no-post-data">
+            No Post Data
+        </h2>
+
+        <button class="btn btn-secondary btn-load-more">
+            Load More
+        </button>
+</div>

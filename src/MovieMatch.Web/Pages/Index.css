@@ -4,37 +4,37 @@
     justify-content: flex-end;
 }
 
-    .rating > input {
-        display: none;
-        background-color: darkblue;
-    }
+.rating > input {
+    display: none;
+    background-color: darkblue;
+}
 
-    .rating > label {
-        position: relative;
-        width: 1em;
-        font-size: 30px;
-        color: #FFD600;
-        cursor: pointer;
-    }
+.rating > label {
+    position: relative;
+    width: 1em;
+    font-size: 30px;
+    color: #FFD600;
+    cursor: pointer;
+}
 
-        .rating > label::before {
-            content: "\2605";
-            position: absolute;
-            opacity: 0;
-        }
+.rating > label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0;
+}
 
-        .rating > label:hover:before,
-        .rating > label:hover ~ label:before {
-            opacity: 1 !important;
-        }
+.rating > label:hover:before,
+.rating > label:hover ~ label:before {
+    opacity: 1 !important;
+}
 
-    .rating > input:checked ~ label:before {
+.rating > input:checked ~ label:before {
         opacity: 1;
-    }
+}
 
-    .rating:hover > input:checked ~ label:before {
-        opacity: 0.4;
-    }
+.rating:hover > input:checked ~ label:before {
+    opacity: 0.4;
+}
 
 h1, p {
     text-align: center;
@@ -69,4 +69,34 @@ p {
 
 .loader{
     display:none;
+}
+
+.btn-load-more{
+    display:none;
+}
+
+.no-post-data{
+    display:none;
+}
+
+.fa-star {
+    color: #FFD600;
+}
+
+.card {
+    width: 30rem;
+}
+
+.card-img-top {
+    width: 50px
+}
+
+.card-text.movie-comment {
+    text-align: left;
+}
+
+
+.card a{
+    text-decoration: none;
+    color: inherit;
 }
