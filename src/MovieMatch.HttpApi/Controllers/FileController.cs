@@ -27,12 +27,12 @@ namespace MovieMatch.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadAsync(SaveBlobInputDto input)
+        public async Task<string> UploadAsync(SaveBlobInputDto input)
         {
             input.Name = Guid.NewGuid().ToString()+input.Content.FileName;
             await _fileAppService.SaveBlobAsync(input);
 
-            return Ok();
+            return input.Name;
 
         }
     }

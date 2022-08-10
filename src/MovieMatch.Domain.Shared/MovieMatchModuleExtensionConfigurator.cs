@@ -17,6 +17,7 @@ public static class MovieMatchModuleExtensionConfigurator
         {
             ConfigureExistingProperties();
             ConfigureExtraProperties();
+            
         });
     }
 
@@ -50,6 +51,7 @@ public static class MovieMatchModuleExtensionConfigurator
         //{
         //    user.AddOrUpdateProperty<IFormFile>("Photo");
         //});
+
     });
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
