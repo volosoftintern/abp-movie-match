@@ -42,14 +42,14 @@ public static class MovieMatchModuleExtensionConfigurator
         ObjectExtensionManager.Instance.Modules()
     .ConfigureIdentity(identity =>
     {
-        identity.ConfigureUser(user =>
-        {
-            user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
-        });
-        identity.ConfigureUser(user =>
-        {
-            user.AddOrUpdateProperty<IFormFile>("Photo");
-        });
+        //identity.ConfigureUser(user =>
+        //{
+        //    user.AddOrUpdateProperty<Guid>(ProfilePictureConsts.ProfilePictureId);
+        //});
+        //identity.ConfigureUser(user =>
+        //{
+        //    user.AddOrUpdateProperty<IFormFile>("Photo");
+        //});
     });
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
