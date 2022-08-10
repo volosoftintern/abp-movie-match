@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using MovieMatch.Movies;
+﻿using MovieMatch.Movies;
 using MovieMatch.UserConnections;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
+using Microsoft.AspNetCore.Authorization;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Ratings;
 
 namespace MovieMatch.Posts
 {
@@ -21,64 +23,57 @@ namespace MovieMatch.Posts
         private readonly ICurrentUser _currentUser;
         private readonly IMovieAppService _movieAppService;
         private readonly IRepository<Post, int> _repository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IRatingRepository _ratingRepository;
 
         public PostService(IRepository<Post, int> repository,
             IUserConnectionRepository userConnectionRepository,
             IIdentityUserAppService userAppService,
             IMovieAppService movieAppService,
-            ICurrentUser currentUser)
+            ICurrentUser currentUser,
+            ICommentRepository commentRespository,
+            IRatingRepository ratingRepository
+            )
         {
             _userConnectionRepository = userConnectionRepository;
             _userAppService = userAppService;
             _movieAppService = movieAppService;
             _currentUser = currentUser;
             _repository = repository;
+            _commentRepository = commentRespository;
+            _ratingRepository= ratingRepository;
         }
 
-        public async Task<PostDto> CreateAsync(CreatePostDto input)
+        public async Task<PagedResultDto<PostDto>> GetFeedAsync(PostFeedDto  input)
         {
 
-            if (!(await _movieAppService.AnyAsync(input.MovieId)))
-            {
+            var maxItemCount = await _commentRepository.GetCountAsync();
 
-                var movie = await _movieAppService.GetAsync(input.MovieId);
-
-                await _movieAppService.CreateAsync(new CreateMovieDto(movie.Id, movie.Title, movie.PosterPath, movie.Overview));
-
-            }
+            var commentSet = await _commentRepository.GetListAsync(entityType: nameof(Movie));
             
-            var post = new Post(input.UserId, input.MovieId, input.Comment, input.Rate);
-            post = await _repository.InsertAsync(post, true);
-            var postDto=ObjectMapper.Map<Post, PostDto>(post);
-            postDto.MovieTitle = input.MovieTitle;
-            postDto.Username = _currentUser.UserName;
 
-            return postDto;
-
-        }
-
-        public async Task<ListResultDto<PostDto>> GetFeedAsync(PostFeedDto input)
-        {
-
-            var queryable = await _repository.GetQueryableAsync();
-            var following = (await _userConnectionRepository.GetQueryableAsync()).Where(x => x.FollowerId == input.UserId).Select(x => x.FollowingId);
-
-            var query= queryable.Where(x => x.UserId == input.UserId || following.Contains(x.UserId));
-
-            query = query
-               .OrderByDescending(x => x.Id);
+            var following = (await _userConnectionRepository.GetQueryableAsync()).Where(x => x.FollowerId == input.UserId).Select(x => x.FollowingId).ToList();
             
-            var queryResult = await AsyncExecuter.ToListAsync(query);
+            var query = commentSet.Where(x => x.Comment.CreatorId == input.UserId || following.Any(f=>f==x.Comment.CreatorId));            
+            int totalCount = query.Count();
 
-            var posts = ObjectMapper.Map<List<Post>, List<PostDto>>(queryResult);
-            foreach (var item in posts)
+            var result= query
+               .OrderByDescending(x => x.Comment.CreationTime).Skip(input.SkipCount).Take(input.MaxCount).ToList();
+
+            var ratingSet = (await _ratingRepository.GetListAsync()).Where(x=> commentSet.Any(c=>c.Comment.CreatorId==x.CreatorId && c.Comment.EntityId==x.EntityId));
+
+            var posts = result.Select(async (x) => new PostDto()
             {
-                item.MovieTitle = (await _movieAppService.GetFromDbAsync(item.MovieId)).Title;
-                item.Username = (await _userAppService.GetAsync(item.UserId)).UserName;
-            }
+                Comment = x.Comment.Text,
+                CreationTime=x.Comment.CreationTime,
+                MovieId = int.Parse(x.Comment.EntityId),
+                UserId = x.Comment.CreatorId,
+                Movie= (await _movieAppService.GetFromDbAsync(int.Parse(x.Comment.EntityId))),
+                User= (await _userAppService.GetAsync(x.Comment.CreatorId)),
+                Rate=ratingSet.FirstOrDefault(r=>r.CreatorId==x.Comment.CreatorId && int.Parse(r.EntityId)==int.Parse(x.Comment.EntityId)).StarCount
+            }).Select(t=>t.Result).ToList();
 
-            return new ListResultDto<PostDto>(posts);
-
+            return new PagedResultDto<PostDto>(totalCount, posts);
         }
 
     }

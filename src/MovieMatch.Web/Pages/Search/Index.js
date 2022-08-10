@@ -130,8 +130,8 @@
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
                                         
-                                        <button class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
-                                        <button class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
+                                        <button type="button" class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
+                                        <button type="button" class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
-            $(`#${movieId}.btn-watch-later`).css("background-color", "red");
+            $(`#${movieId}.btn-watch-later`).toggleClass("btn-primary btn-danger");
             $(`#${movieId}.btn-watch-later`).text("UnWatch");
             abp.notify.success(
                     'Movie added watch later list.',
@@ -177,7 +177,7 @@
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            
             $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
-            $(`#${movieId}.btn-watched-before`).css("background-color", "red");
+            $(`#${movieId}.btn-watched-before`).toggleClass("btn-secondary btn-danger");
             $(`#${movieId}.btn-watched-before`).text("UnWatch");
             abp.notify.success(
                     'Movie added watched before list.',
@@ -195,9 +195,9 @@
                         .then(() => {
                             $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
                             abp.notify.info("Successfully deleted!");
-                            $(`#${id}.btn-watch-later`).css("background-color", "blue");
+                            $(`#${id}.btn-watch-later`).toggleClass("btn-danger btn-primary");
                             $(`#${id}.btn-watch-later`).text("Watch Later");
-                            dataTable.ajax.reload();
+                            
                         })
                 }
             });
@@ -211,9 +211,9 @@
                         .then(() => {
                             $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
                             abp.notify.info("Successfully deleted!");
-                            $(`#${id}.btn-watched-before`).css("background-color", "grey");
+                            $(`#${id}.btn-watched-before`).toggleClass("btn-danger btn-secondary");
                             $(`#${id}.btn-watched-before`).text("Watched Before");
-                            dataTable.ajax.reload();
+                            
                         })
                 }
             });

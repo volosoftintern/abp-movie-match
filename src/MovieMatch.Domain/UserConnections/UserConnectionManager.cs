@@ -29,8 +29,7 @@ namespace MovieMatch.UserConnections
 
                 FollowingId = followingId,
                 FollowerId = (Guid)_currentUser.Id,
-                isFollowed = isFollowed
-
+                IsFollowed = isFollowed
             };
 
         }

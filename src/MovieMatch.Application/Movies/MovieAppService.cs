@@ -45,7 +45,13 @@ namespace MovieMatch.Movies
         public async Task<MovieDto> GetFromDbAsync(int id)
         {
             var movie = await _movieRepository.GetAsync(id);
-            return ObjectMapper.Map<Movie, MovieDto>(movie);
+            
+            var resp= ObjectMapper.Map<Movie, MovieDto>(movie);
+            
+            resp.IsActiveWatchedBefore=(await _watchedBeforeRepository.GetQueryableAsync()).Any(x=>x.MovieId==resp.Id && x.UserId==CurrentUser.Id);
+            resp.IsActiveWatchLater= (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.MovieId == resp.Id && x.UserId == CurrentUser.Id);
+
+            return resp;
         }
 
         public async Task<MovieDto> GetMovieAsync(int id)
@@ -65,11 +71,12 @@ namespace MovieMatch.Movies
             
             var movieDetail=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
             
+            movieDetail.IsActiveWatchedBefore= (await _watchedBeforeRepository.GetQueryableAsync()).Any(x => x.MovieId == movieDetail.Id && x.UserId == CurrentUser.Id);
+            movieDetail.IsActiveWatchLater = (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.MovieId == movieDetail.Id && x.UserId == CurrentUser.Id);
+            
             movieDetail.Director = ObjectMapper.Map<MovieCrewMember,MovieMemeberDto>(director);
             movieDetail.Stars= ObjectMapper.Map<IEnumerable<MovieCastMember>, IEnumerable<MovieMemeberDto>>(stars);
-            //movieDetail.Genres= ObjectMapper.Map<IReadOnlyList<Genre>, IReadOnlyList<MovieGenreDto>>(response.Item.Genres);
-
-
+            
             return movieDetail;
         }
 
