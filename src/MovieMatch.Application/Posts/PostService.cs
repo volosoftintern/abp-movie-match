@@ -70,7 +70,7 @@ namespace MovieMatch.Posts
                 UserId = x.Comment.CreatorId,
                 Movie= (await _movieAppService.GetFromDbAsync(int.Parse(x.Comment.EntityId))),
                 User= (await _userAppService.GetAsync(x.Comment.CreatorId)),
-                Rate=ratingSet.FirstOrDefault(r=>r.CreatorId==x.Comment.CreatorId && int.Parse(r.EntityId)==int.Parse(x.Comment.EntityId)).StarCount
+                Rate=ratingSet.FirstOrDefault(r=>r.CreatorId==x.Comment.CreatorId && int.Parse(r.EntityId)==int.Parse(x.Comment.EntityId))==null?0: ratingSet.FirstOrDefault(r => r.CreatorId == x.Comment.CreatorId && int.Parse(r.EntityId) == int.Parse(x.Comment.EntityId)).StarCount
             }).Select(t=>t.Result).ToList();
 
             return new PagedResultDto<PostDto>(totalCount, posts);

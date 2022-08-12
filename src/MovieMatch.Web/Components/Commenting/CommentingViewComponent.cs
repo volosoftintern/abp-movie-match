@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+
 using DM.MovieApi.MovieDb.Movies;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MovieMatch.Comment;
+using MovieMatch.Comments;
 using MovieMatch.Movies;
 using MovieMatch.Rating;
 using MovieMatch.Web.Components.Rating;
@@ -24,6 +24,7 @@ using Volo.CmsKit.Public.Comments;
 using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 using Volo.CmsKit.Public.Web.Renderers;
+using Movie = MovieMatch.Movies.Movie;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace MovieMatch.Web.Components.Commenting;
@@ -117,7 +118,7 @@ public class CommentingViewComponent : AbpViewComponent
         public List<CommentWithStarsDto> CommentsWithStars { get; set; }
 
         public Dictionary<Guid, string> RawCommentTexts { get; set; }
-        public Task<Movie> Movie { get; set; }
+        public MovieDto Movie { get; set; }
         //public RatingDto Rating { get; set; }
     }
 }
