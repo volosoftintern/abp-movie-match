@@ -2,18 +2,19 @@
     width: 720px;
 }
 
-.row{
-    min-height:480px;
-}
-
 .card-body {
     height: 100%;
 }
-
-.card-text {
-    bottom: 0;
+.h-75.rounded-circle{
+    margin-left:10px;
+}
+.count{
+    margin-top:76px;
+}
+.follow{
+    margin-right:25px;
 }
 
-.actions {
-    margin-bottom:12px;
+.fade:not(.show) {
+    display:none;
 }

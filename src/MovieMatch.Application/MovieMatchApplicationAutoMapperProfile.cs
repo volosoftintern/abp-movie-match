@@ -10,6 +10,10 @@ using MovieMatch.UserConnections;
 using System;
 using Volo.Abp.Identity;
 using Volo.CmsKit.Public.Ratings;
+using System.Collections.Generic;
+using Volo.CmsKit.Comments;
+using MovieMatch.Comments;
+using Volo.CmsKit.Users;
 
 namespace MovieMatch;
 
@@ -38,5 +42,9 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<IdentityUser,IdentityUserDto>();
         CreateMap<Volo.CmsKit.Ratings.Rating,RatingDto>();
         CreateMap<ApiQueryResponse<DM.MovieApi.MovieDb.Movies.Movie>, MovieDto>();
+        CreateMap<CommentWithAuthorQueryResultItem, CommentWithStarsDto>();
+        CreateMap<CmsUser, CmsUserDto>();
+        CreateMap<Comment, CommentDto>();
+        CreateMap<Comment, CommentWithStarsDto>();
     }
 }

@@ -1,4 +1,4 @@
-﻿using MovieMatch.Comment;
+﻿using MovieMatch.Comments;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
