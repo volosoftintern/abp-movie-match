@@ -12,24 +12,24 @@ namespace MovieMatch.UserConnections
 {
     public class UserConnectionManager:DomainService
     {
-        private readonly IUserConnectionRepository _userConnectionRepository;
+        
         private readonly ICurrentUser _currentUser;
 
        
 
-        public UserConnectionManager(IUserConnectionRepository userConnectionRepository, ICurrentUser currentUser)
+        public UserConnectionManager( ICurrentUser currentUser)
         {
-            _userConnectionRepository = userConnectionRepository;
             _currentUser = currentUser;
 
         }
-        public async Task<UserConnection> CreateAsync(Guid followingId)
+        public async Task<UserConnection> CreateAsync(Guid followingId,bool isFollowed)
         {
-            return new UserConnection(followingId, (Guid)_currentUser.Id)
+            return new UserConnection(followingId, (Guid)_currentUser.Id,isFollowed)
             {
-               
+
                 FollowingId = followingId,
-                FollowerId = (Guid)_currentUser.Id
+                FollowerId = (Guid)_currentUser.Id,
+                IsFollowed = isFollowed
             };
 
         }

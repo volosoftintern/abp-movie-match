@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MovieMatch.MultiTenancy;
+using MovieMatch.Posts;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
@@ -16,7 +17,6 @@ using Volo.Abp.TenantManagement;
 using Volo.CmsKit;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Ratings;
-using Volo.CmsKit.Reactions;
 
 namespace MovieMatch;
 
@@ -31,9 +31,9 @@ namespace MovieMatch;
     typeof(AbpPermissionManagementDomainIdentityServerModule),
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpTenantManagementDomainModule),
-    typeof(AbpEmailingModule)
+    typeof(AbpEmailingModule),
+    typeof(CmsKitDomainModule)
 )]
-[DependsOn(typeof(CmsKitDomainModule))]
     public class MovieMatchDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -43,6 +43,7 @@ namespace MovieMatch;
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
+
         Configure<CmsKitCommentOptions>(options =>
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("Movie"));
@@ -51,6 +52,8 @@ namespace MovieMatch;
         {
             options.EntityTypes.Add(new RatingEntityTypeDefinition("Movie"));
         });
+
+
 
 
 

@@ -17,6 +17,7 @@
 <div class="card mb-3 ">
   <div class="row g-0">
     <div class="col-md-4 d-flex flex-column justify-content-between">
+
       <img style="display:{@string.IsNullOrEmpty(Model.MovieDetail.PosterPath)?'none':'block'}" src="https://image.tmdb.org/t/p/original/@Model.MovieDetail.PosterPath" class="img-fluid rounded-start" alt="@Model.MovieDetail.Title">
        <div class="row h-auto" >
         <div class="col-10 px-3">      
@@ -37,11 +38,11 @@
       <div class="card-body position-relative">
         <h5 class="card-title">@Model.MovieDetail.Title</h5>
         <p class="card-text">@Model.MovieDetail.Overview</p>
-        <p class="card-text">Director: <span class="badge bg-success">@Model.MovieDetail.Director.Name</span></p>
+        <p class="card-text">Director: <a href="/Movies/Director/@Model.MovieDetail.Director.PersonId"><span class="badge bg-success"> @Model.MovieDetail.Director.Name</span></a></p>
         <p class="card-text">Stars:
             @foreach (var item in Model.MovieDetail.Stars)
             {
-                <span class="badge bg-primary">@item.Name</span>
+                <a href="/Movies/Actor/@item.PersonId"><span class="badge bg-primary">@item.Name</span></a>
             }
          </p>
          <p class="card-text">Genres:

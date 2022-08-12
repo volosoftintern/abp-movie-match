@@ -11,13 +11,15 @@ using Volo.Abp.Application.Dtos;
 using MovieMatch.MoviesWatchedBefore;
 using MovieMatch.MoviesWatchLater;
 using DM.MovieApi.MovieDb.Genres;
-
+using DM.MovieApi.ApiResponse;
+using DM.MovieApi.MovieDb.People;
 
 namespace MovieMatch.Movies
 {
     public class MovieAppService : MovieMatchAppService, IMovieAppService
     {
         private readonly IApiMovieRequest _movieApi;
+        private readonly IApiPeopleRequest _peopleApi;
         private readonly IMovieRepository _movieRepository;
         private readonly MovieManager _movieManager;
         private readonly IWatchedBeforeRepository _watchedBeforeRepository;
@@ -33,10 +35,30 @@ namespace MovieMatch.Movies
         {
             _movieList= new List<Movie>();
             _movieApi = MovieDbFactory.Create<IApiMovieRequest>().Value;
+            _peopleApi = MovieDbFactory.Create<IApiPeopleRequest>().Value;
             _movieRepository = movieRepository;
             _movieManager = movieManager;
             _watchedBeforeRepository = watchedBeforeRepository;
             _watchLaterRepository = watchLaterRepository;
+        }
+
+        public async Task<MovieDto> GetFromDbAsync(int id)
+        {
+            var movie = await _movieRepository.GetAsync(id);
+            
+            var resp= ObjectMapper.Map<Movie, MovieDto>(movie);
+            
+            resp.IsActiveWatchedBefore=(await _watchedBeforeRepository.GetQueryableAsync()).Any(x=>x.MovieId==resp.Id && x.UserId==CurrentUser.Id);
+            resp.IsActiveWatchLater= (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.MovieId == resp.Id && x.UserId == CurrentUser.Id);
+
+            return resp;
+        }
+
+        public async Task<MovieDto> GetMovieAsync(int id)
+        {
+            var movie = await GetAsync(id);
+
+            return ObjectMapper.Map<MovieDetailDto, MovieDto>(movie);
         }
 
         public async Task<MovieDetailDto> GetAsync(int id)
@@ -49,17 +71,18 @@ namespace MovieMatch.Movies
             
             var movieDetail=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
             
+            movieDetail.IsActiveWatchedBefore= (await _watchedBeforeRepository.GetQueryableAsync()).Any(x => x.MovieId == movieDetail.Id && x.UserId == CurrentUser.Id);
+            movieDetail.IsActiveWatchLater = (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.MovieId == movieDetail.Id && x.UserId == CurrentUser.Id);
+            
             movieDetail.Director = ObjectMapper.Map<MovieCrewMember,MovieMemeberDto>(director);
             movieDetail.Stars= ObjectMapper.Map<IEnumerable<MovieCastMember>, IEnumerable<MovieMemeberDto>>(stars);
-            //movieDetail.Genres= ObjectMapper.Map<IReadOnlyList<Genre>, IReadOnlyList<MovieGenreDto>>(response.Item.Genres);
-
-
+            
             return movieDetail;
         }
 
         public async Task<MovieDto> CreateAsync(CreateMovieDto input)
         {
-            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview,input.IsActive);
+            var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview);
             try
             {
                 await _movieRepository.InsertAsync(movie,true);
@@ -88,7 +111,6 @@ namespace MovieMatch.Movies
             var queryable = await _movieRepository.GetQueryableAsync();
 
             var totalCount = moviesWatchedBefore.Count();
-
             //var queryResult = await AsyncExecuter.ToListAsync(moviesWatchedBefore);
 
             foreach (var item in moviesWatchedBefore)
@@ -107,7 +129,7 @@ namespace MovieMatch.Movies
             //Convert the query result to a list of movieDto objects
             var movieDtos = ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
 
-
+            
             //Get the total count with another query
 
             return new PagedResultDto<MovieDto>(
@@ -154,24 +176,25 @@ namespace MovieMatch.Movies
          );
 
         }
-
-
-
-        public async Task<MovieDto> GetMovieAsync(int id)
+        public async Task<PersonDto> GetPersonAsync(int personId)
         {
-            var api= await _movieApi.FindByIdAsync(id);
-            var findMovie = api.Item;
-            var movie=ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>(findMovie);
+            var response= await _peopleApi.FindByIdAsync(personId);
+            
+            var person=ObjectMapper.Map<Person, PersonDto>(response.Item);
 
-            var userMovieWL = await _watchLaterRepository.FindByIdAsync(id);
-            if(userMovieWL != null)    movie.IsActiveWatchLater = true;
-            else    movie.IsActiveWatchLater = false;
+            var movies = ObjectMapper.Map<IReadOnlyList<Movie>, IReadOnlyList<MovieDto>>((await _movieRepository.GetListAsync()).Take(10).ToList());
+            person.Movies = movies;
 
-            var userMovieWB = await _watchedBeforeRepository.FindByIdAsync(id);
-            if (userMovieWB != null) movie.IsActiveWatchedBefore = true;
-            else movie.IsActiveWatchedBefore = false;
+            //get director movies
+            //paramBuilder.WithCrew(directorId);
+            //_discoverApi.DiscoverMovies(paramBuilder);
 
-            return movie;
+            return person;
+        }
+        
+        public async Task<bool> AnyAsync(int id)
+        {
+            return await _movieRepository.AnyAsync(id);
         }
     }
 }

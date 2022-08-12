@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace MovieMatch.Search
+namespace MovieMatch
 {
-    public class PopularMovieDto
+    public class GetBlobRequestDto
     {
         [Required]
-        public int CurrentPage { get; set; } = 1;
+        public string Name { get; set; }
     }
 }

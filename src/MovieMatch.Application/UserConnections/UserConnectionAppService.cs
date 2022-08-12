@@ -1,135 +1,235 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
+using Volo.Abp.Validation;
 
 namespace MovieMatch.UserConnections
 {
     public class UserConnectionAppService : ApplicationService, IUserConnectionAppService
     {
         //  private readonly IIdentityUserRepository identityUserRepository;
-
+        
         private readonly UserConnectionManager _userConnectionManager; 
-        private readonly IIdentityUserAppService _identityUserAppService;
         private readonly ICurrentUser _currentUser;
         private readonly IUserConnectionRepository _userConnectionRepository;
-        
+        private readonly IIdentityUserRepository _identityUserRepository;
+        private readonly IBlobContainer<MyFileContainer> _organizationBlobContainer;
+        private readonly IHostingEnvironment _env;
+        private readonly IUserRepository _userRepository;
 
-        public UserConnectionAppService(IIdentityUserAppService identityUserAppService, IUserConnectionRepository userConnectionRepository,ICurrentUser currentUser, UserConnectionManager userConnectionManager)
+      
+
+        public UserConnectionAppService(IUserRepository userRepository, IHostingEnvironment env, IBlobContainer<MyFileContainer> organizationBlobContainer, IIdentityUserRepository identityUserRepository, IUserConnectionRepository userConnectionRepository,ICurrentUser currentUser, UserConnectionManager userConnectionManager)
         {
-            
-           _userConnectionRepository = userConnectionRepository;
-            _identityUserAppService = identityUserAppService;
+            _env = env;
+            _userRepository = userRepository;
+            _userConnectionRepository = userConnectionRepository;
+            _identityUserRepository = identityUserRepository;
             _currentUser = currentUser;
             _userConnectionManager= userConnectionManager;
+            _organizationBlobContainer = organizationBlobContainer;
         }
 
+       
 
+        
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-     
-        
-           //var users=await _identityUserManager
-      //   var asd= ObjectMapper.Map<List<IdentityUser>,List<IdentityUserDto>>((List<IdentityUser>)users);
-            var users= await  _identityUserAppService.GetListAsync(input);
-           var filteredUsers=users.Items.Where(u => u.Id != _currentUser.Id);
-           
-            return new PagedResultDto<IdentityUserDto>(filteredUsers.Count(),filteredUsers.ToList());
-                           
-              //     List<IdentityUserDto> userDtos= ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>((List<IdentityUser>)users);
 
-        //    return new ListResultDto<IdentityUserDto>(userDtos);
+
+            //    var res = await _userConnectionRepository.GetListAsync(input.Sorting,input.SkipCount,input.MaxResultCount);
+
+            // var res = await _userConnectionRepository.GetQueryableAsync();
+            var filteredUsersList =await _userConnectionRepository.GetUsersListAsync(input.SkipCount,input.MaxResultCount,input.Filter);
+            var list =await _identityUserRepository.GetListAsync();
+       //     var asd =await _identityUserRepository.GetListAsync(input.Sorting,input.MaxResultCount,input.SkipCount);
+          //  var b=asd.Where()
+            
+            
+            var filteredUsers = filteredUsersList.ToList();
+            var filteredUsersCount = filteredUsers;
+
+            var userDtos= ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(filteredUsers);
+     //   var filteredUsers2 = users.Items.ToList();
+
             
 
-
-        }
-
-        public async Task<bool> AddFollowerAsync(Guid id,bool isActive)
-        {
-            var follower = await _userConnectionManager.CreateAsync(id);
-            if(isActive)
+            foreach (var item in filteredUsers)
             {
-                var result = await _userConnectionRepository.InsertAsync(follower);
-                //isActive = true;
-                return true;
+                item.SetIsActive(false);
             }
-            else
+
+            var currentUserFollowing =await GetFirstAsync();
+            foreach (var item in currentUserFollowing)
             {
-                var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
-                if (result != null)
+                foreach (var user in filteredUsers)
                 {
-                    await _userConnectionRepository.DeleteAsync(result, true);
+                    if(user.Id==item)
+                    {
+                     //   res.Where(x=>x.FollowingId==user.Id).FirstOrDefault().isFollowed=true;
+                        
+                            user.SetIsActive(true);
+
+                    }
+                    
+
                 }
-            //    isActive = false;
-                return false;
             }
+          //  filteredUsers.Count++;
+            return new PagedResultDto<IdentityUserDto>(((list.Count)-1), userDtos);
+                           
+         
+    
+        }
+        public async Task<List<Guid>> GetFirstAsync()
+        {
+            var res = await _userConnectionRepository.GetListAsync();
+            var response =res.Where(n => n.FollowerId == _currentUser.Id).Select(c => (c.FollowingId)).ToList();
+            return response;
 
-            
+        }
+       
+        public async Task FollowAsync(Guid id,bool isActive)
+        {
+            var follower = await _userConnectionManager.CreateAsync(id,true);
 
 
-           // var user= await _identityUserAppService.GetAsync(id);
-           // return user;
+             await _userConnectionRepository.InsertAsync(follower,true);
+             var res= await _userConnectionRepository.GetListAsync();
+          
+            res.Where(x => x.FollowerId == _currentUser.Id && x.FollowingId == id).FirstOrDefault().IsFollowed = true;
+           var finduser= await _identityUserRepository.GetAsync(id);
+            finduser.SetIsActive(!isActive);
+
 
         }
 
-        //public async Task<bool> RemoveFollowerAsync(Guid id,bool isActive)
-        //{
+
+     
+        public async Task UnFollowAsync(Guid id,bool isActive) { 
+                 
 
 
-        //    var follower = await _userConnectionManager.CreateAsync(id);
+            var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
+            result.IsFollowed = false;
 
+            if (result != null)
+                          {
+             var finduser=  await _identityUserRepository.GetAsync(result.FollowingId);
+                finduser.SetIsActive(!isActive);
+                                await _userConnectionRepository.DeleteAsync(result, true);
+                
+                
+                      }
 
-            
-            
+}
 
-        //  //  var user = await _identityUserAppService.GetAsync(id);
-        //  //  return user;
-
-        //}
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetIdentityUsersInput input)
         {
 
-
+          //  var res=await _userConnectionRepository.GetQueryableAsync();
             var res = await _userConnectionRepository.GetListAsync();
-          //  var result = res.ToList();
-            //        var results = result.GroupBy(
-            //p=>p.FollowerId,
-            //p => p.FollowingId,
-            // (key, g) => new { = key, UserConnections = g.ToList() });
+            //   input.MaxResultCount = 100;
+            // input.Sorting = null;
             
-            var response= res.Where(n => n.FollowingId==_currentUser.Id).Select(c=>new FollowerDto(c.FollowerId)).ToList();
-            return new PagedResultDto<FollowerDto>(response.Count(), response);
+            var user = await _identityUserRepository.GetListAsync();
+            
+            var users = await _identityUserRepository.GetListAsync();
+
+
+            var response = res.Where(n => n.FollowingId == _currentUser.Id).Select(c =>(c.FollowerId)).ToList();
+            var q = (from pd in response
+                     join od in users.ToList() on pd equals od.Id 
+                     select new FollowerDto
+                     {
+                         Id = pd,
+                         Name = od.UserName,
+                         Path= od.GetProperty<string>("Photo")
+                     }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
+            return new PagedResultDto<FollowerDto>(q.Count(), q);
+
+
+
+           
             
     }
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetIdentityUsersInput input)
         {
             var res = await _userConnectionRepository.GetListAsync();
-            var user =await _identityUserAppService.GetListAsync(input);
-            //  var result = res.ToList();
-            //        var results = result.GroupBy(
-            //p=>p.FollowerId,
-            //p => p.FollowingId,
-            // (key, g) => new { = key, UserConnections = g.ToList() });
+            //  var res = await _userConnectionRepository.GetQueryableAsync();
+            var user = await _identityUserRepository.GetListAsync();
+         
+            var users = await _identityUserRepository.GetListAsync();
+            //  input.MaxResultCount = 100;
+            //  input.Sorting = null;
 
-            var response= res.Where(n => n.FollowerId==_currentUser.Id).Select(c=>new FollowerDto(c.FollowingId)).ToList();
+            var response= res.Where(n => n.FollowerId==_currentUser.Id).Select(c=>(c.FollowingId)).ToList();
             var q = (from pd in response
-                     join od in user.Items.ToList() on pd.Id equals od.Id
+                     join od in users.ToList() on pd equals od.Id
                      select new FollowerDto
                      {
-
-                         name=od.UserName
-                     }).ToList();
+                         Id=pd,
+                         Name =od.UserName,
+                         Path =od.GetProperty<string>("Photo")
+                     }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
         }
+        public async Task UploadAsync(IFormFile file)
+        {
+            var dir = _env.ContentRootPath;
+            using (var fileStream = new FileStream(Path.Combine(dir, file.Name), FileMode.Open, FileAccess.Read))
+            {
+                file.CopyTo(fileStream);
+            }
+        }
+        
+        public async Task SetPhotoAsync(string userName, string name)
+        {
+            var user = await _userRepository.GetAsync(u => u.UserName == userName);
+            user.SetProperty("Photo",name); //Using the new extension property
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task<string> GetPhotoAsync(string userName)
+        {
+            var user = await _userRepository.GetAsync(u => u.UserName == userName);
+            return user.GetProperty<string>("Photo"); //Using the new extension property
+        }
+        // public async Task<UserConnectionDto> CreateAsync(UserConnectionDto input)
+        // {
+        //    var user=await _userConnectionManager.CreateAsync(_currentUser.GetId(), true);
+        //     if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
+        //     {
+        //         await SaveProfilePictureAsync(_currentUser.GetId(), input.ProfilePictureStreamContent);
+        //     }
+
+        //     return ObjectMapper.Map<UserConnection, UserConnectionDto>(user);
+        // }
+        //public async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
+        // {
+        //     var blobName = id.ToString();
+
+        //     await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
+        // }
+
+
 
     }
 }

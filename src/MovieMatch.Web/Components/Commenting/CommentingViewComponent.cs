@@ -8,8 +8,8 @@ using DM.MovieApi.MovieDb.Movies;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.JSInterop;
-using MovieMatch.Comments;
+using MovieMatch.Comment;
+using MovieMatch.Movies;
 using MovieMatch.Rating;
 using MovieMatch.Web.Components.Rating;
 using MovieMatch.Web.Controllers;
@@ -43,17 +43,17 @@ public class CommentingViewComponent : AbpViewComponent
     public IMarkdownToHtmlRenderer MarkdownToHtmlRenderer { get; }
     public AbpMvcUiOptions AbpMvcUiOptions { get; }
 
-    private readonly Movies.MovieApiService _movieApiService;
+    private readonly IMovieAppService _movieAppService;
     private readonly MovieMatch.Rating.IRatingPublicAppService _ratingPublicAppService;
 
     public CommentingViewComponent(
         ICommentPublicAppService commentPublicAppService,
         IOptions<AbpMvcUiOptions> options,
         IMarkdownToHtmlRenderer markdownToHtmlRenderer,
-        Movies.MovieApiService movieApiService,
+        IMovieAppService movieAppService,
         MovieMatch.Rating.IRatingPublicAppService ratingPublicAppService)
     {
-        _movieApiService = movieApiService;
+        _movieAppService = movieAppService;
         CommentPublicAppService = commentPublicAppService;
         MarkdownToHtmlRenderer = markdownToHtmlRenderer;
         AbpMvcUiOptions = options.Value;
@@ -77,8 +77,10 @@ public class CommentingViewComponent : AbpViewComponent
             EntityType = entityType,
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
-            Movie = _movieApiService.GetMovieAsync(id),      
-            CommentsWithStars = await _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId),
+            Movie =  await _movieAppService.GetMovieAsync(id),
+            CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId)
+          //  Rating= _ratingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId),
+            
         };
 
         await ConvertMarkdownTextsToHtml(viewModel);

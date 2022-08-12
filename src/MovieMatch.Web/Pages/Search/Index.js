@@ -1,13 +1,15 @@
 ﻿$(function () {
+
     $paginationPopular = $('#pagination-popular');
     $paginationSearch = $('#pagination-search');
+    
 
     fetchPopularMovies = (event, page) => {
 
 
         event.preventDefault();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: page }).done((response) => {
+        movieMatch.search.search.getMovies({ currentPage: page }).done((response) => {
             $("#movie-list").empty();
             renderResults(response.results, $("#movie-list"));
             //$paginationPopular.twbsPagination('changeTotalPages', { totalPages: response.totalPages, currentPage: 1 });
@@ -15,12 +17,13 @@
     }
 
 
-    getPopularMovies = (pagination, movieList) => {
+    getPopularMovies =async (pagination, movieList) => {
+        await $('.loader').fadeIn().promise();
 
         $paginationSearch.hide();
         $paginationPopular.show();
 
-        movieMatch.search.search.getPopularMovies({ currentPage: 1 }).done((response) => {
+        movieMatch.search.search.getMovies({currentPage: 1 }).done(async (response) => {
 
             $paginationPopular.twbsPagination({
                 currentPage: 1,
@@ -31,7 +34,8 @@
             $("#movie-list").empty();
 
             renderResults(response.results, $("#movie-list"));
-
+            await $('.loader').fadeOut().promise();
+            await $('.movie-list-title').fadeIn().promise();
             //pagination.twbsPagination('changeTotalPages', response.totalPages, 1);
 
         });
@@ -39,12 +43,22 @@
 
     searchMovies = (ev, page) => {
         event.preventDefault();
+        $('.movie-list-title').fadeOut();
+        $('.loader').fadeIn();
+
+
+        console.log(`SearchMovies: ${$("#movie-name").val()}`);
 
         movieMatch.search.search.getMovies({ name: $("#movie-name").val(), currentPage: page }).done((res) => {
 
             $("#movie-list").empty();
-            renderResults(res.results, $("#movie-list"));
+            $('.movie-list-title').text(`Total ${res.totalResults} results for "${$("#movie-name").val()}"`);
 
+            $('.loader').fadeOut();
+            $('.movie-list-title').fadeIn();
+
+            renderResults(res.results, $("#movie-list"));
+            
         })
     }
 
@@ -63,23 +77,40 @@
         movieMatch.search.search.getMovies({ name: movieName, currentPage: 1 }).done((response) => {
 
 
+
             $("#movie-list").empty();
+            if (response.totalResults > 0) {
+                $('.movie-list-title').text(`Total ${response.totalResults} results for "${$("#movie-name").val()}"`);
+            } else {
+                $('.movie-list-title').text(`No result for "${$("#movie-name").val()}"`);
+            }
+                
+
+            $('.loader').fadeOut();
+            $('.movie-list-title').fadeIn();
+
+            renderResults(response.results, $("#movie-list"));
 
 
-            $paginationSearch.twbsPagination({
-                currentPage: 1,
-                totalPages: response.totalPages,
-                onPageClick: searchMovies
-            });
-
-            $paginationSearch.twbsPagination({
-
+            $('#pagination-search').twbsPagination({
+                currentPage:1,
                 startPage: 1,
-
                 totalPages: response.totalPages,
-
                 onPageClick: searchMovies
             })
+            //$('#pagination-search').twbsPagination('show', 1);
+            $('#pagination-search').twbsPagination('changeTotalPages', response.totalPages,1);
+
+            //$paginationSearch.twbsPagination({
+
+            //    startPage: 1,
+
+            //    totalPages: response.totalPages,
+
+            //    onPageClick: searchMovies
+            //})
+
+
 
         });
     })
@@ -99,12 +130,14 @@
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
                                         
-                                        <button class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
-                                        <button class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
+                                        <button type="button" class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
+                                        <button type="button" class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
                                     </div>
                                 </div>
                             </div>
+
                     `)
+
 
             $(`#${val.id}.btn-watch-later`).data('isactivewatchlater', val.isActiveWatchLater)
             $(`#${val.id}.btn-watch-later`).on('click', () => {
@@ -133,7 +166,7 @@
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
-            $(`#${movieId}.btn-watch-later`).css("background-color", "red");
+            $(`#${movieId}.btn-watch-later`).toggleClass("btn-primary btn-danger");
             $(`#${movieId}.btn-watch-later`).text("UnWatch");
             abp.notify.success(
                     'Movie added watch later list.',
@@ -144,7 +177,7 @@
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            
             $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
-            $(`#${movieId}.btn-watched-before`).css("background-color", "red");
+            $(`#${movieId}.btn-watched-before`).toggleClass("btn-secondary btn-danger");
             $(`#${movieId}.btn-watched-before`).text("UnWatch");
             abp.notify.success(
                     'Movie added watched before list.',
@@ -162,9 +195,9 @@
                         .then(() => {
                             $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
                             abp.notify.info("Successfully deleted!");
-                            $(`#${id}.btn-watch-later`).css("background-color", "blue");
+                            $(`#${id}.btn-watch-later`).toggleClass("btn-danger btn-primary");
                             $(`#${id}.btn-watch-later`).text("Watch Later");
-                            dataTable.ajax.reload();
+                            
                         })
                 }
             });
@@ -178,9 +211,9 @@
                         .then(() => {
                             $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
                             abp.notify.info("Successfully deleted!");
-                            $(`#${id}.btn-watched-before`).css("background-color", "grey");
+                            $(`#${id}.btn-watched-before`).toggleClass("btn-danger btn-secondary");
                             $(`#${id}.btn-watched-before`).text("Watched Before");
-                            dataTable.ajax.reload();
+                            
                         })
                 }
             });
@@ -188,9 +221,4 @@
 
     getPopularMovies($paginationPopular, $('#movie-list'));
 
-
 });
-
-//getAddWatchLaterFcuntion = (val) => {
-    //    return `addWatchLater("${val.id}", "${abp.currentUser.id }")`
-    //}

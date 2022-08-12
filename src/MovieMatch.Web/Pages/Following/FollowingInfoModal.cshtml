@@ -1,0 +1,24 @@
+﻿@page
+@model MovieMatch.Web.Pages.Following.FollowingInfoModalModel
+@using Microsoft.Extensions.Localization
+@using MovieMatch.Localization
+@inject IStringLocalizer<MovieMatchResource> L
+@{
+    Layout = null;
+}
+     
+<abp-modal >
+    <abp-modal-header>
+        <h2>Following</h2>
+    </abp-modal-header>
+    <abp-modal-body>
+        <abp-table striped-rows="true" id="FollowingTable">
+
+        </abp-table>
+    </abp-modal-body>
+     <abp-modal-footer buttons="Close"></abp-modal-footer>
+</abp-modal>
+
+
+
+

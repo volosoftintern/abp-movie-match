@@ -14,6 +14,9 @@ using System.Collections.Generic;
 using Volo.CmsKit.Comments;
 using MovieMatch.Comments;
 using Volo.CmsKit.Users;
+using DM.MovieApi.MovieDb.People;
+using MovieMatch.Posts;
+
 
 namespace MovieMatch;
 
@@ -33,6 +36,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<MovieInfo, MovieDto>();
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>();
+        CreateMap<MovieDetailDto, MovieDto>();
         CreateMap<Movies.Movie, MovieDto>();
         CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
         CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
@@ -46,5 +50,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<CmsUser, CmsUserDto>();
         CreateMap<Comment, CommentDto>();
         CreateMap<Comment, CommentWithStarsDto>();
+        CreateMap<Person, PersonDto>();
+        CreateMap<Post, PostDto>();
     }
 }
