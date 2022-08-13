@@ -108,6 +108,7 @@ namespace MovieMatch.Web;
         {
 
             options.Conventions.AddPageRoute("/Movies/Detail", "Movies/{MovieId}");
+            options.Conventions.AddPageRoute("/UserConnections/Index", "UserConnections/{UserName}");
             options.Conventions.AddPageRoute("/Movies/Director", "Movies/Director/{DirectorId}");
             options.Conventions.AddPageRoute("/Movies/Actor", "Movies/Actor/{ActorId}");
         });

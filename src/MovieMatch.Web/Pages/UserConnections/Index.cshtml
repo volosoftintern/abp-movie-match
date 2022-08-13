@@ -50,7 +50,7 @@
                 </form>
                        
                         <div class="w-100 ms-3">
-                            <h4 class="my-0">@currentUser.Name</h4>
+                            <h4 class="my-0" id="username">@Model.UserName</h4>
                             <button type="button" class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light">Follow</button>
                             <button type="button" class="btn btn-soft-success btn-xs waves-effect mb-2 waves-light">Message</button>
                         </div>
@@ -68,13 +68,13 @@
 
                     <div class="row">
                         <div class="col-4 border-end border-light">
-                            <abp-button id="showFollowers" class="text-muted mt-1 mb-2 fw-normal">Followers</abp-button>
+                                        <abp-button id="showFollowers" data-name="@Model.UserName" class="text-muted mt-1 mb-2 fw-normal">Followers</abp-button>
 
 
-                            <h2 class="mb-0 fw-bold">@Model.FollowersCount</h2>
+                            <h2 id=followers class="mb-0 fw-bold">@Model.FollowersCount</h2>
                         </div>
                         <div class="col-4 border-end border-light">
-                            <abp-button id="showFollowing" class="text-muted mt-1 mb-2 fw-normal">Following</abp-button>
+                            <abp-button id="showFollowing" data-name="@Model.UserName" class="text-muted mt-1 mb-2 fw-normal">Following</abp-button>
                             <h2 id="following" class="mb-0 fw-bold">@Model.FollowingCount</h2>
                         </div>
                         
@@ -86,6 +86,10 @@
 
 
 
+
+
+
+                        
 
 
 
@@ -106,28 +110,7 @@
   </h1>  
 @*<abp-button id="showFollowers"  class="btn btn-info btnfollowers">Followers(@Model.FollowersCount)</abp-button>
 <abp-button   id="showFollowing"   class="btn btn-info btnfollowing">Following(@Model.FollowingCount) </abp-button>*@
-<div class="connections">
-<abp-card>
-    <abp-card-header>
-        <h2>@L["UserConnections"] (@Model.UserCount)</h2>
-        
-    </abp-card-header>
-    <abp-card-body>
-        <abp-table striped-rows="true" id="UserConnectionsTable">
 
-
-
-
-        </abp-table>
-        
-
-
-
-
-
-    </abp-card-body>
-</abp-card>
-</div>
 
 
 

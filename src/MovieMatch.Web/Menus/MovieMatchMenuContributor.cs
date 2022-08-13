@@ -64,6 +64,14 @@ public class MovieMatchMenuContributor : IMenuContributor
                 order: 1
             )
         );
+        context.Menu.Items.Insert(
+           2,
+            new ApplicationMenuItem(
+                MovieMatchMenus.Explore,
+                l["Menu:Explore"],
+                "/Explore"
+            )
+        );
 
         if (MultiTenancyConsts.IsEnabled)
         {
