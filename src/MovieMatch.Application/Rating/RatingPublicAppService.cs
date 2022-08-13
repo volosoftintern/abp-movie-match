@@ -99,15 +99,15 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
     }
     [Authorize]
-    public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId)
+    public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId,int currPage)
     {
-       // var currentPageIndex = 1;
+        var total = (currPage*5);
         
 
         var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
         var parentComments = comments
-        .Where(c => c.Comment.RepliedCommentId == null).OrderBy(c => c.Comment.CreationTime)
-        .Select(c => ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment))
+        .Where(c => c.Comment.RepliedCommentId == null).OrderByDescending(c => c.Comment.CreationTime)
+        .Select(c => ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment)).Skip(0).Take(total)
         .ToList();
         foreach (var parentComment in parentComments)
         {
