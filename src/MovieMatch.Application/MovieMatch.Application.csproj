@@ -16,6 +16,7 @@
 
     <PackageReference Include="Abp" Version="7.3.0" />
 
+
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="TheMovieDbWrapper" Version="1.2.0" />
     <PackageReference Include="Volo.Abp.Account.Application" Version="5.3.2" />
