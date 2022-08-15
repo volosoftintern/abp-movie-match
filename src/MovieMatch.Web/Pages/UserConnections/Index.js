@@ -53,12 +53,24 @@
     
 
 
+$(document).ready(function () {
 
+    var currentusername = $('#UploadFileDto_File').data('username');
+    var username = $('#UploadFileDto_File').data('name');
     $('#img').click(function (e) {
+
         e.preventDefault();
-        //
-        $('#UploadFileDto_File').click();
+        if (currentusername == username) {
+            $('#UploadFileDto_File').click();
+        }
+        else {
+            abp.notify.error('You only change your photo');
+        }
     });
+});
+    
+
+
 
     $("#UploadFileDto_File").on('change', function (e) {
         e.preventDefault();

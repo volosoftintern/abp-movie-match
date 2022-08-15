@@ -42,7 +42,7 @@
                     <div class="d-flex align-items-start">
                         <form method="post" id="MyGreatFileUploadForm" enctype="multipart/form-data">
                             
-                        <input type="file" id="UploadFileDto_File" asp-for="UploadFileDto.File" class="rounded-circle avatar-lg img-thumbnail"  style="display:none; alt="profile-image"/>
+                        <input type="file" id="UploadFileDto_File" data-username="@currentUser.UserName" data-name="@Model.UserName" asp-for="UploadFileDto.File" class="rounded-circle avatar-lg img-thumbnail"  style="display:none; alt="profile-image"/>
                         
                         <img id="img" src="@photoPath" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
                         
