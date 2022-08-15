@@ -41,18 +41,7 @@ public class MovieMatchMenuContributor : IMenuContributor
             )
         );
 
-        context.Menu.AddItem(
-    new ApplicationMenuItem(
-        "MovieMatch",
-        l["Menu:MovieMatch"],
-        icon: "fa fa-userconnection"
-    ).AddItem(
-        new ApplicationMenuItem(
-            "MovieMatch.UserConnections",
-            l["Menu:UserConnections"],
-            url: "/UserConnections"
-        ))
-);
+      
 
         context.Menu.Items.Insert(
             1,
