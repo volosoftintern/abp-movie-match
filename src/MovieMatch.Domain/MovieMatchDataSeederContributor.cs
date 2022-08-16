@@ -14,11 +14,11 @@ namespace MovieMatch
 {
     public class MovieMatchDataSeederContributor : IDataSeedContributor, ITransientDependency
     {
-        private readonly IRepository<Genre,int> _repository;
+        private readonly IRepository<Genre, int> _repository;
         private readonly IdentityUserManager _userManager;
         private readonly IGuidGenerator _guidGenerator;
 
-        public MovieMatchDataSeederContributor(IRepository<Genre,int> repository, IdentityUserManager userManager,IGuidGenerator guidGenerator)
+        public MovieMatchDataSeederContributor(IRepository<Genre, int> repository, IdentityUserManager userManager, IGuidGenerator guidGenerator)
         {
             _repository = repository;
             _userManager = userManager;
@@ -27,10 +27,10 @@ namespace MovieMatch
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            if(await _repository.GetCountAsync() <= 0)
+            if (await _repository.GetCountAsync() <= 0)
             {
                 await _repository.InsertAsync(
-                    new Genre(28,"Action")
+                    new Genre(28, "Action")
                 );
 
                 await _repository.InsertAsync(
@@ -40,7 +40,7 @@ namespace MovieMatch
                 await _repository.InsertAsync(
                     new Genre(16, "Animation")
                 );
-                
+
                 await _repository.InsertAsync(
                     new Genre(35, "Comedy")
                 );
@@ -102,20 +102,16 @@ namespace MovieMatch
                 );
             }
 
-            if (_userManager.Users.Count() <= 1)
-            {
-                var user= new IdentityUser(_guidGenerator.Create(), "baris", "baris@abp.io");
-                await _userManager.CreateAsync(user, "1q2w3E*");
-                user = new IdentityUser(_guidGenerator.Create(), "kutay", "kutay@abp.io");
-                await _userManager.CreateAsync(user, "1q2w3E*");
-                user = new IdentityUser(_guidGenerator.Create(), "cagatay", "cagatay@abp.io");
-                await _userManager.CreateAsync(user, "1q2w3E*");
-                user = new IdentityUser(_guidGenerator.Create(), "ali", "ali@abp.io");
-                await _userManager.CreateAsync(user, "1q2w3E*");
-                user = new IdentityUser(_guidGenerator.Create(), "veli", "veli@abp.io");
-                await _userManager.CreateAsync(user, "1q2w3E*");
-            }
-
+            var user = new IdentityUser(_guidGenerator.Create(), "baris", "baris@abp.io");
+            await _userManager.CreateAsync(user, "1q2w3E*");
+            user = new IdentityUser(_guidGenerator.Create(), "kutay", "kutay@abp.io");
+            await _userManager.CreateAsync(user, "1q2w3E*");
+            user = new IdentityUser(_guidGenerator.Create(), "cagatay", "cagatay@abp.io");
+            await _userManager.CreateAsync(user, "1q2w3E*");
+            user = new IdentityUser(_guidGenerator.Create(), "ali", "ali@abp.io");
+            await _userManager.CreateAsync(user, "1q2w3E*");
+            user = new IdentityUser(_guidGenerator.Create(), "veli", "veli@abp.io");
+            await _userManager.CreateAsync(user, "1q2w3E*");
         }
     }
 }
