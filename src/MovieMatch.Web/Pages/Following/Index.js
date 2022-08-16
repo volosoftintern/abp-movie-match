@@ -1,5 +1,4 @@
 ﻿abp.modals.FollowingInfo = function () {
-    
     function initModal(modalManager, args) {
         console.log(args)
         console.log(modalManager.getArgs().username)
@@ -54,10 +53,10 @@
 
                         {
 
-
+                            
                             data: "isFollow",
                             render: function (data, type, row) {
-                                isActive = row.extraProperties.isFollow; var id = row.id;
+                                isActive = row.isFollow; var id = row.id;
 
 
                                 if (isActive === true) {
