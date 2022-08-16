@@ -56,6 +56,10 @@ namespace MovieMatch
                 );
 
                 await _repository.InsertAsync(
+                    new Genre(14, "Fantasy")
+                );
+
+                await _repository.InsertAsync(
                     new Genre(36, "History")
                 );
                 await _repository.InsertAsync(
