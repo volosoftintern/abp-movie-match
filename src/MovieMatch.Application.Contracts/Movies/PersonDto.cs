@@ -14,5 +14,10 @@ namespace MovieMatch.Movies
         public string Biography { get; set; }
 
         public IReadOnlyList<MovieDto> Movies { get; set; }
+
+        public PersonDto()
+        {
+            Movies=new List<MovieDto>();
+        }
     }
 }

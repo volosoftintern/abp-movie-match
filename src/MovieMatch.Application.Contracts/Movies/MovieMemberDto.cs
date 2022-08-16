@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MovieMatch.Movies
 {
-    public class MovieMemeberDto
+    public class MovieMemberDto
     {
         public int PersonId { get; set; } 
         public string Name { get; set; }
