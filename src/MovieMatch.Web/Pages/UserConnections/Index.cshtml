@@ -44,13 +44,13 @@
                             
                         <input type="file" id="UploadFileDto_File" data-username="@currentUser.UserName" data-name="@Model.UserName" asp-for="UploadFileDto.File" class="rounded-circle avatar-lg img-thumbnail"  style="display:none; alt="profile-image"/>
                         
-                        <img id="img" src="@photoPath" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
+                        <img id="img" src="@photoPath" class="rounded-circle profile" alt="profile-image" />
                         
-                        <button id="upload"  type="submit"></button>
+                        <button id="upload"  type="submit" style="display:none"></button>
                 </form>
                        
                         <div class="w-100 ms-3">
-                            <h4 class="my-0" id="username">@Model.UserName</h4>
+                                <h4 class="my-0" style="margin-left:17px" id="username">@Model.UserName.Substring(0,1).ToUpper()@Model.UserName.Substring(1,(Model.UserName.Length-1)).ToLower()</h4>
                             <button type="button" class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light">Follow</button>
                             <button type="button" class="btn btn-soft-success btn-xs waves-effect mb-2 waves-light">Message</button>
                         </div>
@@ -74,6 +74,7 @@
                             <h2 id=followers class="mb-0 fw-bold">@Model.FollowersCount</h2>
                         </div>
                         <div class="col-4 border-end border-light">
+
                             <abp-button id="showFollowing" data-name="@Model.UserName" class="text-muted mt-1 mb-2 fw-normal">Following</abp-button>
                             <h2 id="following" class="mb-0 fw-bold">@Model.FollowingCount</h2>
                         </div>

@@ -21,10 +21,10 @@
                             data: "path",
                             render: function (data) {
                                 if (data != null) {
-                                    return `<img class="profile" src="/images/host/my-file-container/${data}"/>`
+                                    return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
                                 }
                                 else {
-                                    return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                                    return '<img class="profile rounded-circle" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
                                 }
                             }
                         },
@@ -33,7 +33,7 @@
                             title: l('Username'),
                             data: "name",
                             render: function (name) {
-                                return `<a  href=${name} /* onclick="changeinfo(this)"*/ > ${name} </a>`
+                                return `<a  href=${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
 
                             }
                         },

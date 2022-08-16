@@ -14,10 +14,10 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                     data: "extraProperties.Photo",
                     render: function (data) {
                         if (data != null) {
-                            return `<img class="profile" src="/images/host/my-file-container/${data}"/>`
+                            return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
                         }
                         else {
-                            return '<img class="profile" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                            return '<img class="profile rounded-circle"  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
                         }
                     }
                 },
@@ -28,7 +28,7 @@ var dataTable = $('#UserConnectionsTable').DataTable(
 
                     
 
-                        return `<a  href=UserConnections/${userName} /* onclick="changeinfo(this)"*/ > ${userName} </a>`
+                        return `<a  href=UserConnections/${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
                     }
 
                 },
