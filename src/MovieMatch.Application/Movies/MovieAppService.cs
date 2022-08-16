@@ -40,7 +40,7 @@ namespace MovieMatch.Movies
         private AsyncFallbackPolicy<MovieCredit> _creditPolicy;
 
         PersonDto _person=null;
-        MovieDetailDto? _movieDetail=null;
+        MovieDetailDto _movieDetail=null;
         MovieCredit _movieCredit = null;
 
         private int _personId = 0;
@@ -66,6 +66,10 @@ namespace MovieMatch.Movies
             _directorRepository = directorRepository;
             _personRepository = personRepository;
             _genreRepository = genreRepository;
+
+            _moviePolicy = Policy<MovieDetailDto>.Handle<Exception>().FallbackAsync(_movieDetail);
+            _creditPolicy = Policy<MovieCredit>.Handle<Exception>().FallbackAsync(_movieCredit);
+            _personPolicy = Policy<PersonDto>.Handle<Exception>().FallbackAsync(_person);
 
         }
 
@@ -110,26 +114,16 @@ namespace MovieMatch.Movies
                     CastMembers = ObjectMapper.Map<IEnumerable<PersonDto>, List<MovieCastMember>>(_movieDetail.Stars.ToList())
                 };
                 
-
-                
                 _moviePolicy = Policy<MovieDetailDto>.Handle<Exception>().FallbackAsync(_movieDetail);
                 _creditPolicy = Policy<MovieCredit>.Handle<Exception>().FallbackAsync(_movieCredit);
 
             }
 
-            try
+            _movieDetail = await _moviePolicy.ExecuteAsync(async () =>
             {
-                _movieDetail = await _moviePolicy.ExecuteAsync(async () =>
-                {
-                    var response = await _movieApi.FindByIdAsync(id);
-                    return ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
-                });
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new UserFriendlyException("An error occured please try again later");
-                
-            }
+                var response = await _movieApi.FindByIdAsync(id);
+                return ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
+            });
             
             _movieCredit = await _creditPolicy.ExecuteAsync(async () =>
             {
@@ -290,20 +284,11 @@ namespace MovieMatch.Movies
             }
 
 
-
-            //var policy =Policy<PersonDto>.Handle<Exception>().FallbackAsync(_person);
-            try
+            _person = await _personPolicy.ExecuteAsync(async () =>
             {
-                _person = await _personPolicy.ExecuteAsync(async () =>
-                {
-                    var response = await _peopleApi.FindByIdAsync(_personId);
-                    return ObjectMapper.Map<DM.MovieApi.MovieDb.People.Person, PersonDto>(response.Item);
-                });
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new UserFriendlyException("An error occured please try again later");
-            }
+                var response = await _peopleApi.FindByIdAsync(_personId);
+                return ObjectMapper.Map<DM.MovieApi.MovieDb.People.Person, PersonDto>(response.Item);
+            });
             
             if (isDirector && (await _directorRepository.GetQueryableAsync()).Where(x => x.Id == personId).Count() == 0)
             {
