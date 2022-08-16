@@ -7,8 +7,6 @@ using MovieMatch.MoviesWatchLater;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
 
 namespace MovieMatch.Search
 {
@@ -29,7 +27,7 @@ namespace MovieMatch.Search
         }
 
 
-        public async Task<SearchResponseDto<MovieDto>> GetMovies(SearchMovieDto input)
+        public async Task<SearchResponseDto<MovieDto>> GetMovies(SearchMovieDto input)//Implement Polly
         {
             IReadOnlyList<MovieDto> result;
             ApiSearchResponse<MovieInfo> response;
@@ -40,43 +38,13 @@ namespace MovieMatch.Search
             }
             else
             {
-                response = await _movieApi.SearchByTitleAsync(input.Name, input.CurrentPage);
+                response = await _movieApi.SearchByTitleAsync(input.Name, input.CurrentPage);//
             }
             
             result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
 
             await BackupMoviesAsync(result);
 
-            //Before
-            /*
-            
-              var userMoviesWatchLater = await _watchLaterRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-              var userMoviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-              foreach (var item in result)
-            {
-                var check = userMoviesWatchLater.FirstOrDefault(x => x.MovieId == item.Id);
-                if (check!=null) {
-                    item.IsActiveWatchLater = true;
-                }
-                else{
-                    item.IsActiveWatchLater = false;
-                }
-            } 
-            foreach (var item in result)
-            {
-                var check = userMoviesWatchedBefore.FirstOrDefault(x => x.MovieId == item.Id);
-                if (check!=null) {
-                    item.IsActiveWatchedBefore = true;
-                }
-                else{
-                    item.IsActiveWatchedBefore = false;
-                }
-            }
-             
-             
-             */
-
-            //Now
             foreach (var item in result)
             {
                 item.IsActiveWatchLater = (await _watchLaterRepository.GetQueryableAsync()).Any(x => x.UserId == CurrentUser.Id && x.MovieId==item.Id);
