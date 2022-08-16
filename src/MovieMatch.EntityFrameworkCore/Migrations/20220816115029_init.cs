@@ -768,6 +768,28 @@ namespace MovieMatch.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppMessages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    When = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppMessages_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Connections",
                 columns: table => new
                 {
@@ -1367,6 +1389,11 @@ namespace MovieMatch.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppMessages_UserId",
+                table: "AppMessages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AppMoviesWatchedBefore_MovieId",
                 table: "AppMoviesWatchedBefore",
                 column: "MovieId");
@@ -1520,6 +1547,9 @@ namespace MovieMatch.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppMessages");
 
             migrationBuilder.DropTable(
                 name: "AppMoviesWatchedBefore");

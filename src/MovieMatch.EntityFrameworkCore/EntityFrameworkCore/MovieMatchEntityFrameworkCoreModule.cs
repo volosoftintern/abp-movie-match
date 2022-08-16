@@ -54,6 +54,7 @@ namespace MovieMatch.EntityFrameworkCore;
                  * See also MovieMatchMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
+
         //Configure<AbpBlobStoringOptions>(options =>
         //{
         //    options.Containers.ConfigureDefault(container =>

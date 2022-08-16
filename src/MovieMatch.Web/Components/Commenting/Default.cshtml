@@ -31,15 +31,15 @@
         </span>;
 }
 @{
-     Func<dynamic, IHtmlContent> GetCommentStar(int starsCount) =>
+     Func<dynamic, IHtmlContent> GetCommentStar(int starsCount,Guid? id) =>
      @<span>
          @if(starsCount==0)
         {
-             <small class="text float-end noRating">no rating done</small>
+         <small class="text float-end noRating" id="rating_@id">no rating done</small>
         }
         else
         {
-           <small class="text-dark fa fa-star float-end givenRating">@starsCount/5 given rating</small>
+           <small class="text-dark fa fa-star float-end givenRating" id="rating_@id">@starsCount/5 given rating</small>
          }  
      </span>;
 }
@@ -167,7 +167,7 @@
                 <div class="card p-3 mx-0 my-3">
                     <h5>
                         @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
-                        @GetCommentStar(comment.StarsCount).Invoke(null)
+                        @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                     </h5>
 
                     @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
@@ -198,7 +198,7 @@
                                 <div class="comment">
                                     <h5>
                                         @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
-                                        @GetCommentStar(comment.StarsCount).Invoke(null)
+                                        @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                                     </h5>
 
                                     @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)

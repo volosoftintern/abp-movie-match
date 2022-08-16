@@ -47,6 +47,7 @@ using Volo.Abp.Account.Web.ProfileManagement;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Comments;
+using Volo.Abp.AspNetCore.SignalR;
 
 
 namespace MovieMatch.Web;
@@ -65,7 +66,8 @@ namespace MovieMatch.Web;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(CmsKitWebModule)
+    typeof(CmsKitWebModule),
+    typeof(AbpAspNetCoreSignalRModule)
     )]
 
     public class MovieMatchWebModule : AbpModule
@@ -80,7 +82,8 @@ namespace MovieMatch.Web;
                 typeof(MovieMatchDomainSharedModule).Assembly,
                 typeof(MovieMatchApplicationModule).Assembly,
                 typeof(MovieMatchApplicationContractsModule).Assembly,
-                typeof(MovieMatchWebModule).Assembly
+                typeof(MovieMatchWebModule).Assembly,
+                typeof(AbpAspNetCoreSignalRModule).Assembly
             );
         });
     }
@@ -236,8 +239,8 @@ namespace MovieMatch.Web;
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieMatch API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-            }
-        );
+            });
+        services.AddSignalR();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

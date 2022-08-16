@@ -17,7 +17,8 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
 using MovieMatch.Posts;
-
+using Volo.Abp;
+using MovieMatch.Messages;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -46,6 +47,7 @@ public class MovieMatchDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
+    public DbSet<Message> Messages { get; set; }
     public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
     public DbSet<WatchLater> MoviesWatchLater { get; set; }
     public DbSet<Movie> Movies { get; set; }
@@ -86,8 +88,9 @@ public class MovieMatchDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
         builder.ConfigureCmsKit();
-
         /* Configure your own tables/entities inside here */
+
+
         builder.Entity<UserConnection>(
             b =>
             {
@@ -153,8 +156,18 @@ public class MovieMatchDbContext :
             b.HasOne<Movie>().WithMany().HasForeignKey(x => x.MovieId);
             b.HasIndex(x => x.Id);
         });
+        builder.Entity<Message>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Messages",
+                MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Id).IsRequired();
+            b.Property(x => x.Text).IsRequired();
+            b.Property(x => x.UserId).IsRequired();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(d => d.UserId);
+        });
 
-        
+
     }
         
         

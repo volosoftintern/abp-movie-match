@@ -39,9 +39,9 @@
                             {
                                 starCount: parseInt(currentRating)
                             }
-                        ).then(function () {
+                        ).then(function (starCount) {
                             widgetManager.refresh($widget);
-                            myWidgetManager.refresh();
+                            $("#rating_"+abp.currentUser.id).text(starCount.starCount+"/5 Given Rating")
                         })
                     }
                 });
@@ -61,7 +61,7 @@
                                 $ratingArea.attr("data-entity-type"),
                                 $ratingArea.attr("data-entity-id")
                             ).then(function () {
-                                myWidgetManager.refresh();
+                                $("#rating_" + abp.currentUser.id).text("No given rating")
                                 widgetManager.refresh($widget);
                             });
                         }
