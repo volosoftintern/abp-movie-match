@@ -88,7 +88,7 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
-            debugger;
+
             if (res.length == 0) list.append(` <div style = "position:relative; left:133px; top:49px;font-style: oblique;font-size: 25px;">no watchers yet</div>`)
             else {
                 for (var element of res) {
@@ -137,10 +137,5 @@
                 })
         });
     }
-
-
-
-    
-
 });
 

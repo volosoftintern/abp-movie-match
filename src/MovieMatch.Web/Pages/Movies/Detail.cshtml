@@ -41,11 +41,11 @@
       <div class="card-body position-relative">
         <h5 class="card-title">@Model.MovieDetail.Title</h5>
         <p class="card-text">@Model.MovieDetail.Overview</p>
-        <p class="card-text">Director: <a href="/Movies/Director/@Model.MovieDetail.Director.PersonId"><span class="badge bg-success"> @Model.MovieDetail.Director.Name</span></a></p>
+        <p class="card-text">Director: <a href="/Movies/Director/@Model.MovieDetail.Director.Id"><span class="badge bg-success"> @Model.MovieDetail.Director.Name</span></a></p>
         <p class="card-text">Stars:
             @foreach (var item in Model.MovieDetail.Stars)
             {
-                <a href="/Movies/Actor/@item.PersonId"><span class="badge bg-primary">@item.Name</span></a>
+                <a href="/Movies/Actor/@item.Id"><span class="badge bg-primary">@item.Name</span></a>
             }
          </p>
          <p class="card-text">Genres:
@@ -58,17 +58,17 @@
             <i class="fa fa-star text-warning" aria-hidden="true"></i><small class="text-muted">@Model.MovieDetail.VoteAverage.ToString("0.#")-IMDB</small>
         </p>
               <div class="d-flex justify-content-around actions" style="top: 89px;position: relative;width: 414px;left: 13px;">
-          @if(@Model.Movie.IsActiveWatchLater){
-          <button type="button" id="idWatchLater"  data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" style="font-size:13px" class="btn btn-danger">Remove from watch later list</button>
+          @if(@Model.MovieDetail.IsActiveWatchLater){
+          <button type="button" id="idWatchLater"  data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" style="font-size:13px" class="btn btn-danger">Remove from watch later list</button>
           }
           else{
-            <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchLater" class="btn btn-primary">Add to watch later list</button>
+            <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" class="btn btn-primary">Add to watch later list</button>
           }
-          @if(@Model.Movie.IsActiveWatchedBefore){
-          <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" style="font-size:13px" class="btn btn-danger">Remove from watched before list</button>
+          @if(@Model.MovieDetail.IsActiveWatchedBefore){
+          <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" style="font-size:13px" class="btn btn-danger">Remove from watched before list</button>
           }
           else{
-            <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.Movie.IsActiveWatchedBefore" class="btn btn-secondary">Add to watched before list</button>
+            <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" class="btn btn-secondary">Add to watched before list</button>
           }
       </div>
       </div>
