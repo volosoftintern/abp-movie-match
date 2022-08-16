@@ -1,2 +1,8 @@
-﻿body {
+﻿:root {
+    --profile-size: 80px;
+}
+
+.profile {
+    height: var(--profile-size);
+    width: var(--profile-size);
 }
