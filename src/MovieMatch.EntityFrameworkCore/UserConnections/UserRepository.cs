@@ -37,7 +37,7 @@ namespace MovieMatch.UserConnections
         {
             var dbContext = await GetDbContextAsync();
             return await dbContext.Set<IdentityUser>()
-                .Where(u => EF.Property<string>(u, "Photo") == Name)
+                .Where(u => EF.Property<string>(u, ProfilePictureConsts.PhotoProperty) == Name)
                 .FirstOrDefaultAsync();
         }
 

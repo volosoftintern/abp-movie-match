@@ -159,7 +159,7 @@ namespace MovieMatch.UserConnections
                      {
                          Id = pd,
                          Name = od.UserName,
-                         Path= od.GetProperty<string>("Photo")
+                         Path= od.GetProperty<string>(ProfilePictureConsts.PhotoProperty)
                      }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
@@ -198,7 +198,7 @@ namespace MovieMatch.UserConnections
                      {
                          Id=pd,
                          Name =od.UserName,
-                         Path =od.GetProperty<string>("Photo")
+                         Path =od.GetProperty<string>(ProfilePictureConsts.PhotoProperty)
                      }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
@@ -215,14 +215,14 @@ namespace MovieMatch.UserConnections
         public async Task SetPhotoAsync(string userName, string name)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            user.SetProperty("Photo",name); //Using the new extension property
+            user.SetProperty(ProfilePictureConsts.PhotoProperty,name); //Using the new extension property
             await _userRepository.UpdateAsync(user);
         }
 
         public async Task<string> GetPhotoAsync(string userName)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            return user.GetProperty<string>("Photo"); //Using the new extension property
+            return user.GetProperty<string>(ProfilePictureConsts.PhotoProperty); //Using the new extension property
         }
 
         public async Task<UserInformationDto> GetUserInfoAsync(string username)
