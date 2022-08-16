@@ -21,6 +21,15 @@ public class MovieMatchMenuContributor : IMenuContributor
         {
             await ConfigureMainMenuAsync(context);
         }
+        if (context.Menu.Name == StandardMenus.User)
+        {
+            var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);
+            if(userMenu == null)
+            {
+            }                userMenu = new ApplicationMenuItem(IdentityMenuNames.Users, "My Profile", "/UserConnections",icon:"fa fa-user");
+
+            context.Menu.AddItem(userMenu);
+        }
     }
 
    
@@ -29,7 +38,8 @@ public class MovieMatchMenuContributor : IMenuContributor
     {
         var administration =context.Menu.GetAdministration();
         var l = context.GetLocalizer<MovieMatchResource>();
-       
+        
+
         context.Menu.Items.Insert(
             0,
             new ApplicationMenuItem(

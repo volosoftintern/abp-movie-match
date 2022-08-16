@@ -63,7 +63,8 @@ namespace MovieMatch.Web.Pages.UserConnections
         public async Task OnGetAsync(string username)
         {
 
-           
+            if (UserName == null)
+                UserName = _currentUser.UserName;
             FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetUsersFollowInfo { username = UserName })).Items.Count;
            // FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetIdentityUsersInput(), UserName)).Items.Count;
             FollowingCount =(await _userConnectionService.GetFollowingAsync(new GetUsersFollowInfo { username=UserName})).Items.Count;
