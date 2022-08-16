@@ -17,7 +17,8 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
 using MovieMatch.Posts;
-
+using MovieMatch.People;
+using MovieMatch.Genres;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -30,7 +31,7 @@ public class MovieMatchDbContext :
     IIdentityDbContext,
     ITenantManagementDbContext
 {
-    
+
     public DbSet<UserConnection> Connections { get; set; }
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
@@ -46,10 +47,16 @@ public class MovieMatchDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
+
     public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
     public DbSet<WatchLater> MoviesWatchLater { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Person> People { get; set; }
+    public DbSet<Director> Directors { get; set; }
+    public DbSet<MovieDetail> MovieDetails { get; set; }
+
 
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
@@ -65,14 +72,14 @@ public class MovieMatchDbContext :
 
     #endregion
 
-    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options): base(options)
+    public MovieMatchDbContext(DbContextOptions<MovieMatchDbContext> options) : base(options)
     {
-        
+
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        
+
         base.OnModelCreating(builder);
 
         /* Include modules to your migration db context */
@@ -88,8 +95,7 @@ public class MovieMatchDbContext :
         builder.ConfigureCmsKit();
 
         /* Configure your own tables/entities inside here */
-        builder.Entity<UserConnection>(
-            b =>
+        builder.Entity<UserConnection>(b =>
             {
                 b.ToTable("Connections");
                 b.ConfigureByConvention();
@@ -100,9 +106,8 @@ public class MovieMatchDbContext :
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowingId).IsRequired().OnDelete(DeleteBehavior.NoAction);
-          //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
+                //      b.HasIndex(x => new { x.FollowerId, x.FollowingId });
             });
-                
         builder.Entity<Movie>(b =>
         {
             b.ToTable(MovieMatchConsts.DbTablePrefix + "Movies" + MovieMatchConsts.DbSchema);
@@ -110,7 +115,7 @@ public class MovieMatchDbContext :
 
             b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             b.HasKey(x => x.Id);
-            
+
 
         });
         builder.Entity<WatchedBefore>(b =>
@@ -120,7 +125,7 @@ public class MovieMatchDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.MovieId).IsRequired();
             b.Property(x => x.UserId).IsRequired();
-            b.HasKey(x => new {x.UserId,x.MovieId});
+            b.HasKey(x => new { x.UserId, x.MovieId });
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.UserId).IsRequired();
             b.HasOne<Movie>().WithMany().HasForeignKey(c => c.MovieId).IsRequired();
             b.HasIndex(x => new { x.UserId, x.MovieId });
@@ -135,9 +140,8 @@ public class MovieMatchDbContext :
             b.HasKey(x => new { x.UserId, x.MovieId });
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(y => y.UserId).IsRequired();
             b.HasOne<Movie>().WithMany().HasForeignKey(y => y.MovieId).IsRequired();
-            b.HasIndex(x => new {x.UserId,x.MovieId});
+            b.HasIndex(x => new { x.UserId, x.MovieId });
         });
-
         builder.Entity<Post>(b =>
         {
             b.ToTable(MovieMatchConsts.DbTablePrefix + "Posts",
@@ -153,9 +157,83 @@ public class MovieMatchDbContext :
             b.HasOne<Movie>().WithMany().HasForeignKey(x => x.MovieId);
             b.HasIndex(x => x.Id);
         });
+        builder.Entity<Person>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "People", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
 
-        
+            b.Property(x => x.BirthDay).IsRequired();
+            b.Property(x => x.Biography).IsRequired();
+            b.Property(x => x.Name).IsRequired();
+            b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.HasIndex(x => x.Id);
+
+        });
+        builder.Entity<Director>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Directors", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.BirthDay).IsRequired();
+            b.Property(x => x.Biography).IsRequired();
+            b.Property(x => x.Name).IsRequired();
+            b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.HasIndex(x => x.Id);
+        });
+        builder.Entity<Genre>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Genres", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.HasIndex(x => x.Id);
+
+        });
+        builder.Entity<MovieDetail>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "MovieDetails", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            b.HasIndex(x => x.Id);
+
+            b.Property(x => x.Title).IsRequired();
+            b.Property(x => x.Overview).IsRequired();
+            b.Property(x => x.ReleaseDate).IsRequired();
+            b.Property(x => x.VoteAverage).IsRequired();
+            b.Property(x => x.ImdbId).IsRequired();
+            b.Property(x => x.DirectorId).IsRequired();
+
+            b.HasOne<Director>().WithMany().HasForeignKey(x => x.DirectorId).IsRequired();
+            b.HasMany(x => x.Stars).WithOne().HasForeignKey(x => x.MovieDetailId).IsRequired();
+
+        });
+        builder.Entity<MovieGenre>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "MovieGenres", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            //define composite key
+            b.HasKey(x => new { x.MovieDetailId, x.GenreId });
+
+            //many-to-many configuration
+            b.HasOne<MovieDetail>().WithMany(x=>x.Genres).HasForeignKey(x => x.MovieDetailId).IsRequired();
+            b.HasOne<Genre>().WithMany().HasForeignKey(x => x.GenreId).IsRequired();
+            b.HasIndex(x => new { x.MovieDetailId, x.GenreId });
+        });
+        builder.Entity<MoviePerson>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "MoviePeople", MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasKey(x => new { x.MovieDetailId, x.PersonId });
+
+            b.HasOne<Person>().WithMany().HasForeignKey(x => x.PersonId).IsRequired();
+            b.HasOne<MovieDetail>().WithMany(x=>x.Stars).HasForeignKey(x => x.MovieDetailId).IsRequired();
+
+            b.HasIndex(x => new { x.MovieDetailId, x.PersonId });
+        });
+
     }
-        
-        
+
+
 }
