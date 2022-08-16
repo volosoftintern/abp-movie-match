@@ -1,0 +1,57 @@
+﻿.creationTime {
+    opacity: 1;
+    font-size: 14px;
+}
+.title {
+    opacity: 1;
+    position: relative;
+    font-size: 14px;
+    left: 18px;
+    top: 76px;
+}
+
+.noRating {
+    opacity: 1;
+    font-size: 14px;
+    color: slateblue;
+    position: relative;
+    opacity: 1;
+    font-size: 14px;
+    color: slateblue;
+    left: 277px;
+    top: 75px;
+}
+
+.givenRating {
+    opacity: 1;
+    position: relative;
+    left: 296px;
+    top: 78px;
+    font-size: 14px;
+    color: slateblue;
+}
+
+.commentArea {
+    min-height: 95px;
+    height: 20px;
+}
+.commetColumn {
+    height: 100px;
+}
+.abpBtn {
+    width: 62px;
+    height: 82px;
+}
+.editRow {
+    min-height: 48px;
+}
+.commentsRow {
+    height: 35px;
+    min-height: 35px;
+}
+.commentsRow2 {
+    min-height: 48px;
+}
+.cms-comment-form-area{
+    height:120px;
+}

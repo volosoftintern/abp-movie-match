@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MovieMatch.UserConnections;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Content;
 using Volo.Abp.Data;
@@ -21,6 +24,8 @@ namespace MovieMatch.Web.Pages.UserConnections
 
         [BindProperty]
         public UploadFileDto UploadFileDto { get; set; }
+        [BindProperty(SupportsGet =true)]
+        public string UserName { get; set; }
         public bool Uploaded { get; set; } = false;
         //  public OrganizationViewModel Organization { get; set; }
         private readonly IUserConnectionAppService _userConnectionService;
@@ -28,8 +33,9 @@ namespace MovieMatch.Web.Pages.UserConnections
         public string filepath { get; set; }
         private readonly IHostingEnvironment _env;
         private readonly IFileAppService _fileAppService;
+       
+       
         public string path { get; set; }
-        public int UserCount { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
         [BindProperty]
@@ -54,14 +60,21 @@ namespace MovieMatch.Web.Pages.UserConnections
         }
        
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string username)
         {
-            //  filepath= await _userConnectionService.GetPhotoAsync(_currentUser.UserName);
-            var result=await _userConnectionService.GetListAsync(new GetIdentityUsersInput());
-            UserCount = (int)result.TotalCount;
-            FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetIdentityUsersInput())).Items.Count;
-            FollowingCount =(await _userConnectionService.GetFollowingAsync(new GetIdentityUsersInput())).Items.Count;
-            path =await _userConnectionService.GetPhotoAsync(_currentUser.UserName);
+
+            if (UserName == null)
+                UserName = _currentUser.UserName;
+            FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetUsersFollowInfo { username = UserName })).Items.Count;
+           // FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetIdentityUsersInput(), UserName)).Items.Count;
+            FollowingCount =(await _userConnectionService.GetFollowingAsync(new GetUsersFollowInfo { username=UserName})).Items.Count;
+
+           
+           
+          
+  
+            
+            path =await _userConnectionService.GetPhotoAsync(UserName);
           //  Organization = new OrganizationViewModel();
 
 

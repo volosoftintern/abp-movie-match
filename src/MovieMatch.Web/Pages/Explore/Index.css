@@ -1,5 +1,5 @@
 ﻿:root {
-    --profile-size: 70px;
+    --profile-size: 80px;
 }
 
 .connections {
@@ -7,13 +7,16 @@
     margin-top: 100px;
     width: 292px;
 }
+
 }
+
 .pp {
     width: 200px;
     height: 117px;
     background-color: darkgrey;
     margin-top: 300px;
 }
+
 .ppimg {
     height: 83%;
     width: 55%;
@@ -22,9 +25,11 @@
     margin-bottom: 4px;
     margin-top: 10px;
 }
-.btn.btn-info.btnfollowers{
-    margin-left:341px;
+
+.btn.btn-info.btnfollowers {
+    margin-left: 341px;
 }
+
 .btn.btn-info.btnfollowing {
     margin-left: 1px;
 }

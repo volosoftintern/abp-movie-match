@@ -88,8 +88,7 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
-
-            if (res.length == 0) list.append(` <div style = "position:relative; left:133px; top:49px;font-style: oblique;font-size: 25px;">no watchers yet</div>`)
+            if (res.length == 0) list.append(` <div class="nowatchers">no watchers yet</div>`)
             else {
                 for (var element of res) {
                     var count = 0;
@@ -97,27 +96,21 @@
                         count = c;
                     });
                     list.append(`
-                <div class="card mb-3">
-                  <div class="row g-0" style="min-height:50px">
-                     <div class="col-md-2 d-flex flex-column justify-content-between">
-                        <img class="card-img-top" style="padding-top: 8px;border-radius: 70%;padding-left: 8px;padding-bottom: 8px;width:120px;height:140px" src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg">
-                       </div>
-                    <div class="col-md-5">
-                       <div class="card-body position-relative">              
-                           <p class="card-text"><span class="badge bg-light" style="font-size:20px; width:113px; border-radius:40%; font-style:oblique;color:darkslategray">${element.userName} </span></p>
-                          <div style = "position:relative; left:11px; top:35px;">
-                        <p>${count} movie watched</p>
-                         </div>
-                        </div>
-                    
-                   </div>
-                    <div class="col-md-5">
-                      <div style = "position:relative; left:200px; top:35px;">
-                        ${abp.currentUser.userName == element.userName ? '' : '<button type="button" class="btn btn-outline-dark">takip et</button>'}
-                         </div>
+                  
+                    <div class="card d-flex flex-row">
+
+                     <div class="col-sm-2 d-flex flex-column justify-content-around">
+                        <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
+                     </div>
+                       <div class="col-sm-3">
+                        <p class="card-text"><h5 class="badge bg-dark">${element.userName}</h5></p>
+                        <p class="count">${count} movie watched</p>
                     </div>
-                  </div>
-                </div>
+                     <div class="col-md-5"></div>
+                    <div class="col-md-2 d-flex flex-column justify-content-center ">
+                         
+                        ${abp.currentUser.userName == element.userName ? '' : '<button type="button" class="btn btn-outline-dark follow">takip et</button>'}
+                 </div>
                 `);
 
                 }

@@ -5,7 +5,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace MovieMatch.Web.Components.WatchLater
 {
     [Widget(
-        ScriptFiles = new[] { "/Components/WatchLater/Default.js" }
+        ScriptFiles = new[] { "/Components/WatchLater/Default.js" },
+        StyleFiles = new[] { "/Components/WatchLater/def.css" }
         )]
     public class WatchLaterViewComponent : AbpViewComponent
     {

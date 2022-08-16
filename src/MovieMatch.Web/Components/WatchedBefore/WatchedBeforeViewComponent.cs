@@ -4,7 +4,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
 namespace MovieMatch.Web.Components.WatchedBefore
 {
-    [Widget(ScriptFiles = new[] { "/Components/WatchedBefore/Default.js" })]
+    [Widget(
+        ScriptFiles = new[] { "/Components/WatchedBefore/Default.js" },
+        StyleFiles = new[] {"/Components/WatchedBefore/def.css"}
+        )]
     public class WatchedBeforeViewComponent:AbpViewComponent
     {
         public WatchedBeforeViewComponent()

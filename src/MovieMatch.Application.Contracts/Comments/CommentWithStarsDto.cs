@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 using Volo.CmsKit.Public.Comments;
 
-namespace MovieMatch.Comment
+namespace MovieMatch.Comments
 {
     [Serializable]
     public class CommentWithStarsDto 
@@ -50,11 +50,7 @@ namespace MovieMatch.Comment
             set;
         }
 
-        public CmsUserDto Author
-        {
-            get;
-            set;
-        }
+        public CmsUserDto Author {get; set;}
 
         public string ConcurrencyStamp
         {
@@ -62,6 +58,7 @@ namespace MovieMatch.Comment
             set;
         }
         public int StarsCount { get; set; }
+        public int PageNumber { get; set; }
 
     }
 }

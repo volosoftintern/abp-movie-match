@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using DM.MovieApi.MovieDb.Movies;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MovieMatch.Comment;
+using MovieMatch.Comments;
 using MovieMatch.Movies;
 using MovieMatch.Rating;
 using MovieMatch.Web.Components.Rating;
+using MovieMatch.Web.Controllers;
+using Nancy.Json;
+using Newtonsoft.Json.Serialization;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
@@ -17,14 +24,17 @@ using Volo.CmsKit.Public.Comments;
 using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting;
 using Volo.CmsKit.Public.Web.Renderers;
+using Movie = MovieMatch.Movies.Movie;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace MovieMatch.Web.Components.Commenting;
 
 [ViewComponent(Name = "CmsCommenting")]
 [Widget(
     ScriptTypes = new[] { typeof(CommentingScriptBundleContributor) },
-   // ScriptFiles =new[] { "/Components/Commenting/Default.js" },
+    ScriptFiles = new[] { "/Components/Commenting/def.js" },
     StyleTypes = new[] { typeof(CommentingStyleBundleContributor) },
+    StyleFiles =new[] { "/Components/Commenting/def.css" },
     RefreshUrl = "/CmsKitPublicWidgets/Commenting",
     AutoInitialize = true
 )]
@@ -50,17 +60,18 @@ public class CommentingViewComponent : AbpViewComponent
         AbpMvcUiOptions = options.Value;
         _ratingPublicAppService = ratingPublicAppService;
     }
-
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
         string entityId)
     {
+
         var comments = (await CommentPublicAppService
             .GetListAsync(entityType, entityId)).Items;
-
-
+        
         var loginUrl = $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
+       
         var id = int.Parse(entityId);
+        
         var viewModel = new CommentingViewModel
         {
             EntityId = entityId,
@@ -74,6 +85,7 @@ public class CommentingViewComponent : AbpViewComponent
         };
 
         await ConvertMarkdownTextsToHtml(viewModel);
+
 
         return View("/Components/Commenting/Default.cshtml", viewModel);
     }
@@ -102,12 +114,13 @@ public class CommentingViewComponent : AbpViewComponent
         public string EntityId { get; set; }
 
         public string LoginUrl { get; set; }
-
         public List<CommentWithDetailsDto> Comments { get; set; }
         public List<CommentWithStarsDto> CommentsWithStars { get; set; }
 
         public Dictionary<Guid, string> RawCommentTexts { get; set; }
         public MovieDto Movie { get; set; }
-        public RatingDto Rating { get; set; }
+        //public RatingDto Rating { get; set; }
     }
 }
+
+

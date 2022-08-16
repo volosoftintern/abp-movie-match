@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
+@using Microsoft.JSInterop
+@using MovieMatch.Comments
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
 @using Volo.CmsKit.GlobalFeatures
@@ -14,28 +16,30 @@
 @inject IHtmlLocalizer<CmsKitResource> L
 @model MovieMatch.Web.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
+
+
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
-    @<span>
-        <i class="far fa-comment-alt me-2"></i>
-        @((string.IsNullOrWhiteSpace(author.Name)
-    ? author.UserName
-    :author.Name+ " " + author.Surname).Trim())
+        @<span>
+            <i class="far fa-comment-alt me-2"></i>
+            @((string.IsNullOrWhiteSpace(author.Name)
+        ? author.UserName
+        :author.Name+ " " + author.Surname).Trim())
 
-        <a class="text-muted float-end" style="opacity: 1; font-size: 14px">@creationTime.ToString()</a> 
-        <a class="text-muted float-end" href="@Model.EntityId" style="opacity: 1;position:relative; font-size: 14px;left: 18px;top: 76px;">@(Model.Movie.Title)</a> 
-    </span>;
+            <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
+            <a class="text-muted float-end title " href="@Model.EntityId">@(Model.Movie.Title)</a> 
+        </span>;
 }
 @{
      Func<dynamic, IHtmlContent> GetCommentStar(int starsCount) =>
      @<span>
          @if(starsCount==0)
         {
-             <small class="text float-end" style="opacity: 1; font-size: 14px; color:slateblue; position: relative;opacity: 1;font-size: 14px; color:slateblue;left: 277px;top: 75px;">no rating done</small>
+             <small class="text float-end noRating">no rating done</small>
         }
         else
         {
-           <small class="text-dark fa fa-star float-end" style="opacity: 1; position:relative; left: 296px;top: 78px; font-size: 14px; color:slateblue">@starsCount/5 given rating</small>
+           <small class="text-dark fa fa-star float-end givenRating">@starsCount/5 given rating</small>
          }  
      </span>;
 }
@@ -48,15 +52,15 @@
               style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
-            <div class="row" style="min-height:95px;height:20px">
-                <div class="col" style="height:100px">
+            <div class="row commentArea">
+                <div class="col commetColumn">
                     <div class="mb-3 m-0">
                         <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
                 </div>
                 <div class="col-auto">
                     <div class="text-end">
-                        <abp-button type="submit" button-type="Light" size="Block" style="width:62px;height:82px">
+                        <abp-button type="submit" button-type="Light" size="Block" class="abpBtn">
                             <i class="fa fa-comment-alt me-1"></i> @L["Send"]
                         </abp-button>
                         @if (cancelButton)
@@ -113,7 +117,7 @@
         <div class="card bg-light p-3 mx-0 mt-3">
             <form class="cms-comment-update-form">
                 <input hidden value="@id.ToString()" name="id" />
-                <div class="row" style="min-height:48px">
+                <div class="row editRow">
                     <div class="col">
                         <div class="mb-3 m-0">
                             <textarea class="form-control" name="commentText" rows="3">@text</textarea>
@@ -135,8 +139,10 @@
     </div>;
 }
 
-<div class="cms-comment-area mb-5" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
-    @if (CurrentUser.IsAuthenticated)
+    <div class="cms-comment-area mb-5" id="ids" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+    
+    
+    @if(CurrentUser.IsAuthenticated)
     {
         <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
             @GetCommentArea(null).Invoke(null)
@@ -148,32 +154,37 @@
             <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
         </div>
     }
+
+	
+
     @foreach (var comment in Model.CommentsWithStars)
-    {
-        <div class="comment">
-            <div class="card p-3 mx-0 my-3">
-                <h5>
-                    @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
-                    @GetCommentStar(comment.StarsCount).Invoke(null)
-                </h5>
+       {
+        <div class="comment " id="idComment" >
+    
+        <div class="card p-3 mx-0 my-3">
+            <h5>
+                @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
+                @GetCommentStar(comment.StarsCount).Invoke(null)
+            </h5>
 
-                @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
+            @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-                <div class="row mt-2" style="height:35px;min-height:35px">
-                    <div class="col">
-                        <div class="my-2 ">
-                            @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
-                        </div>
+            <div class="row mt-2 commentsRow">
+                <div class="col">
+                    <div class="my-2 ">
+                        @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
                     </div>
-                    <div class="col-auto">
-                        <div class="reaction-in-comment">
-                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                </div>
+                <div class="col-auto">
+                    <div class="reaction-in-comment">
+                        @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
                             {
                                 @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
                             }
                         </div>
                     </div>
                 </div>
+
                 @GetEditArea(comment.Id, Model.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
 
                 @if (comment.Replies.Any())
@@ -189,9 +200,9 @@
 
                                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
-                                <div class="row mt-2" style="min-height:48px">
+                                <div class="row mt-2 commentsRow2">
                                     <div class="col">
-                                        <div class="my-2 ">
+                                        <div class="my-2">
                                             @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
                                         </div>
                                     </div>
@@ -229,8 +240,60 @@
                 {
                     @GetCommentArea(comment.Id, true).Invoke(null)
                 }
+                </div>
+                </div>
+       }
+    
+   </div>
 
-            </div>
-        </div>
+
+
+
+
+
+
+
+@*   @section Scripts{
+    <script>
+   $(document).ready(function () {
+        window.onscroll = function () {      
+                if (getScrollTop() < getDocumentHeight() - window.innerHeight) return;
+                else{
+                    debugger;
+                   var commentsList = $("#comments-list");
+                   $.get("text-editor", function (data) { container.html(data); });
+                   //$.ajax({
+                   // type: "GET",
+                   // url: _url,
+                   // data: { entit },
+                   // success: function (result) {
+                   //     $("#comments-list").html(result);
+                   // },
+                   // });
+                }
+}
+        });
+
+
+    function getScrollTop() {
+	return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
     }
-</div>
+
+    function getDocumentHeight() {
+	const body = document.body;
+	const html = document.documentElement;
+	
+	return Math.max(
+		body.scrollHeight, body.offsetHeight,
+		html.clientHeight, html.scrollHeight, html.offsetHeight
+	    );
+     };
+    </script>
+}*@
+       
+@*    <ul class="comments-list__pagination comments-list__pagination--inactive" data-content="@Model.EntityId" id="comments-list-pagination"></ul>
+*@ 
+
+
+
+
