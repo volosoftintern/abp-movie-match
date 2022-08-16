@@ -224,19 +224,19 @@ namespace MovieMatch.UserConnections
         public async Task<string> GetPhotoAsync(string userName)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            return user.GetProperty<string>("Photo"); //Using the new extension property
+            return user.GetProperty<string>(ProfilePictureConsts.PhotoProperty); //Using the new extension property
         } 
         public async Task SetisFollowAsync(string userName, bool isFollow)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            user.SetProperty("isFollow",isFollow); //Using the new extension property
+            user.SetProperty(IdentityUserConsts.IsFollowProperty,isFollow); //Using the new extension property
             await _userRepository.UpdateAsync(user);
         }
 
         public async Task<bool> GetisFollowAsync(string userName)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            return user.GetProperty<bool>("isFollow"); //Using the new extension property
+            return user.GetProperty<bool>(IdentityUserConsts.IsFollowProperty); //Using the new extension property
         }
 
         public async Task<UserInformationDto> GetUserInfoAsync(string username)
