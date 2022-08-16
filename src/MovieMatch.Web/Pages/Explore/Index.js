@@ -36,10 +36,9 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                 {
 
 
-                    data: "isFollow",
+                    data: "extraProperties.isFollow",
                     render: function (data, type, row) {
                         isActive = row.extraProperties.isFollow; var id = row.id;
-
 
                         if (isActive === false) {
                             return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">Follow User</button>`
@@ -61,10 +60,10 @@ var dataTable = $('#UserConnectionsTable').DataTable(
 
     })
 );
+
 followUser = (button) => {
     var btn = $(button);
     var id = btn.attr("id");
-
 
     if ((btn).attr("isActive") == 'false') {
         movieMatch.userConnections.userConnection.follow(btn.attr("id"), btn.attr("isActive")).done(() => {
