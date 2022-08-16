@@ -161,7 +161,10 @@ namespace MovieMatch.UserConnections
                      {
                          Id = pd,
                          Name = od.UserName,
-                         Path= od.GetProperty<string>(ProfilePictureConsts.PhotoProperty)
+
+                         Path= od.GetProperty<string>("Photo"),
+                         isFollow = od.GetProperty<bool>("isFollow")
+
                      }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
@@ -200,7 +203,11 @@ namespace MovieMatch.UserConnections
                      {
                          Id=pd,
                          Name =od.UserName,
-                         Path =od.GetProperty<string>(ProfilePictureConsts.PhotoProperty)
+
+                         Path =od.GetProperty<string>("Photo"),
+                         isFollow =od.GetProperty<bool>("isFollow"),
+
+
                      }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
