@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MovieMatch.UserConnections;
@@ -7,6 +8,7 @@ using Volo.Abp.Identity;
 
 namespace MovieMatch.Web.Pages.Explore
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IUserConnectionAppService _userConnectionService;

@@ -38,9 +38,9 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                 {
 
 
-                    data: "isActive",
+                    data: "isFollow",
                     render: function (data, type, row) {
-                        isActive = row.isActive; var id = row.id;
+                        isActive = row.extraProperties.isFollow; var id = row.id;
 
 
                         if (isActive === false) {

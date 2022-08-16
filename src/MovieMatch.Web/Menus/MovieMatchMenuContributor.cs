@@ -68,7 +68,8 @@ public class MovieMatchMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 MovieMatchMenus.Explore,
                 l["Menu:Explore"],
-                "/Explore"
+                "/Explore",
+                icon: "fa fa-users"
             )
         );
 
