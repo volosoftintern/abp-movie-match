@@ -33,43 +33,48 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<WatchLater, WatchLaterDto>();
         CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
         CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
+       
+        //Movie
         CreateMap<MovieInfo, MovieDto>();
-        
         CreateMap<MovieDetail, MovieDetailDto>()
             .ForMember(s=>s.Genres,t=>t.Ignore())
             .ForMember(s=>s.Stars,t=>t.Ignore());
-
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>();
         CreateMap<DM.MovieApi.MovieDb.Movies.Movie, MovieDto>();
         CreateMap<MovieDetailDto, MovieDto>();
         CreateMap<Movies.Movie, MovieDto>();
         CreateMap<MovieDto, CreateUpdateWatchedBeforeDto>();
         CreateMap<Movies.Movie, CreateUpdateWatchedBeforeDto>();
+        CreateMap<ApiQueryResponse<DM.MovieApi.MovieDb.Movies.Movie>, MovieDto>();
         
+        //Genre
         CreateMap<Genre, GenreDto>();
         CreateMap<Genres.Genre, GenreDto>();
         
-        CreateMap<Director, DirectorDto>();
-        CreateMap<Director, PersonDto>();
-
-        CreateMap<MovieCrewMember, PersonDto>().ForMember(dest=>dest.Id,opt=>opt.MapFrom(src=>src.PersonId));
-        CreateMap<MovieCastMember, PersonDto>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PersonId));
-
+        //IdentityUser
         CreateMap<IdentityUser,IdentityUserDto>();
+
+        //Rating
         CreateMap<Volo.CmsKit.Ratings.Rating,RatingDto>();
-        CreateMap<ApiQueryResponse<DM.MovieApi.MovieDb.Movies.Movie>, MovieDto>();
+        
+
+        //Comment
         CreateMap<CommentWithAuthorQueryResultItem, CommentWithStarsDto>();
         CreateMap<CmsUser, CmsUserDto>();
         CreateMap<Comment, CommentDto>();
         CreateMap<Comment, CommentWithStarsDto>();
-        CreateMap<Person, PersonDto>();
 
+        //Person
         CreateMap<PersonDto, MovieCastMember>().ForMember(s => s.PersonId, opt => opt.MapFrom(t => t.Id));
-
         CreateMap<People.Person, PersonDto>();
-
         CreateMap<DM.MovieApi.MovieDb.People.Person, PersonDto>();
         CreateMap<DM.MovieApi.MovieDb.People.Person, People.Person>();
+        CreateMap<Director, DirectorDto>();
+        CreateMap<Director, PersonDto>();
+        CreateMap<MovieCrewMember, PersonDto>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PersonId));
+        CreateMap<MovieCastMember, PersonDto>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PersonId));
+
+        //Post
         CreateMap<Post, PostDto>();
     }
 }
