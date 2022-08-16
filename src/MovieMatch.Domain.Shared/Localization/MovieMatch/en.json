@@ -33,7 +33,8 @@
     "Following": "Following",
     "MovieId": "Movie Id",
     "UserId": "User Id",
-    "MovieMatch:00001": "There is already added a movie with the same title: {title}"
+    "MovieMatch:00001": "There is already added a movie with the same title: {title}",
+    "Menu:Explore":"Explore" 
   }
 
 }

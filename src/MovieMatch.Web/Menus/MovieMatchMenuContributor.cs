@@ -21,6 +21,15 @@ public class MovieMatchMenuContributor : IMenuContributor
         {
             await ConfigureMainMenuAsync(context);
         }
+        if (context.Menu.Name == StandardMenus.User)
+        {
+            var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);
+            if(userMenu == null)
+            {
+            }                userMenu = new ApplicationMenuItem(IdentityMenuNames.Users, "My Profile", "/UserConnections",icon:"fa fa-user");
+
+            context.Menu.AddItem(userMenu);
+        }
     }
 
    
@@ -29,7 +38,8 @@ public class MovieMatchMenuContributor : IMenuContributor
     {
         var administration =context.Menu.GetAdministration();
         var l = context.GetLocalizer<MovieMatchResource>();
-       
+        
+
         context.Menu.Items.Insert(
             0,
             new ApplicationMenuItem(
@@ -41,18 +51,7 @@ public class MovieMatchMenuContributor : IMenuContributor
             )
         );
 
-        context.Menu.AddItem(
-    new ApplicationMenuItem(
-        "MovieMatch",
-        l["Menu:MovieMatch"],
-        icon: "fa fa-userconnection"
-    ).AddItem(
-        new ApplicationMenuItem(
-            "MovieMatch.UserConnections",
-            l["Menu:UserConnections"],
-            url: "/UserConnections"
-        ))
-);
+      
 
         context.Menu.Items.Insert(
             1,
@@ -62,6 +61,15 @@ public class MovieMatchMenuContributor : IMenuContributor
                 "/Search",
                 icon: "fa fa-search",
                 order: 1
+            )
+        );
+        context.Menu.Items.Insert(
+           2,
+            new ApplicationMenuItem(
+                MovieMatchMenus.Explore,
+                l["Menu:Explore"],
+                "/Explore",
+                icon: "fa fa-users"
             )
         );
         context.Menu.Items.Insert(5,new ApplicationMenuItem("MovieMatch.Home", l["Menu:Chat"], "/Chat"));

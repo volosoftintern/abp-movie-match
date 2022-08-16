@@ -7,7 +7,7 @@
 @using Volo.Abp.Data
 @inject IStringLocalizer<MovieMatchResource> L
 @{
-    var photoPath="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+    var photoPath="/default_picture.png";
     if(Model.path!=null)
     {
          photoPath = ("/images/host/my-file-container/"+(@Model.path))    ;
@@ -42,15 +42,15 @@
                     <div class="d-flex align-items-start">
                         <form method="post" id="MyGreatFileUploadForm" enctype="multipart/form-data">
                             
-                        <input type="file" id="UploadFileDto_File" asp-for="UploadFileDto.File" class="rounded-circle avatar-lg img-thumbnail"  style="display:none; alt="profile-image"/>
+                        <input type="file" id="UploadFileDto_File" data-username="@currentUser.UserName" data-name="@Model.UserName" asp-for="UploadFileDto.File" class="rounded-circle avatar-lg img-thumbnail"  style="display:none; alt="profile-image"/>
                         
-                        <img id="img" src="@photoPath" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
+                        <img id="img" src="@photoPath" class="rounded-circle profile" alt="profile-image" />
                         
-                        <button id="upload"  type="submit"></button>
+                        <button id="upload"  type="submit" style="display:none"></button>
                 </form>
                        
                         <div class="w-100 ms-3">
-                            <h4 class="my-0">@currentUser.Name</h4>
+                                <h4 class="my-0" style="margin-left:17px" id="username">@Model.UserName.Substring(0,1).ToUpper()@Model.UserName.Substring(1,(Model.UserName.Length-1)).ToLower()</h4>
                             <button type="button" class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light">Follow</button>
                             <button type="button" class="btn btn-soft-success btn-xs waves-effect mb-2 waves-light">Message</button>
                         </div>
@@ -68,13 +68,14 @@
 
                     <div class="row">
                         <div class="col-4 border-end border-light">
-                            <abp-button id="showFollowers" class="text-muted mt-1 mb-2 fw-normal">Followers</abp-button>
+                                        <abp-button id="showFollowers" data-name="@Model.UserName" class="text-muted mt-1 mb-2 fw-normal">Followers</abp-button>
 
 
-                            <h2 class="mb-0 fw-bold">@Model.FollowersCount</h2>
+                            <h2 id=followers class="mb-0 fw-bold">@Model.FollowersCount</h2>
                         </div>
                         <div class="col-4 border-end border-light">
-                            <abp-button id="showFollowing" class="text-muted mt-1 mb-2 fw-normal">Following</abp-button>
+
+                            <abp-button id="showFollowing" data-name="@Model.UserName" class="text-muted mt-1 mb-2 fw-normal">Following</abp-button>
                             <h2 id="following" class="mb-0 fw-bold">@Model.FollowingCount</h2>
                         </div>
                         
@@ -86,6 +87,10 @@
 
 
 
+
+
+
+                        
 
 
 
@@ -106,28 +111,7 @@
   </h1>  
 @*<abp-button id="showFollowers"  class="btn btn-info btnfollowers">Followers(@Model.FollowersCount)</abp-button>
 <abp-button   id="showFollowing"   class="btn btn-info btnfollowing">Following(@Model.FollowingCount) </abp-button>*@
-<div class="connections">
-<abp-card>
-    <abp-card-header>
-        <h2>@L["UserConnections"] (@Model.UserCount)</h2>
-        
-    </abp-card-header>
-    <abp-card-body>
-        <abp-table striped-rows="true" id="UserConnectionsTable">
 
-
-
-
-        </abp-table>
-        
-
-
-
-
-
-    </abp-card-body>
-</abp-card>
-</div>
 
 
 
