@@ -36,8 +36,6 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                 },
 
                 {
-
-
                     data: "isFollow",
                     render: function (data, type, row) {
                         isActive = row.extraProperties.isFollow; var id = row.id;
@@ -51,9 +49,6 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                             return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-outline-info">UnFollow User</button>`
 
                         }
-
-
-
                     }
 
                 }
@@ -74,21 +69,21 @@ followUser = (button) => {
 
             (btn).text("UnFollow User");
             (btn).attr("isActive", 'true');
-            $('#UserConnectionsTable').DataTable().ajax.reload();
+            
             abp.notify.success('Followed user');
 
             var following = document.getElementById('following');
             var number = parseInt(following.innerText);
             value = number + 1;
             following.innerText = value;
-
+            $('#UserConnectionsTable').DataTable().ajax.reload();
         });
     }
     else {
         movieMatch.userConnections.userConnection.unFollow(id, isActive).done(() => {
             (btn).attr("class", "btn btn-outline-info");
             (btn).attr("isActive", 'false');
-            $('#UserConnectionsTable').DataTable().ajax.reload();
+           
             (btn).text("Follow User");
 
             abp.notify.success(`UnFollowed user`);
@@ -96,16 +91,7 @@ followUser = (button) => {
             var number = parseInt(following.innerText);
             value = number - 1;
             following.innerText = value;
-
-
-
-
-
-
-
-
-
-
+            $('#UserConnectionsTable').DataTable().ajax.reload();
         });
     }
 }

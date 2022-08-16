@@ -79,7 +79,7 @@ public class CommentingViewComponent : AbpViewComponent
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
             Movie =  await _movieAppService.GetFromDbAsync(id),
-            CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId)
+            CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId,currPage)
           //  Rating= _ratingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId),
             
         };
