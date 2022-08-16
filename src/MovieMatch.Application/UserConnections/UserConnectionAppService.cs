@@ -70,7 +70,7 @@ namespace MovieMatch.UserConnections
 
             foreach (var item in filteredUsers)
             {
-                item.SetIsActive(false);
+               await SetisFollowAsync(item.UserName, false);
             }
 
             var currentUserFollowing =await GetFirstAsync();
@@ -80,9 +80,9 @@ namespace MovieMatch.UserConnections
                 {
                     if(user.Id==item)
                     {
-                     //   res.Where(x=>x.FollowingId==user.Id).FirstOrDefault().isFollowed=true;
-                        
-                            user.SetIsActive(true);
+                        //   res.Where(x=>x.FollowingId==user.Id).FirstOrDefault().isFollowed=true;
+
+                       await SetisFollowAsync(user.UserName, true);
 
                     }
                     
@@ -113,7 +113,8 @@ namespace MovieMatch.UserConnections
           
             res.Where(x => x.FollowerId == _currentUser.Id && x.FollowingId == id).FirstOrDefault().IsFollowed = true;
            var finduser= await _identityUserRepository.GetAsync(id);
-            finduser.SetIsActive(!isActive);
+          //  bool isFollow =await GetisFollowAsync(finduser.UserName);
+            await SetisFollowAsync(finduser.UserName, !isActive);
 
 
         }
@@ -130,8 +131,9 @@ namespace MovieMatch.UserConnections
             if (result != null)
                           {
              var finduser=  await _identityUserRepository.GetAsync(result.FollowingId);
-                finduser.SetIsActive(!isActive);
-                                await _userConnectionRepository.DeleteAsync(result, true);
+          //      bool isFollow = await GetisFollowAsync(finduser.UserName);
+                await SetisFollowAsync(finduser.UserName, !isActive);
+                await _userConnectionRepository.DeleteAsync(result, true);
                 
                 
                       }
@@ -223,6 +225,18 @@ namespace MovieMatch.UserConnections
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
             return user.GetProperty<string>("Photo"); //Using the new extension property
+        } 
+        public async Task SetisFollowAsync(string userName, bool isFollow)
+        {
+            var user = await _userRepository.GetAsync(u => u.UserName == userName);
+            user.SetProperty("isFollow",isFollow); //Using the new extension property
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task<bool> GetisFollowAsync(string userName)
+        {
+            var user = await _userRepository.GetAsync(u => u.UserName == userName);
+            return user.GetProperty<bool>("isFollow"); //Using the new extension property
         }
 
         public async Task<UserInformationDto> GetUserInfoAsync(string username)

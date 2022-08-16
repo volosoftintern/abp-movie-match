@@ -18,6 +18,7 @@ public static class MovieMatchEfCoreEntityExtensionMappings
         {
             ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, Guid>(ProfilePictureConsts.ProfilePictureId);
             ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, string>("Photo");
+            ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, bool>("isFollow");
 
             /* You can configure extra properties for the
              * entities defined in the modules used by your application.
