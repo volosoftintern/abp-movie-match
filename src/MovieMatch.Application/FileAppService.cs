@@ -34,7 +34,7 @@ namespace MovieMatch
         {
             await _fileContainer.SaveAsync(input.Name, input.Content.GetStream(), true);
             var user = await _userRepository.GetAsync(u => u.UserName == _currentUser.UserName);
-            user.SetProperty("Photo", input.Name); //Using the new extension property
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, input.Name); //Using the new extension property
             await _userRepository.UpdateAsync(user);
 
 

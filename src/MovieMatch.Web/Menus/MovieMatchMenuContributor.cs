@@ -72,6 +72,7 @@ public class MovieMatchMenuContributor : IMenuContributor
                 icon: "fa fa-users"
             )
         );
+        context.Menu.Items.Insert(5,new ApplicationMenuItem("MovieMatch.Home", l["Menu:Chat"], "/Chat"));
 
         if (MultiTenancyConsts.IsEnabled)
         {

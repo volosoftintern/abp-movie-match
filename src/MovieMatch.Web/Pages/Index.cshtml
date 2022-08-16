@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using MovieMatch.Localization
 @using MovieMatch.Web.Components.Post
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @using Volo.Abp.Users
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
@@ -13,7 +14,7 @@
 }
     @section scripts {
     <abp-script src="/Pages/Index.js" />
-
+    @*<abp-script type="typeof(SignalRBrowserScriptContributor)" />*@
 }
 
     <div class="container d-flex align-items-center flex-column mb-3">
