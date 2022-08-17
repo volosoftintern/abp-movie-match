@@ -105,7 +105,6 @@ public class MovieMatchDbContext :
                 b.ConfigureByConvention();
                 b.Property(x => x.FollowerId).IsRequired();
                 b.Property(x => x.FollowingId).IsRequired();
-                b.Property(x => x.IsFollowed).IsRequired();
                 b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
