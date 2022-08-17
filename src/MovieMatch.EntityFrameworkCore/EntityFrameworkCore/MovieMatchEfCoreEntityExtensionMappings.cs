@@ -16,7 +16,6 @@ public static class MovieMatchEfCoreEntityExtensionMappings
         MovieMatchModuleExtensionConfigurator.Configure();
         OneTimeRunner.Run(() =>
         {
-            ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, Guid>(ProfilePictureConsts.ProfilePictureId);
             ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, string>("Photo");
             ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, bool>("isFollow");
 

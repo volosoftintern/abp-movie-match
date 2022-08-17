@@ -15,8 +15,7 @@ namespace MovieMatch.UserConnections
         public Guid FollowersId { get; set; }
         [Required]
         public Guid FollowingId { get; set; }
-        [CanBeNull]
-        public RemoteStreamContent ProfilePictureStreamContent { get; set; }
+       
 
     }
 
