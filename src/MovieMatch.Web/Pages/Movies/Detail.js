@@ -91,10 +91,12 @@
             if (res.length == 0) list.append(` <div class="nowatchers">no watchers yet</div>`)
             else {
                 for (var element of res) {
+                    
                     var count = 0;
                     await getCount(element.id).then((c) => {
                         count = c;
                     });
+                    
                     list.append(`
                   
                     <div class="card d-flex flex-row">
@@ -107,11 +109,27 @@
                         <p class="count">${count} movie watched</p>
                     </div>
                      <div class="col-md-5"></div>
-                    <div class="col-md-2 d-flex flex-column justify-content-center ">
-                         
-                        ${abp.currentUser.userName == element.userName ? '' : '<button type="button" class="btn btn-outline-dark follow">takip et</button>'}
-                 </div>
+                    
                 `);
+                    if (element.userName != abp.currentUser.userName) {
+                        if (element.extraProperties.isFollow == false)
+                        {
+                                      list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
+                       
+                             <button onclick=followToggle(this) id=${element.id} isFollow=${element.extraProperties.isFollow} type="button" class="btn btn-outline-dark follow">Follow</button>
+                               </div>`)
+                       
+                        }
+                        else {
+                                          
+                               list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
+                
+                                   <button onclick=followToggle(this) id=${element.id} isFollow=${element.extraProperties.isFollow} type="button" class="btn btn-outline-dark follow">UnFollow</button>
+                              </div>`)
+                             }   
+                       }
+                    
+
 
                 }
             }
@@ -130,5 +148,28 @@
                 })
         });
     }
+
+
+    followToggle = (button) => {
+        console.log(button);
+        btn = $(button);
+        if (btn.text() == 'Follow') {
+            movieMatch.userConnections.userConnection.follow(btn.attr('id'), btn.attr('isFollow')).done(() => {
+
+                btn.text('UnFollow');
+
+
+            });
+        }
+        else{
+            movieMatch.userConnections.userConnection.unFollow(btn.attr('id'), btn.attr('isFollow')).done(() => {
+
+                btn.text('Follow');
+
+
+            });
+        }
+    }
 });
+
 
