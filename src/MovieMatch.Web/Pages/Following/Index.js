@@ -32,7 +32,7 @@
                                     return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
                                 }
                                 else {
-                                    return '<img class="profile rounded-circle" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>'
+                                    return '<img class="profile rounded-circle" src="/default_picture.png"/>'
                                 }
                             }
                         },

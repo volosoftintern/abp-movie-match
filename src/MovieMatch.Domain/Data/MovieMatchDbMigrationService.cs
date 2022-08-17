@@ -104,6 +104,7 @@ public class MovieMatchDbMigrationService : ITransientDependency
             .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, IdentityDataSeedContributor.AdminEmailDefaultValue)
             .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, IdentityDataSeedContributor.AdminPasswordDefaultValue)
         );
+   
     }
 
     private bool AddInitialMigrationIfNotExist()

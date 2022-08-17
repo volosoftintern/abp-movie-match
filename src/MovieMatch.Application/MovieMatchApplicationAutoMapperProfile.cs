@@ -17,7 +17,7 @@ using MovieMatch.Comments;
 using Volo.CmsKit.Users;
 using DM.MovieApi.MovieDb.People;
 using MovieMatch.Posts;
-
+using MovieMatch.Messages;
 
 namespace MovieMatch;
 
@@ -76,5 +76,6 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
 
         //Post
         CreateMap<Post, PostDto>();
+        CreateMap<CreateMessageDto, Message>();
     }
 }
