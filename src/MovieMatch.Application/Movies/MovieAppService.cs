@@ -39,8 +39,8 @@ namespace MovieMatch.Movies
         private AsyncFallbackPolicy<MovieDetailDto> _moviePolicy;
         private AsyncFallbackPolicy<MovieCredit> _creditPolicy;
 
-        PersonDto _person=null;
-        MovieDetailDto _movieDetail=null;
+        PersonDto _person = null;
+        MovieDetailDto _movieDetail = null;
         MovieCredit _movieCredit = null;
 
         private int _personId = 0;
@@ -98,22 +98,22 @@ namespace MovieMatch.Movies
             if (isMoveExist)
             {
 
-                var movie = (await _movieDetailRepository.WithDetailsAsync(x=>x.Genres,x=>x.Stars)).FirstOrDefault(x=>x.Id==id);
-                
-                _movieDetail =ObjectMapper.Map<MovieDetail, MovieDetailDto>(movie);
-                var dir= await _directorRepository.GetAsync(movie.DirectorId);
+                var movie = (await _movieDetailRepository.WithDetailsAsync(x => x.Genres, x => x.Stars)).FirstOrDefault(x => x.Id == id);
+
+                _movieDetail = ObjectMapper.Map<MovieDetail, MovieDetailDto>(movie);
+                var dir = await _directorRepository.GetAsync(movie.DirectorId);
                 _movieDetail.Director = ObjectMapper.Map<Director, PersonDto>(dir);
-                var movieStars = (await _personRepository.GetListAsync()).Where(x=>movie.Stars.ToList().Any(p => p.PersonId == x.Id)).ToArray();
-                var movieGenres= (await _genreRepository.GetListAsync()).Where(x => movie.Genres.ToList().Any(p => p.GenreId== x.Id)).ToArray();
+                var movieStars = (await _personRepository.GetListAsync()).Where(x => movie.Stars.ToList().Any(p => p.PersonId == x.Id)).ToArray();
+                var movieGenres = (await _genreRepository.GetListAsync()).Where(x => movie.Genres.ToList().Any(p => p.GenreId == x.Id)).ToArray();
                 _movieDetail.Stars = ObjectMapper.Map<IEnumerable<People.Person>, IEnumerable<PersonDto>>(movieStars);
-                _movieDetail.Genres= ObjectMapper.Map<IEnumerable<Genres.Genre>, IEnumerable<GenreDto>>(movieGenres);
-                _movieCredit=new MovieCredit()
+                _movieDetail.Genres = ObjectMapper.Map<IEnumerable<Genres.Genre>, IEnumerable<GenreDto>>(movieGenres);
+                _movieCredit = new MovieCredit()
                 {
                     CrewMembers = new List<MovieCrewMember>() { new MovieCrewMember() { PersonId = dir.Id, Job = "Director", Name = dir.Name, ProfilePath = dir.ProfilePath } }
                     ,
                     CastMembers = ObjectMapper.Map<IEnumerable<PersonDto>, List<MovieCastMember>>(_movieDetail.Stars.ToList())
                 };
-                
+
                 _moviePolicy = Policy<MovieDetailDto>.Handle<Exception>().FallbackAsync(_movieDetail);
                 _creditPolicy = Policy<MovieCredit>.Handle<Exception>().FallbackAsync(_movieCredit);
 
@@ -124,11 +124,11 @@ namespace MovieMatch.Movies
                 var response = await _movieApi.FindByIdAsync(id);
                 return ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
             });
-            
+
             _movieCredit = await _creditPolicy.ExecuteAsync(async () =>
             {
-                
-                var resp= await _movieApi.GetCreditsAsync(id);
+
+                var resp = await _movieApi.GetCreditsAsync(id);
                 return resp.Item;
             });
 
@@ -151,7 +151,7 @@ namespace MovieMatch.Movies
             if ((await _movieDetailRepository.GetQueryableAsync()).Where(x => x.Id == id).Count() == 0)
             {
                 var savedMovie = new MovieDetail(_movieDetail.Id, _movieDetail.Title, _movieDetail.PosterPath, _movieDetail.Overview, _movieDetail.ReleaseDate, _movieDetail.VoteAverage, _movieDetail.ImdbId, _movieDetail.Director.Id);
-                
+
                 foreach (var item in _movieDetail.Genres)
                 {
                     savedMovie.Genres.Add(new MovieGenre(movieId: savedMovie.Id, genreId: item.Id));
@@ -193,35 +193,25 @@ namespace MovieMatch.Movies
         }
         public async Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(PagedAndSortedResultRequestDto input)
         {
-            var moviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
-            var queryable = await _movieRepository.GetQueryableAsync();
 
-            var totalCount = moviesWatchedBefore.Count();
-            //var queryResult = await AsyncExecuter.ToListAsync(moviesWatchedBefore);
+            var movieIdsWatchedBefore = (await _watchedBeforeRepository.GetQueryableAsync()).
+                Where(x=>x.UserId==CurrentUser.Id).Select(x=>x.MovieId);
 
-            foreach (var item in moviesWatchedBefore)
-            {
-                var addMovie = queryable.FirstOrDefault(x => x.Id == item.MovieId);
-                if (addMovie != null)
-                {
-                    _movieList.Add(addMovie);
-                }
+            var totalCount = movieIdsWatchedBefore.Count();
 
-            }
+            var queryable = (await _movieRepository.GetQueryableAsync());
 
-            moviesWatchedBefore = moviesWatchedBefore
-             .Skip(input.SkipCount)
-             .Take(input.MaxResultCount).ToList();
-            //Convert the query result to a list of movieDto objects
-            var movieDtos = ObjectMapper.Map<List<Movie>, List<MovieDto>>(_movieList);
+            var query = queryable
+                .Where(x => movieIdsWatchedBefore.Contains(x.Id))
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount);
 
-
-            //Get the total count with another query
+            var movies = await AsyncExecuter.ToListAsync(query);
 
             return new PagedResultDto<MovieDto>(
-             totalCount,
-             movieDtos
-         );
+                totalCount,
+                ObjectMapper.Map<List<Movie>, List<MovieDto>>(movies)
+                );
 
         }
         public async Task<PagedResultDto<MovieDto>> GetWatchLaterListAsync(PagedAndSortedResultRequestDto input)
@@ -262,11 +252,11 @@ namespace MovieMatch.Movies
          );
 
         }
-        
+
         public async Task<PersonDto> GetPersonAsync(int personId, bool isDirector = false)//Implemented Polly
         {
             //PersonDto person = new PersonDto();
-            _personId=personId;
+            _personId = personId;
 
             if (isDirector && (await _directorRepository.GetQueryableAsync()).Where(x => x.Id == personId).Count() > 0)
             {
@@ -289,12 +279,12 @@ namespace MovieMatch.Movies
                 var response = await _peopleApi.FindByIdAsync(_personId);
                 return ObjectMapper.Map<DM.MovieApi.MovieDb.People.Person, PersonDto>(response.Item);
             });
-            
+
             if (isDirector && (await _directorRepository.GetQueryableAsync()).Where(x => x.Id == personId).Count() == 0)
             {
-                await _directorRepository.InsertAsync(new Director(personId,_person.Name, _person.ProfilePath, _person.BirthDay, _person.DeathDay, _person.Biography), true);
+                await _directorRepository.InsertAsync(new Director(personId, _person.Name, _person.ProfilePath, _person.BirthDay, _person.DeathDay, _person.Biography), true);
             }
-           
+
             if (!isDirector && (await _personRepository.GetQueryableAsync()).Where(x => x.Id == personId).Count() == 0)
             {
                 await _personRepository.InsertAsync(new People.Person(personId, _person.Name, _person.ProfilePath, _person.BirthDay, _person.DeathDay, _person.Biography), true);
