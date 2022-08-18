@@ -1,6 +1,7 @@
 ﻿const defaultPicturePath ="/default_picture.png"
 
 var l = abp.localization.getResource('MovieMatch');
+
 var dataTable = $('#UserConnectionsTable').DataTable(
     abp.libs.datatables.normalizeConfiguration({
         serverSide: true,
@@ -9,11 +10,13 @@ var dataTable = $('#UserConnectionsTable').DataTable(
         searching: true,
         scrollX: true,
         ajax: abp.libs.datatables.createAjax(movieMatch.userConnections.userConnection.getList),
-
+        
         columnDefs:
             [
+                
                 {
                     data: "extraProperties.Photo",
+                    
                     render: function (data) {
                         if (data != null) {
                             return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
@@ -30,7 +33,7 @@ var dataTable = $('#UserConnectionsTable').DataTable(
 
                     
 
-                        return `<a  href=UserConnections/${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
+                        return `<a  href=${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
                     }
 
                 },

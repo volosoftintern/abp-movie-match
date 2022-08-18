@@ -41,7 +41,7 @@
                             data: "name",
                             render: function (name) {
 
-                                return `<a  href=UserConnections/${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
+                                return `<a  href=${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
 
                             }
 
