@@ -107,7 +107,7 @@ namespace MovieMatch.UserConnections
              var res= await _userConnectionRepository.GetListAsync();
           
            var finduser= await _identityUserRepository.GetAsync(id);
-            await SetisFollowAsync(finduser.UserName, !isActive);
+            await SetisFollowAsync(finduser.UserName, true);
 
 
         }
@@ -123,7 +123,7 @@ namespace MovieMatch.UserConnections
             if (result != null)
                           {
              var finduser=  await _identityUserRepository.GetAsync(result.FollowingId);
-                await SetisFollowAsync(finduser.UserName, !isActive);
+                await SetisFollowAsync(finduser.UserName, false);
                 await _userConnectionRepository.DeleteAsync(result, true);
                 
                 

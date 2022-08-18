@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using MovieMatch.Movies;
+using MovieMatch.UserConnections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
@@ -77,16 +79,24 @@ namespace MovieMatch.MoviesWatchedBefore
             var movies=await _watchedBeforeRepository.GetListAsync(x=>x.UserId==id);
             return movies.Count;
         }
-        public async Task<List<IdentityUserDto>> ListOfUsers(int movieId)
+        public async Task<List<FollowerDto>> ListOfUsers(int movieId)
         {
+             List<FollowerDto> userList=new List<FollowerDto>();
             var usersWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.MovieId == movieId);
-            if(usersWatchedBefore==null) return null;
-            foreach (var item in usersWatchedBefore)
+            var userslist = usersWatchedBefore.ToList();
+            foreach (var item in userslist)
             {
-                var users=await _usersService.FindAsync(item.UserId);
-                userDtos.Add(users);
+               var user=await _usersService.GetAsync(item.UserId);
+                userList.Add(new FollowerDto
+                {
+                    Id = user.Id,
+                    Name = user.UserName,
+                    isFollow = user.GetProperty<bool>("isFollow"),
+                    Path = user.GetProperty<string>("Photo")
+
+                });
             }
-            var userList = ObjectMapper.Map<List<IdentityUser>,List<IdentityUserDto>>(userDtos);
+            
             return userList;
         }
     }
