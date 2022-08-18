@@ -28,6 +28,7 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<UserConnection, UserConnectionDto>();
         CreateMap<UserConnection,IdentityUserDto >();
         CreateMap<IdentityUser,UserConnectionDto >();
+        CreateMap<CmsUser, IdentityUserDto>();
         CreateMap<CreateUpdateUserConnectionDto, UserConnection>();
         CreateMap<WatchedBefore, WatchedBeforeDto>();
         CreateMap<WatchLater, WatchLaterDto>();
