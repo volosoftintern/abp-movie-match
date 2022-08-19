@@ -1,0 +1,35 @@
+h1, p {
+    text-align: center;
+}
+
+.fa-star {
+    color: #FFD600;
+}
+
+.card {
+    width: 30rem;
+}
+
+.card-img-top {
+    width: 50px
+}
+
+.card-text.movie-comment {
+    text-align: left;
+}
+
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 600px) {
+    p {
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{post.user.name}}<span class="text-muted px-1">@{{post.user.userName}}</span>
+            <span class="px-1">&#x26AC;</span><span class="text-muted px-1">{{
+                post.creationTime | timeDiffer}}</span>
+        </h5>
+        <h6 class="card-subtitle text-muted mb-1">{{post.movie.title}}</h6>
+        <a [routerLink]="['/','Movies',post.movie.id]">
+            <div class="row mb-1">
+                <div class="col-2">
+                    <img class="card-img-top" [src]="imgPath+post.movie.posterPath" [alt]="post.movie.title">
+                </div>
+                <div class="col-7">
+                    <p class="card-text movie-comment">{{post.comment}}</p>
+                </div>
+                <div class="col-2">
+                    <p class="card-text"><i class="fas fa-star"></i> {{post.rate}}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
