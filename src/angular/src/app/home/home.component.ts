@@ -11,7 +11,7 @@ import { IdentityUserService } from '@abp/ng.identity/proxy';
 })
 export class HomeComponent implements OnInit {
   post = { items: [], totalCount: 0 } as PagedResultDto<PostDto>;
-  imgPath = "https://image.tmdb.org/t/p/original/";
+  
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }
