@@ -3,20 +3,24 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { TimeDifferPipe } from './timeDiffer/time-differ.pipe';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    TimeDifferPipe
+  ],
   imports: [
     CoreModule,
     ThemeSharedModule,
     NgbDropdownModule,
-    NgxValidateCoreModule
+    NgxValidateCoreModule,
   ],
   exports: [
     CoreModule,
     ThemeSharedModule,
     NgbDropdownModule,
-    NgxValidateCoreModule
+    NgxValidateCoreModule,
+    TimeDifferPipe
   ],
   providers: []
 })
