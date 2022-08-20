@@ -1,17 +1,17 @@
 <div class="container d-flex align-items-center flex-column mb-3">
-  <div id="post-list" class="post-list d-flex flex-column align-items-center my-3 post-container">
+  <div #postList class="post-list d-flex flex-column align-items-center my-3 post-container">
     <app-post *ngFor="let item of post.items;index as i" [post]="item"></app-post>
   </div>
 
-  <div class="spinner-border loader" role="status">
+  <div *ngIf="isLoading" class="spinner-border loader" role="status">
     <span class="sr-only">Loading...</span>
   </div>
 
-  <h2 class="no-post-data">
+  <h2 *ngIf="noData" class="no-post-data">
     No Post Data
   </h2>
 
-  <button class="btn btn-secondary btn-load-more">
-    Load More
+  <button *ngIf="noMoreData" disabled class="btn btn-secondary btn-load-more">
+    No More Data
   </button>
 </div>
