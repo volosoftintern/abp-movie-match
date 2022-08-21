@@ -12,11 +12,9 @@ namespace MovieMatch.UserConnections
     {
         public Guid FollowerId { get;  set; }
         public Guid FollowingId { get;  set; }
-        public bool IsFollowed { get; set; }
       
-        public UserConnection(Guid followerId, Guid followingId, bool isFollowed)
+        public UserConnection(Guid followerId, Guid followingId)
         {
-            IsFollowed=isFollowed;
             FollowerId = followerId;
             FollowingId = followingId;
         }

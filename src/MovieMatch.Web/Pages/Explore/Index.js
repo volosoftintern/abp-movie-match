@@ -1,6 +1,7 @@
 ﻿const defaultPicturePath ="/default_picture.png"
 
 var l = abp.localization.getResource('MovieMatch');
+
 var dataTable = $('#UserConnectionsTable').DataTable(
     abp.libs.datatables.normalizeConfiguration({
         serverSide: true,
@@ -9,11 +10,13 @@ var dataTable = $('#UserConnectionsTable').DataTable(
         searching: true,
         scrollX: true,
         ajax: abp.libs.datatables.createAjax(movieMatch.userConnections.userConnection.getList),
-
+        
         columnDefs:
             [
+                
                 {
                     data: "extraProperties.Photo",
+                    
                     render: function (data) {
                         if (data != null) {
                             return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
@@ -30,7 +33,7 @@ var dataTable = $('#UserConnectionsTable').DataTable(
 
                     
 
-                        return `<a  href=UserConnections/${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
+                        return `<a  href=${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
                     }
 
                 },
@@ -70,7 +73,7 @@ followUser = (button) => {
 
             (btn).text("UnFollow User");
             (btn).attr("isActive", 'true');
-            
+
             abp.notify.success('Followed user');
 
             var following = document.getElementById('following');
@@ -78,13 +81,14 @@ followUser = (button) => {
             value = number + 1;
             following.innerText = value;
             $('#UserConnectionsTable').DataTable().ajax.reload();
+
         });
     }
     else {
         movieMatch.userConnections.userConnection.unFollow(id, isActive).done(() => {
             (btn).attr("class", "btn btn-outline-info");
             (btn).attr("isActive", 'false');
-           
+
             (btn).text("Follow User");
 
             abp.notify.success(`UnFollowed user`);
@@ -93,6 +97,18 @@ followUser = (button) => {
             value = number - 1;
             following.innerText = value;
             $('#UserConnectionsTable').DataTable().ajax.reload();
+
+
+
+
+
+
+
+
+
+
+
+
         });
     }
 }
