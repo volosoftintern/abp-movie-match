@@ -2,23 +2,6 @@ $(function () {
 
     var skipCount = 0;
     var maxResultCount = 10;
-    var resultCount = 0;
-
-    $('#searchBtn').on('click', (e) => {
-        const movieName = $('#movieName').val();
-        if (isNullOrEmpty(movieName)) return;
-
-        movieMatch.search.search.getMovies({ name: movieName, currentPage: 1 }).done((response) => {
-            $('#movieList')
-                .find('option')
-                .remove()
-
-            response.results.forEach((val, i) => {
-                $('#movieList').append(`<option value="${val.id}">${val.title}</option>`);
-            });
-
-        })
-    });
 
     $('#shareBtn').on('click', (e) => {
 

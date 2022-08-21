@@ -1,0 +1,16 @@
+import * as Comments from './comments';
+import * as Controllers from './controllers';
+import * as Microsoft from './microsoft';
+import * as Movies from './movies';
+import * as MoviesWatchLater from './movies-watch-later';
+import * as MoviesWatchedBefore from './movies-watched-before';
+import * as Posts from './posts';
+import * as Rating from './rating';
+import * as Search from './search';
+import * as UserConnections from './user-connections';
+import * as Volo from './volo';
+import * as Web from './web';
+export * from './file.service';
+export * from './models';
+export * from './profile-picture.service';
+export { Comments, Controllers, Microsoft, Movies, MoviesWatchLater, MoviesWatchedBefore, Posts, Rating, Search, UserConnections, Volo, Web };

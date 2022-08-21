@@ -48,7 +48,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.CmsKit.Web;
 using Volo.CmsKit.Comments;
 using Volo.Abp.AspNetCore.SignalR;
-
+using System.Linq;
+using Microsoft.AspNetCore.Cors;
 
 namespace MovieMatch.Web;
 
@@ -115,7 +116,25 @@ namespace MovieMatch.Web;
             options.Conventions.AddPageRoute("/Movies/Director", "Movies/Director/{DirectorId}");
             options.Conventions.AddPageRoute("/Movies/Actor", "Movies/Actor/{ActorId}");
         });
-       
+
+        context.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .WithOrigins(
+                        configuration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray()
+                    )
+                    .WithAbpExposedHeaders()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
 
     }
 
@@ -260,7 +279,7 @@ namespace MovieMatch.Web;
         {
             app.UseErrorPage();
         }
-
+        app.UseCors();
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
