@@ -1,4 +1,5 @@
-h1, p {
+h1,
+p {
     text-align: center;
 }
 
@@ -8,20 +9,21 @@ h1, p {
 
 .card {
     width: 30rem;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .card-img-top {
+        width: 50px
+    }
 }
 
-.card-img-top {
-    width: 50px
-}
+
 
 .card-text.movie-comment {
     text-align: left;
-}
-
-
-.card a {
-    text-decoration: none;
-    color: inherit;
 }
 
 p {
@@ -29,7 +31,12 @@ p {
 }
 
 @media only screen and (max-width: 600px) {
+
     p {
-        font-size: 12px;
+        font-size: 1rem;
+    }   
+
+    .card{
+        width: 23rem;
     }
 }

@@ -1,5 +1,5 @@
 <div class="container d-flex align-items-center flex-column mb-3">
-  <div #postList class="post-list d-flex flex-column align-items-center my-3 post-container">
+  <div #postList class="d-flex flex-column align-items-center my-3 post-container">
     <app-post *ngFor="let item of post.items;index as i" [post]="item"></app-post>
   </div>
 
