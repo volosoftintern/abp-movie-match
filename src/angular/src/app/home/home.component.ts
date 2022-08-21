@@ -10,16 +10,15 @@ import { OAuthService } from 'angular-oauth2-oidc';
 })
 export class HomeComponent implements OnInit {
 
-  post = { items: [], totalCount: 0 } as PagedResultDto<PostDto>;
+  
   maxCount = 5
   skipCount = 0;
   isLoading = false;
   noData = false;
   noMoreData = false;
   currentUser: CurrentUserDto;
-  @ViewChild('postList') postList: ElementRef<HTMLDivElement>;
-
-
+  post = { items: [], totalCount: 0 } as PagedResultDto<PostDto>;
+  
   @HostListener('window:scroll', ['$event'])
   onScroll($event) {
 
@@ -56,6 +55,7 @@ export class HomeComponent implements OnInit {
 
   loadPosts(currentUser: CurrentUserDto) {
     this.isLoading = true;
+    
     this.postService.getFeed({ userId: currentUser.id, maxCount: this.maxCount, skipCount: this.skipCount }).subscribe(res => {
       this.post.items.push(...res.items);
 

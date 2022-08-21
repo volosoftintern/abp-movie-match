@@ -4,11 +4,9 @@ import { NgModule } from '@angular/core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { TimeDifferPipe } from './timeDiffer/time-differ.pipe';
-import { PostComponent } from "./post/post.component";
 @NgModule({
   declarations: [
-    TimeDifferPipe,
-    PostComponent
+    TimeDifferPipe
   ],
   imports: [
     CoreModule,
@@ -21,8 +19,7 @@ import { PostComponent } from "./post/post.component";
     ThemeSharedModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
-    TimeDifferPipe,
-    PostComponent
+    TimeDifferPipe
   ],
   providers: []
 })
