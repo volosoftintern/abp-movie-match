@@ -13,9 +13,8 @@ namespace MovieMatch.Messages
         public Guid UserId { get; set; }
         public string UserName { get; set; }
 
-        public CreateMessageDto(Guid id ,string targetUserName, string text, DateTime when, Guid userID, string userName)
+        public CreateMessageDto(string targetUserName, string text, DateTime when, Guid userID, string userName)
         {
-            Id = id;
             TargetUserName = targetUserName;
             Text = text;
             When = when;

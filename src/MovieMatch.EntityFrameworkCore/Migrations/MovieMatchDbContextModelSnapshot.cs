@@ -62,6 +62,8 @@ namespace MovieMatch.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("AppMessages", (string)null);

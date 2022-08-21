@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MovieMatch.Migrations
 {
     [DbContext(typeof(MovieMatchDbContext))]
-    [Migration("20220816165948_new_mig")]
-    partial class new_mig
+    [Migration("20220817144731_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,8 @@ namespace MovieMatch.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id");
 
                     b.HasIndex("UserId");
 

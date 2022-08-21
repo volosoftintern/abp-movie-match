@@ -9,38 +9,49 @@ using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Users;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using MovieMatch.UserConnections;
+using Volo.Abp.Application.Dtos;
 
 namespace MovieMatch.Web.Pages.Chat
 {
     
     public class IndexModel : PageModel
     {
-        public List<Message> Messages = new List<Message>();
-        public string TargetUserName { get; set; }
-        [Required]
-        public string Text { get; set; }
-        public DateTime When { get; set; }
-        public int Count { get; set; }
-        public Guid UserID { get; set; }
-        public string UserName { get; set; }
-        private readonly IMessageAppService _messageAppService;
-        private readonly IMessageRepository _messageRepository;
-        private readonly ICurrentUser _currentUser;
-        public IndexModel(IMessageAppService messageAppService, IMessageRepository messageRepository,ICurrentUser currentUser)
+        [BindProperty]
+        public MessageViewModel MyModel { get; set; }
+        public ICurrentUser CurrentUser;
+        public IUserConnectionAppService _userConnectionAppService;
+        public IMessageAppService _messageAppService;
+        public IndexModel(ICurrentUser currentUser,IUserConnectionAppService userConnectionAppService,IMessageAppService messageAppService)
         {
-            When = DateTime.Now;
-            _messageAppService = messageAppService;
-            _currentUser = currentUser;
-            _messageRepository = messageRepository;
+            CurrentUser = currentUser;
+            MyModel = new MessageViewModel();
+            _userConnectionAppService=userConnectionAppService;
+            _messageAppService=messageAppService;
         }
-        public void OnGetAsync()
+
+        public async Task OnGetAsync()
         {
-            
-           // Messages = await _messageRepository.GetListAsync();
+            var usersFollowInfo = new GetUsersFollowInfo
+            {
+                username = CurrentUser.UserName
+            };
+            MyModel = new MessageViewModel
+            {
+                Following = await _userConnectionAppService.GetFollowingAsync(usersFollowInfo),
+                Messages = await _messageAppService.GetMessagesListAsync()
+            };
         }
-        //private async Task GetDataAsync()
-        //{
-            
-        //}
+
+        public class MessageViewModel
+        {
+
+            [DynamicFormIgnore]
+            public PagedResultDto<FollowerDto> Following { get; set; }
+            [DynamicFormIgnore]
+            public List<MessageDto> Messages { get; set; }
+        }
     }
 }

@@ -201,6 +201,7 @@ public class MovieMatchDbContext :
             b.Property(x => x.Id).IsRequired();
             b.Property(x => x.Text).IsRequired();
             b.Property(x => x.UserId).IsRequired();
+            b.HasIndex(x => x.Id);
             b.HasOne<IdentityUser>().WithMany().HasForeignKey(d => d.UserId);
         });
         builder.Entity<MovieDetail>(b =>

@@ -15,5 +15,6 @@ namespace MovieMatch.Messages
         PagedAndSortedResultRequestDto, //Used for paging/sorting
         CreateMessageDto> //Used to create/update a WatchLater
     {
+        Task<List<MessageDto>> GetMessagesListAsync();
     }
 }

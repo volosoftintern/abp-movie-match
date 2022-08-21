@@ -121,24 +121,19 @@ namespace MovieMatch.UserConnections
 
 
      
-        public async Task UnFollowAsync(Guid id,bool isActive) { 
-                 
-
-
+        public async Task UnFollowAsync(Guid id,bool isActive)
+        { 
             var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
             result.IsFollowed = false;
 
             if (result != null)
-                          {
+            {
              var finduser=  await _identityUserRepository.GetAsync(result.FollowingId);
-          //      bool isFollow = await GetisFollowAsync(finduser.UserName);
-                await SetisFollowAsync(finduser.UserName, !isActive);
-                await _userConnectionRepository.DeleteAsync(result, true);
-                
-                
-                      }
-
-}
+          // bool isFollow = await GetisFollowAsync(finduser.UserName);
+             await SetisFollowAsync(finduser.UserName, !isActive);
+             await _userConnectionRepository.DeleteAsync(result, true);
+            }
+        }
 
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input)
@@ -149,10 +144,8 @@ namespace MovieMatch.UserConnections
             //   input.MaxResultCount = 100;
             // input.Sorting = null;
             
-            var user = await _identityUserRepository.GetListAsync();
-            
+            var user = await _identityUserRepository.GetListAsync();   
             var users = await _identityUserRepository.GetListAsync();
-
 
             var response = res.Where(n => n.FollowingId == userr.Id).Select(c =>(c.FollowerId)).ToList();
             var q = (from pd in response
@@ -166,13 +159,8 @@ namespace MovieMatch.UserConnections
                          isFollow = od.GetProperty<bool>("isFollow")
 
                      }).WhereIf(!string.IsNullOrEmpty(input.Filter), x => x.Name.Contains(input.Filter)).ToList();
-            return new PagedResultDto<FollowerDto>(q.Count(), q);
-
-
-
-           
-            
-    }
+                 return new PagedResultDto<FollowerDto>(q.Count(), q);    
+        }
         public async Task<int> GetFollowersCount(string userName)
         {
             var count = await GetFollowersAsync(new GetUsersFollowInfo() { username = userName });
