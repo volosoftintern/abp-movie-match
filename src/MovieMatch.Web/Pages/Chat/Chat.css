@@ -1,6 +1,6 @@
-﻿#MessageList {
+﻿.messageList{
     border: 1px solid gray;
-    height: 400px;
+    height: 600px;
     overflow: auto;
     list-style: none;
     padding-left: 0;
@@ -8,9 +8,18 @@
 }
 
 #TargetUser {
-    width: 100%;
+    width: 50%;
 }
 
 #Message {
-    width: 100%;
+    width: 50%;
+}
+
+.inputText{
+    margin-top:514px;
+    width:90%;
+}
+
+.fade:not(.show) {
+    display: none;
 }

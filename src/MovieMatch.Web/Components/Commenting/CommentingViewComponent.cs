@@ -81,7 +81,6 @@ public class CommentingViewComponent : AbpViewComponent
             Movie =  await _movieAppService.GetFromDbAsync(id),
             CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId,currPage)
           //  Rating= _ratingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId),
-            
         };
 
         await ConvertMarkdownTextsToHtml(viewModel);

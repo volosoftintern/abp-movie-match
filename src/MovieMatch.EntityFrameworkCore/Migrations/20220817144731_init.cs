@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieMatch.Migrations
 {
-    public partial class new_mig : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1513,6 +1513,11 @@ namespace MovieMatch.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AppGenres_Id",
                 table: "AppGenres",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppMessages_Id",
+                table: "AppMessages",
                 column: "Id");
 
             migrationBuilder.CreateIndex(

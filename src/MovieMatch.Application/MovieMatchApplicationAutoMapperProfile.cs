@@ -77,5 +77,6 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         //Post
         CreateMap<Post, PostDto>();
         CreateMap<CreateMessageDto, Message>();
+        CreateMap<Message, MessageDto>();
     }
 }

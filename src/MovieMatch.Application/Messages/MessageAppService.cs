@@ -1,5 +1,6 @@
 ﻿using DM.MovieApi.MovieDb.Movies;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
 using MovieMatch.Messages;
 using MovieMatch.Movies;
 using MovieMatch.MoviesWatchLater;
@@ -34,14 +35,27 @@ namespace MovieMatch.Messages
             _currentUser = currentUser;
             _messageRepository = messageRepository;
         }
+        [Authorize]
         public override async Task<MessageDto> CreateAsync(CreateMessageDto input)
         {
-            
-            var createMessage = new CreateMessageDto(input.Id,input.TargetUserName, input.Text, input.When, input.UserId, input.UserName);
-            var message=ObjectMapper.Map<CreateMessageDto, Message>(createMessage);
-            await _messageRepository.InsertAsync(message);
+            var createMessage = new Message(
+                   input.TargetUserName,
+                   input.Text,
+                   input.When,
+                   input.UserId,
+                   input.UserName);
+            await _messageRepository.InsertAsync(createMessage);
             return null;
         }
+
+        public async Task<List<MessageDto>> GetMessagesListAsync()
+        {
+            var messages=await _messageRepository.GetListAsync();
+            return ObjectMapper.Map<List<Message>, List<MessageDto>>(messages);
+        }
+
+
+
     }
 }
 

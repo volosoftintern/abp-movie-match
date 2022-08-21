@@ -26,15 +26,12 @@ namespace MovieMatch.Web
             _messageAppService = messageAppService;
         }
 
-        public async Task SendMessage(string targetUserName, string message)
+        public async Task SendMessage(string targetUserName,string text)
         {
             var targetUser = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName(targetUserName));
-
-            message = $"{CurrentUser.UserName}: {message}";
-
             await Clients
                 .User(targetUser.Id.ToString())
-                .SendAsync("ReceiveMessage", message);
+                .SendAsync("ReceiveMessage", CurrentUser.UserName, text);
         }
     }
 }
