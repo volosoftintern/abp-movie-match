@@ -22,14 +22,14 @@ namespace MovieMatch.UserConnections
             _currentUser = currentUser;
 
         }
-        public async Task<UserConnection> CreateAsync(Guid followingId)
+        public UserConnection Create(Guid followingId)
         {
             return new UserConnection(followingId, (Guid)_currentUser.Id)
             {
 
                 FollowingId = followingId,
                 FollowerId = (Guid)_currentUser.Id,
-                
+
             };
 
         }
