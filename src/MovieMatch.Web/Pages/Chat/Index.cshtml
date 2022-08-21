@@ -10,7 +10,7 @@
     <abp-script type="typeof(SignalRBrowserScriptContributor)" />
     <abp-script src="/Pages/Chat/Chat.js" />
 }
-    @{
+@{
     List<string> x=new List<string>();
 }
         <div>
@@ -20,7 +20,7 @@
               @foreach (var item in Model.MyModel.Following.Items )
               {
                     x.AddIfNotContains(item.Name);
-              <button class="nav-link" id="v-pills-@item.Name-tab" data-content="@item.Name" data-bs-toggle="pill" data-bs-target="#v-pills-@item.Name" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">@item.Name</button>
+                    <button class="nav-link" id="v-pills-@item.Name-tab" data-content="@item.Name" data-bs-toggle="pill" data-bs-target="#v-pills-@item.Name" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">@item.Name</button>
               }
                 @foreach (var item in Model.MyModel.Messages.Where(x => x.TargetUserName == CurrentUser.UserName))
                 {
