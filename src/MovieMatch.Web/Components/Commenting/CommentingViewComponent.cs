@@ -31,10 +31,10 @@ namespace MovieMatch.Web.Components.Commenting;
 
 [ViewComponent(Name = "CmsCommenting")]
 [Widget(
-    ScriptTypes = new[] { typeof(CommentingScriptBundleContributor) },
-    ScriptFiles = new[] { "/Components/Commenting/def.js" },
+    ScriptTypes = new[] { typeof(Commenting.CommentingScriptBundleContributor) },
+   // ScriptFiles = new[] { "/Components/Commenting/def.js" },
     StyleTypes = new[] { typeof(CommentingStyleBundleContributor) },
-    StyleFiles =new[] { "/Components/Commenting/def.css" },
+   StyleFiles =new[] { "/Components/Commenting/def.css" },
     RefreshUrl = "/CmsKitPublicWidgets/Commenting",
     AutoInitialize = true
 )]
@@ -62,7 +62,7 @@ public class CommentingViewComponent : AbpViewComponent
     }
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
-        string entityId)
+        string entityId,int currPage)
     {
 
         var comments = (await CommentPublicAppService
@@ -79,7 +79,7 @@ public class CommentingViewComponent : AbpViewComponent
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
             Movie =  await _movieAppService.GetFromDbAsync(id),
-            CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId)
+            CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId,currPage)
           //  Rating= _ratingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId),
             
         };

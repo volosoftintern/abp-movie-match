@@ -19,6 +19,8 @@ using Volo.CmsKit.EntityFrameworkCore;
 using MovieMatch.Posts;
 using MovieMatch.People;
 using MovieMatch.Genres;
+using Volo.Abp;
+using MovieMatch.Messages;
 
 namespace MovieMatch.EntityFrameworkCore;
 
@@ -47,7 +49,7 @@ public class MovieMatchDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
-
+    public DbSet<Message> Messages { get; set; }
     public DbSet<WatchedBefore> MoviesWatchedBefore { get; set; }
     public DbSet<WatchLater> MoviesWatchLater { get; set; }
     public DbSet<Movie> Movies { get; set; }
@@ -93,15 +95,16 @@ public class MovieMatchDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
         builder.ConfigureCmsKit();
-
         /* Configure your own tables/entities inside here */
-        builder.Entity<UserConnection>(b =>
+
+
+        builder.Entity<UserConnection>(
+            b =>
             {
                 b.ToTable("Connections");
                 b.ConfigureByConvention();
                 b.Property(x => x.FollowerId).IsRequired();
                 b.Property(x => x.FollowingId).IsRequired();
-                b.Property(x => x.IsFollowed).IsRequired();
                 b.HasKey(x => new { x.FollowerId, x.FollowingId });
 
                 b.HasOne<IdentityUser>().WithMany().HasForeignKey(c => c.FollowerId).IsRequired().OnDelete(DeleteBehavior.NoAction);
@@ -188,6 +191,16 @@ public class MovieMatchDbContext :
             b.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             b.HasIndex(x => x.Id);
 
+        });
+        builder.Entity<Message>(b =>
+        {
+            b.ToTable(MovieMatchConsts.DbTablePrefix + "Messages",
+                MovieMatchConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Id).IsRequired();
+            b.Property(x => x.Text).IsRequired();
+            b.Property(x => x.UserId).IsRequired();
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(d => d.UserId);
         });
         builder.Entity<MovieDetail>(b =>
         {

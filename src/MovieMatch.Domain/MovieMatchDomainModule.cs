@@ -44,6 +44,7 @@ namespace MovieMatch;
         });
 
 
+
         Configure<CmsKitCommentOptions>(options =>
         {
             options.EntityTypes.Add(new CommentEntityTypeDefinition("Movie"));

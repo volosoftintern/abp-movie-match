@@ -88,14 +88,20 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
-            if (res.length == 0) list.append(` <div class="nowatchers">no watchers yet</div>`)
+            if (res.length == 0) list.append(` <div class="no watchers">no watchers yet</div>`)
             else {
+                console.log(res);
                 for (var element of res) {
                     var count = 0;
                     await getCount(element.id).then((c) => {
                         count = c;
                     });
-                    list.append(`
+                    if (element.path != null) {
+                        list.append(`
+                    
+                    
+                    
+                    
                   
                     <div class="card d-flex flex-row">
 
@@ -103,15 +109,56 @@
                         <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
                      </div>
                        <div class="col-sm-3">
-                        <p class="card-text"><h5 class="badge bg-dark">${element.userName}</h5></p>
+                        <p class="card-text"><h5 class="badge bg-dark">${element.name}</h5></p>
+                        <img class= "profile rounded-circle prep" id = "rounded" src="/images/host/my-file-container/${element.path}" />
                         <p class="count">${count} movie watched</p>
                     </div>
                      <div class="col-md-5"></div>
-                    <div class="col-md-2 d-flex flex-column justify-content-center ">
-                         
-                        ${abp.currentUser.userName == element.userName ? '' : '<button type="button" class="btn btn-outline-dark follow">takip et</button>'}
-                 </div>
+                    
                 `);
+                    }
+                    else {
+                        list.append(`
+                    
+                    
+                    
+                    
+                  
+                    <div class="card d-flex flex-row">
+
+                     <div class="col-sm-2 d-flex flex-column justify-content-around">
+                        <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
+                     </div>
+                       <div class="col-sm-3">
+                        <p class="card-text"><h5 class="badge bg-dark">${element.name}</h5></p>
+                        <img class="profile rounded-circle prep" id="rounded" src="/default_picture.png"/>
+                        <p class="count">${count} movie watched</p>
+                    </div>
+                     <div class="col-md-5"></div>
+                    
+                `);
+                    }
+                    
+                    if (element.name != abp.currentUser.userName) {
+                        console.log(abp.currentUser.userName);
+                        if (element.isFollow === false)
+                        {
+                                      list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
+                       
+                             <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark follow">Follow</button>
+                               </div>`)
+                       
+                        }
+                        else {
+                                          
+                               list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
+                
+                                   <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark follow">UnFollow</button>
+                              </div>`)
+                             }   
+                       }
+                    
+
 
                 }
             }
@@ -119,7 +166,8 @@
         });
         
     }
-
+   
+    
 
     getCount = (id) => {
         
@@ -130,5 +178,29 @@
                 })
         });
     }
+
+
+    followToggle = (button) => {
+        console.log(button);
+        btn = $(button);
+        if (btn.text() == 'Follow') {
+            movieMatch.userConnections.userConnection.follow(btn.attr('id'), btn.attr('isFollow')).done(() => {
+
+                btn.text('UnFollow');
+
+
+            });
+        }
+        else{
+            movieMatch.userConnections.userConnection.unFollow(btn.attr('id'), btn.attr('isFollow')).done(() => {
+
+                btn.text('Follow');
+
+
+            });
+        }
+    }
 });
+
+
 

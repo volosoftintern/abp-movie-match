@@ -14,5 +14,5 @@ public interface IRatingPublicAppService : IApplicationService
     Task DeleteAsync(string entityType, string entityId);
 
     Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId);
-    Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId);
+    Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId,int currPage);
 }
