@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -14,5 +15,6 @@ namespace MovieMatch.Movies
         Task<bool> AnyAsync(int id);
         Task<MovieDto> GetFromDbAsync(int id);
         Task<MovieDto> GetMovieAsync(int id);
+        Task<IReadOnlyList<MovieDto>> GetSimilarMoviesAsync(int id);
     }
 }

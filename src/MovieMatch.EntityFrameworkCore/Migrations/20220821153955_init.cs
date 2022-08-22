@@ -262,7 +262,6 @@ namespace MovieMatch.Migrations
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProfilePictureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     isFollow = table.Column<bool>(type: "bit", nullable: false),
                     ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
@@ -839,8 +838,7 @@ namespace MovieMatch.Migrations
                 columns: table => new
                 {
                     FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsFollowed = table.Column<bool>(type: "bit", nullable: false)
+                    FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
