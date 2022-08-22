@@ -201,7 +201,7 @@ namespace MovieMatch.UserConnections
             var dir = _env.ContentRootPath;
             using (var fileStream = new FileStream(Path.Combine(dir, file.Name), FileMode.Open, FileAccess.Read))
             {
-                file.CopyTo(fileStream);
+                await file.CopyToAsync(fileStream);
             }
         }
 
