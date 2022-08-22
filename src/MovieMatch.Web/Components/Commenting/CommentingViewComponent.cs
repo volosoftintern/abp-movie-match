@@ -62,7 +62,7 @@ public class CommentingViewComponent : AbpViewComponent
     }
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
-        string entityId,int currPage)
+        string entityId,int currPage,MovieDetailDto movie)
     {
 
         var comments = (await CommentPublicAppService
@@ -78,9 +78,8 @@ public class CommentingViewComponent : AbpViewComponent
             EntityType = entityType,
             LoginUrl = loginUrl,
             Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
-            Movie =  await _movieAppService.GetFromDbAsync(id),
+            Movie =movie, 
             CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId,currPage)
-          //  Rating= _ratingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId),
         };
 
         await ConvertMarkdownTextsToHtml(viewModel);
@@ -109,16 +108,12 @@ public class CommentingViewComponent : AbpViewComponent
     public class CommentingViewModel
     {
         public string EntityType { get; set; }
-
         public string EntityId { get; set; }
-
         public string LoginUrl { get; set; }
         public List<CommentWithDetailsDto> Comments { get; set; }
         public List<CommentWithStarsDto> CommentsWithStars { get; set; }
-
         public Dictionary<Guid, string> RawCommentTexts { get; set; }
-        public MovieDto Movie { get; set; }
-        //public RatingDto Rating { get; set; }
+        public MovieDetailDto Movie { get; set; }
     }
 }
 
