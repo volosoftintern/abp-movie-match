@@ -12,7 +12,7 @@
     <abp-script src="/Pages/Movies/Actor.js" />
 }
 
-<div class="card mb-3">
+<div class="card mb-3 person-card" data-personId="@Model.ActorId">
   <div class="row g-0">
     <div class="col-md-2 d-flex flex-column justify-content-between">
     @if (!string.IsNullOrEmpty(Model.Actor.ProfilePath))
@@ -35,13 +35,13 @@
   </div>
 </div>
 
-<h3>Actor's Movies (@Model.Actor.Movies.Count)</h3>
+<h3>Actor's Movies (@Model.TotalCount)</h3>
 <div class="swiper movie-carousel" >
   <!-- Additional required wrapper -->
   <div class="swiper-wrapper">
     <!-- Slides -->
         
-    @foreach (var item in Model.Actor.Movies)
+    @foreach (var item in Model.Movies)
     {
         <div class="swiper-slide">
             <a href="/Movies/@item.Id">

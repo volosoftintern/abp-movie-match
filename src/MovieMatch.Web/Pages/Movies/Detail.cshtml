@@ -3,6 +3,7 @@
 @using MovieMatch.Web.Components.Commenting
 @using Volo.Abp.Users
 @using MovieMatch.Web.Components.Rating
+@using Volo.Abp;
 @inject ICurrentUser CurrentUser
 @model MovieMatch.Web.Pages.Movies.DetailModel
 
@@ -83,7 +84,8 @@
         new {
         entityType = "Movie",
         entityId = Model.MovieId.ToString(),
-        currPage=1
+        currPage=1,
+        movie=Model.MovieDetail,
         })
        
      </div>
