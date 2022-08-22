@@ -14,7 +14,6 @@ using Volo.CmsKit.Ratings;
 
 namespace MovieMatch.Posts
 {
-    [Authorize]
     public class PostService :
         MovieMatchAppService, IPostService
     {
