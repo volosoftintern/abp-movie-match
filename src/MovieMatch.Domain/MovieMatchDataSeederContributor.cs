@@ -103,14 +103,23 @@ namespace MovieMatch
             }
 
             var user = new IdentityUser(_guidGenerator.Create(), "baris", "baris@abp.io");
+            user.Name = "baris";
             await _userManager.CreateAsync(user, "1q2w3E*");
+
             user = new IdentityUser(_guidGenerator.Create(), "kutay", "kutay@abp.io");
+            user.Name = "kutay";
             await _userManager.CreateAsync(user, "1q2w3E*");
+
             user = new IdentityUser(_guidGenerator.Create(), "cagatay", "cagatay@abp.io");
+            user.Name = "cagatay";
             await _userManager.CreateAsync(user, "1q2w3E*");
+
             user = new IdentityUser(_guidGenerator.Create(), "ali", "ali@abp.io");
+            user.Name = "ali";
             await _userManager.CreateAsync(user, "1q2w3E*");
+
             user = new IdentityUser(_guidGenerator.Create(), "veli", "veli@abp.io");
+            user.Name = "veli";
             await _userManager.CreateAsync(user, "1q2w3E*");
         }
     }
