@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MovieMatch.Migrations
 {
     [DbContext(typeof(MovieMatchDbContext))]
-    [Migration("20220817144731_init")]
+    [Migration("20220821153955_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -299,9 +299,6 @@ namespace MovieMatch.Migrations
 
                     b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsFollowed")
-                        .HasColumnType("bit");
 
                     b.HasKey("FollowerId", "FollowingId");
 
@@ -1001,9 +998,6 @@ namespace MovieMatch.Migrations
 
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProfilePictureId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
                         .IsRequired()

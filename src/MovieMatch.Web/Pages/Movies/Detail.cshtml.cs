@@ -1,6 +1,8 @@
+using DM.MovieApi.MovieDb.Movies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MovieMatch.Movies;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MovieMatch.Web.Pages.Movies
@@ -13,6 +15,7 @@ namespace MovieMatch.Web.Pages.Movies
         public int MovieId { get; set; }
 
         public MovieDetailDto MovieDetail { get; set; }
+        public IReadOnlyList<MovieDto> SimilarMovies { get; set; }
 
         public DetailModel(IMovieAppService movieAppService)
         {
@@ -29,6 +32,7 @@ namespace MovieMatch.Web.Pages.Movies
         private async Task GetDataAsync()
         {
             MovieDetail = await _movieAppService.GetAsync(MovieId);
+            SimilarMovies = await _movieAppService.GetSimilarMoviesAsync(MovieId);
         }
     }
 }

@@ -314,5 +314,13 @@ namespace MovieMatch.Movies
         {
             return await _movieRepository.AnyAsync(id);
         }
+        public async Task<IReadOnlyList<MovieDto>> GetSimilarMoviesAsync(int id)
+        {
+            var response = await _movieApi.GetSimilarAsync(id);
+            var result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
+            return result;
+
+
+        }
     }
 }
