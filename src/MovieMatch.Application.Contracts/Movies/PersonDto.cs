@@ -12,12 +12,5 @@ namespace MovieMatch.Movies
         public DateTime BirthDay { get; set; }
         public DateTime? DeathDay { get; set; }
         public string Biography { get; set; }
-
-        public IReadOnlyList<MovieDto> Movies { get; set; }
-
-        public PersonDto()
-        {
-            Movies=new List<MovieDto>();
-        }
     }
 }
