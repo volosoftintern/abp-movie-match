@@ -373,5 +373,13 @@ namespace MovieMatch.Movies
 
             return new PagedResultDto<MovieDto>(totalCount,personMovies);
         }
+        public async Task<IReadOnlyList<MovieDto>> GetSimilarMoviesAsync(int id)
+        {
+            var response = await _movieApi.GetSimilarAsync(id);
+            var result = ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
+            return result;
+
+
+        }
     }
 }
