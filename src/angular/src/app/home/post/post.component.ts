@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PostDto } from '@proxy/posts';
+import { imagePath } from 'src/environments/environment';
 
 @Component({
   selector: 'app-post',
@@ -7,9 +8,10 @@ import { PostDto } from '@proxy/posts';
   styleUrls: ['./post.component.scss']
 })
 export class PostComponent implements OnInit {
-  imgPath = "https://image.tmdb.org/t/p/original/";
+  
+  imgPath=imagePath;
   @Input() post:PostDto;
-
+  
   constructor() { }
 
   ngOnInit(): void {
