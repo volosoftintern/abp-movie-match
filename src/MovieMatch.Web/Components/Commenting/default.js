@@ -142,7 +142,6 @@
                             text: formAsObject.commentText
                         }
                     ).then(function (data) {
-                        debugger;
                         currPage = currentPage
                         $.ajax({
                             url: '/Comments/MyViewComponent/',

@@ -103,23 +103,31 @@ namespace MovieMatch
             }
 
             var user = new IdentityUser(_guidGenerator.Create(), "baris", "baris@abp.io");
-            user.Name = "baris";
+
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            
+
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "kutay", "kutay@abp.io");
-            user.Name = "kutay";
+
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "cagatay", "cagatay@abp.io");
-            user.Name = "cagatay";
+
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "ali", "ali@abp.io");
-            user.Name = "ali";
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "veli", "veli@abp.io");
-            user.Name = "veli";
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+
+
             await _userManager.CreateAsync(user, "1q2w3E*");
         }
     }

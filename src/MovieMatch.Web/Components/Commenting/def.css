@@ -55,3 +55,11 @@
 .cms-comment-form-area{
     height:120px;
 }
+:root {
+    --profile-size: 80px;
+}
+
+.profile {
+    height: var(--profile-size);
+    width: var(--profile-size);
+}

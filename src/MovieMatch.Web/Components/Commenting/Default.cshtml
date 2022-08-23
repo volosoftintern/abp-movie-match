@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
+@using MovieMatch
 @using MovieMatch.Comments
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
@@ -19,14 +20,17 @@
 
 
 @{
-    Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
+    Func<dynamic, IHtmlContent> GetCommentTitle(MyCmsUserDto author, DateTime creationTime) =>
         @<span>
             <i class="far fa-comment-alt me-2"></i>
+        <img class="profile rounded-circle" src="~/images/host/my-file-container/@author.Path">
             @((string.IsNullOrWhiteSpace(author.Name)
+
         ? author.UserName
         :author.Name+ " " + author.Surname).Trim())
 
-            <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
+   
+        <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
             <a class="text-muted float-end title " href="@Model.EntityId">@(Model.Movie.Title)</a> 
         </span>;
 }
@@ -197,7 +201,7 @@
                             <div class="bg-light card p-3 mx-0 mt-3">
                                 <div class="comment">
                                     <h5>
-                                        @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
+                                       @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
                                         @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                                     </h5>
 

@@ -7,7 +7,7 @@
 @using Volo.Abp.Data
 @inject IStringLocalizer<MovieMatchResource> L
 @{
-    var photoPath="/default_picture.png";
+    var photoPath="";
     if(Model.path!=null)
     {
          photoPath = ("/images/host/my-file-container/"+(@Model.path))    ;

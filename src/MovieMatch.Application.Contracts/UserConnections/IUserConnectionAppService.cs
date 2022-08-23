@@ -14,7 +14,7 @@ namespace MovieMatch.UserConnections
 
         IApplicationService
     {
-        Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input);
+        Task<PagedResultDto<FollowerDto>> GetListAsync(GetIdentityUsersInput input);
         Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetUsersFollowInfo input);
         Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input);
         Task<int> GetFollowersCount(string username);

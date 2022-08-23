@@ -59,7 +59,6 @@
     <Folder Include="Options\" />
     <Folder Include="Pages\Components\" />
     <Folder Include="Pages\Dummy\" />
-    <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
