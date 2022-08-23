@@ -87,10 +87,12 @@ $(function () {
     renderResults = (posts) => {
 
         posts.forEach((val, i) => {
+            
             $('#post-list').append(`
                 <div class="card" >
                     <div class="card-body">
-                        <h5 class="card-title">${val.user.name}<span class="text-muted px-1">@${val.user.userName}</span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span> </h5>
+                       
+                        <h5 class="card-title">  <img class="profile rounded-circle prep" src="/images/host/my-file-container/${val.user.extraProperties.Photo}"/>  ${val.user.name}<span class="text-muted px-1">@<a href="${val.user.userName}">${val.user.userName}</a></span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span> </h5>
                         <h6 class="card-subtitle text-muted mb-1">${val.movie.title}</h6>
                         <a href="/Movies/${val.movie.id}">
                             <div class="row mb-1">

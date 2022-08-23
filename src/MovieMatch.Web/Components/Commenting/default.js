@@ -105,7 +105,6 @@
                 var $form = $(this);
                 $form.submit(function (e) {
                     e.preventDefault();
-                    debugger;
                     var formAsObject = $form.serializeFormToObject();
                     volo.cmsKit.public.comments.commentPublic.update(
                         formAsObject.id,
@@ -143,7 +142,6 @@
                             text: formAsObject.commentText
                         }
                     ).then(function (data) {
-                        debugger;
                         currPage = currentPage
                         $.ajax({
                             url: '/Comments/MyViewComponent/',

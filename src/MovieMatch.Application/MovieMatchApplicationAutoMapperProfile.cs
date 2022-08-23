@@ -33,9 +33,11 @@ public class MovieMatchApplicationAutoMapperProfile : Profile
         CreateMap<WatchLater, WatchLaterDto>();
         CreateMap<CreateUpdateWatchLaterDto, WatchLater>();
         CreateMap<CreateUpdateWatchedBeforeDto, WatchedBefore>();
+        CreateMap<CmsUser, MyCmsUserDto>();
        
         //Movie
         CreateMap<MovieInfo, MovieDto>();
+        
         CreateMap<MovieDetail, MovieDetailDto>()
             .ForMember(s=>s.Genres,t=>t.Ignore())
             .ForMember(s=>s.Stars,t=>t.Ignore());

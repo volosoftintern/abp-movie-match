@@ -9,7 +9,7 @@ namespace MovieMatch.Comments
     public class CommentWithStarsDto 
     {
          public Guid Id
-        {
+        { 
             get;
             set;
         }
@@ -50,9 +50,13 @@ namespace MovieMatch.Comments
             set;
         }
 
-        public CmsUserDto Author {get; set;}
+        public MyCmsUserDto Author {get; set;}
 
         public string ConcurrencyStamp
+        {
+            get;
+            set;
+        } public string Path
         {
             get;
             set;
