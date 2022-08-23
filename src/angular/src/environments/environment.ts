@@ -1,7 +1,7 @@
 import { Environment } from '@abp/ng.core';
 
 const baseUrl = 'http://localhost:4200';
-
+export const imagePath='https://image.tmdb.org/t/p/original/'
 export const environment = {
   production: false,
   application: {
