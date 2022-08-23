@@ -83,7 +83,7 @@ namespace MovieMatch.Search
 
                 query = query.Where(x => x.Title.Contains(input.Name));
                 totalResults = query.Count();
-                query.OrderByDescending(x => x.Id).Skip((input.CurrentPage - 1) * maxResult).Take(maxResult);
+                query.OrderByDescending(x => x.Title).Skip((input.CurrentPage - 1) * maxResult).Take(maxResult);
                 var queryresult = await AsyncExecuter.ToListAsync(query);
                 result = ObjectMapper.Map<List<Movie>, List<MovieDto>>(queryresult);
                 _moviesPolicy = Policy<IReadOnlyList<MovieDto>>.Handle<Exception>().FallbackAsync(result);
