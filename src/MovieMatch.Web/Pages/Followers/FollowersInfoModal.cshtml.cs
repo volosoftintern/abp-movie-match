@@ -7,7 +7,7 @@ namespace MovieMatch.Web.Pages.Followers
 {
     public class FollowersInfoModalModel : AbpPageModel
     {
-        public async Task OnGetAsync(string username)
+        public void OnGet(string username)
         {
 
         }
