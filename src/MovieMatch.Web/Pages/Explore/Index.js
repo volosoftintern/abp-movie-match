@@ -1,4 +1,4 @@
-﻿const defaultPicturePath ="/default_picture.png"
+﻿const defaultPicturePath ="/images/host/my-file-container/default_picture.png"
 
 var l = abp.localization.getResource('MovieMatch');
 
@@ -15,25 +15,22 @@ var dataTable = $('#UserConnectionsTable').DataTable(
             [
                 
                 {
-                    data: "extraProperties.Photo",
+                    data: "path",
                     
                     render: function (data) {
-                        if (data != null) {
+                     
                             return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
-                        }
-                        else {
-                            return `<img class="profile rounded-circle"  src="${defaultPicturePath}"/>`
-                        }
+                     
                     }
                 },
                 {
                       title: l('Username'),
-                    data: "userName",
-                    render: function (userName) {
+                    data: "name",
+                    render: function (name) {
 
                     
 
-                        return `<a  href=${userName} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${userName} </a>`
+                        return `<a  href=${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
                     }
 
                 },
@@ -41,9 +38,9 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                 {
 
 
-                    data: "extraProperties.isFollow",
+                    data: "isFollow",
                     render: function (data, type, row) {
-                        isActive = row.extraProperties.isFollow; var id = row.id;
+                        isActive = row.isFollow; var id = row.id;
 
                         if (isActive === false) {
                             return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">Follow User</button>`
@@ -78,10 +75,7 @@ followUser = (button) => {
             (btn).attr("isActive", 'true');
             abp.notify.success('Followed user');
 
-            var following = document.getElementById('following');
-            var number = parseInt(following.innerText);
-            value = number + 1;
-            following.innerText = value;
+          
             $('#UserConnectionsTable').DataTable().ajax.reload();
 
 
@@ -94,10 +88,7 @@ followUser = (button) => {
             (btn).text("Follow User");
 
             abp.notify.success(`UnFollowed user`);
-            var following = document.getElementById('following');
-            var number = parseInt(following.innerText);
-            value = number - 1;
-            following.innerText = value;
+
             $('#UserConnectionsTable').DataTable().ajax.reload();
 
 

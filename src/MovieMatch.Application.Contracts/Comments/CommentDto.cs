@@ -18,6 +18,10 @@ namespace MovieMatch.Comments
         {
             get;
             set;
+        }public string Path
+        {
+            get;
+            set;
         }
 
         public string EntityId
@@ -50,7 +54,7 @@ namespace MovieMatch.Comments
             set;
         }
 
-        public CmsUserDto Author
+        public MyCmsUserDto Author
         {
             get;
             set;

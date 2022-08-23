@@ -117,27 +117,7 @@
                     
                 `);
                     }
-                    else {
-                        list.append(`
-                    
-                    
-                    
-                    
-                  
-                    <div class="card d-flex flex-row">
-
-                     <div class="col-sm-2 d-flex flex-column justify-content-around">
-                        <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
-                     </div>
-                       <div class="col-sm-3">
-                        <p class="card-text"><h5 class="badge bg-dark">${element.name}</h5></p>
-                        <img class="profile rounded-circle prep" id="rounded" src="/default_picture.png"/>
-                        <p class="count">${count} movie watched</p>
-                    </div>
-                     <div class="col-md-5"></div>
-                    
-                `);
-                    }
+               
                     
                     if (element.name != abp.currentUser.userName) {
                         console.log(abp.currentUser.userName);
