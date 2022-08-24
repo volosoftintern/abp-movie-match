@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: src/angular
-      run: npm install
+      run: npm install --legacy-peer-deps 
 
     - name: Build
       working-directory: src/angular
