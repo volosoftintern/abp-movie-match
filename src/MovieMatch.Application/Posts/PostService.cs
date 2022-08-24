@@ -88,7 +88,7 @@ namespace MovieMatch.Posts
 
             var ratingSet = (await _ratingRepository.GetListAsync()).Where(x=> commentSet.Any(c=>c.Comment.CreatorId==x.CreatorId && c.Comment.EntityId==x.EntityId));
             var re=result.SelectMany(x => x.Comment.EntityId);
-
+            
             var posts = result.Select(async (x) => new PostDto()
             {
                 Comment = x.Comment.Text,
