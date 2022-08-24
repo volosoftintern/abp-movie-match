@@ -24,4 +24,5 @@ jobs:
           base_href: /abp-movie-match/
           deploy_branch: gh-pages 
           angular_dist_build_folder: src/client/dist/MovieMatch
+          skip-failure: true
           
