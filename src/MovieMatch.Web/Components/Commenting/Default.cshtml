@@ -23,7 +23,8 @@
     Func<dynamic, IHtmlContent> GetCommentTitle(MyCmsUserDto author, DateTime creationTime) =>
         @<span>
             <i class="far fa-comment-alt me-2"></i>
-        <img class="profile rounded-circle" src="~/images/host/my-file-container/@author.Path">
+
+        <img class="profile rounded-circle" src="@author.Path">
             @((string.IsNullOrWhiteSpace(author.Name)
 
         ? author.UserName

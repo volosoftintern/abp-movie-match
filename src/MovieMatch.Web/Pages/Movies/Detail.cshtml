@@ -23,7 +23,7 @@
                             <div class="col-10 px-3">
                                 @await Component.InvokeAsync(typeof(RatingViewComponent), new
                             {
-                            entityType = "Movie",
+                            entityType = nameof(Movie),
                             entityId = Model.MovieId.ToString(),
                             })
                             </div>
@@ -89,7 +89,7 @@
      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
         @await Component.InvokeAsync(typeof(CommentingViewComponent),
         new {
-        entityType = "Movie",
+        entityType = nameof(Movie),
         entityId = Model.MovieId.ToString(),
         currPage=1,
         movie=Model.MovieDetail,
