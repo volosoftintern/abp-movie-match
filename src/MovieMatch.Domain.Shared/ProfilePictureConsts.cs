@@ -8,7 +8,7 @@ namespace MovieMatch
     {
         public const string ProfilePictureId = "ProfilePictureId";
         public const string PhotoProperty = "Photo";
-        public const string DefaultPhotoPath = "/images/host/my-file-container/default_picture.png";
+        public const string DefaultPhotoPath = "/default_picture.png";
         
     }
 
