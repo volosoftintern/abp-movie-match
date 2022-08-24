@@ -18,8 +18,8 @@ jobs:
         with:
           secrets: >
             [
-              { "filename": "src/MovieMatch/MovieMatch.Web/appsettings.Production.json", "keys": [{"key": "connectionString","value": "${{secrets.CONNECTION_STRING}}"}]},
-              { "filename": "src/MovieMatch/MovieMatch.DbMigrator/appsettings.Production.json", "keys": [{"key": "connectionString","value": "${{secrets.CONNECTION_STRING}}"}]}
+              { "filename": "src/MovieMatch.Web/appsettings.Production.json", "keys": [{"key": "connectionString","value": "${{secrets.CONNECTION_STRING}}"}]},
+              { "filename": "src/MovieMatch.DbMigrator/appsettings.Production.json", "keys": [{"key": "connectionString","value": "${{secrets.CONNECTION_STRING}}"}]}
             ]
 
       - name: Set up .NET Core
