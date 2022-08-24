@@ -6,23 +6,30 @@ on:
     paths:
       - src/angular/**
   workflow_dispatch:
-    
 jobs:
-  ci:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Deploy
-        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.3.2 ## replace by latest version without it you will see Expected format {org}/{repo}[/path]@ref. Actual 'AhsanAyaz/angular-deploy-gh-pages-actions',Input string was not in a correct format.
-        with:
-          github_access_token: ${{ secrets.ACCESS_TOKEN }} # see the Configuration section for how you can create secrets
-          build_configuration: production # The build environment for the app. please look configurations in your angular.json
-          angular_project_dir: src/angular
-          base_href: /abp-movie-match/
-          deploy_branch: gh-pages 
-          angular_dist_build_folder: src/client/dist/MovieMatch
-          skip-failure: true
-          
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      working-directory: src/angular
+      run: npm install
+
+    - name: Build
+      working-directory: src/angular
+      run: npm run build:prod
+
+    - name: Deploy
+      if: success()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: src/client/dist/MovieMatch
+        enable_jekyll: true

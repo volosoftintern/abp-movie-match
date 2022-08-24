@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build:prod": "ng build --configuration production --base-href /abp-movie-match/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
