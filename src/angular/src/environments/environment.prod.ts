@@ -1,7 +1,7 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4200';
-
+const baseUrl = 'https://volosoftintern.github.io/abp-movie-match';//github pages link
+export const imagePath='https://image.tmdb.org/t/p/original/'
 export const environment = {
   production: true,
   application: {
@@ -10,7 +10,7 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44389',
+    issuer: 'https://abpmoviematch.azurewebsites.net',
     redirectUri: baseUrl,
     clientId: 'MovieMatch_App',
     responseType: 'code',
@@ -19,7 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44389',
+      url: 'https://abpmoviematch.azurewebsites.net',
       rootNamespace: 'MovieMatch',
     },
   },

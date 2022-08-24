@@ -1,0 +1,27 @@
+name: Deploy Client to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/angular/**
+  workflow_dispatch:
+    
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
+        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.3.2 ## replace by latest version without it you will see Expected format {org}/{repo}[/path]@ref. Actual 'AhsanAyaz/angular-deploy-gh-pages-actions',Input string was not in a correct format.
+        with:
+          github_access_token: ${{ secrets.ACCESS_TOKEN }} # see the Configuration section for how you can create secrets
+          build_configuration: production # The build environment for the app. please look configurations in your angular.json
+          angular_project_dir: src/angular
+          base_href: /abp-movie-match/
+          deploy_branch: gh-pages 
+          angular_dist_build_folder: src/client/dist/MovieMatch
+          
