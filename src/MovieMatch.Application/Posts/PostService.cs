@@ -17,6 +17,7 @@ using MovieMatch.MoviesWatchLater;
 
 namespace MovieMatch.Posts
 {
+    [Authorize]
     public class PostService :
         MovieMatchAppService, IPostService
     {
@@ -69,7 +70,7 @@ namespace MovieMatch.Posts
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
 
         }
-        [AllowAnonymous]
+        
         public async Task<PagedResultDto<PostDto>> GetFeedAsync(PostFeedDto  input)
         {
 
