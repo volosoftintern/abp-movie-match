@@ -60,6 +60,8 @@
     <Folder Include="Pages\Components\" />
     <Folder Include="Pages\Dummy\" />
     <Folder Include="wwwroot\NewFolder\" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="Components\**\*.js" />
   </ItemGroup>
 
 </Project>
