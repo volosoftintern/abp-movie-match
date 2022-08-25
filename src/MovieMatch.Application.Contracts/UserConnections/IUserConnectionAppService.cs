@@ -25,7 +25,7 @@ namespace MovieMatch.UserConnections
         Task FollowAsync(Guid id);
         Task UnFollowAsync(Guid id);
         Task<UserInformationDto> GetUserInfoAsync(string username);
-      
 
+        Task<List<IdentityUserDto>> GetRecommendedUsersList(GetIdentityUsersInput input);
     }
 }

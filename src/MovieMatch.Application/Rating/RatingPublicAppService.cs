@@ -110,8 +110,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
     public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId, int currPage)
     {
-        var total = (currPage * maxItem);
-
         var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 
         var parentComments = comments
@@ -123,15 +121,14 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
                 comment.Author = ObjectMapper.Map<CmsUser, MyCmsUserDto>(c.Author);
                 return comment;
             })
-            .Take(total)
+            .Skip((currPage-1)*maxItem).Take(maxItem)
             .ToList();
 
 
         parentComments.ForEach((x) =>
         {
-
+            x.Author = GetAuthorAsDtoFromCommentList(comments, x.Id);
             x.Path = string.IsNullOrEmpty(x.Author.Path) ? ProfilePictureConsts.DefaultPhotoPath : x.Author.Path;
-
             x.Replies = comments
                 .Where(c => c.Comment.RepliedCommentId == x.Id)
                 .Select(c => ObjectMapper.Map<Comment, Comments.CommentDto>(c.Comment)).ToList();
@@ -139,10 +136,8 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
             x.Replies.ForEach(async (r) =>
             {
                 var user = await _userRepository.GetAsync(r.CreatorId);
-
                 r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
                 r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
-
             });
 
         });
@@ -151,7 +146,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
         var res= (await Task.WhenAll(parentComments.Select(async (c) =>
         {
-
             try
             {
                 var userRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, c.CreatorId);
@@ -164,7 +158,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
                         UserName = c.Author.UserName, 
                         Path = c.Path 
                     },
-
                     ConcurrencyStamp = c.ConcurrencyStamp,
                     CreationTime = c.CreationTime,
                     EntityId = entityId,
@@ -187,8 +180,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         semaphore.Dispose();
 
         return res;
-
-
     }
 }
 

@@ -144,6 +144,40 @@
     </div>;
 }
 
+@{
+    Func<dynamic, IHtmlContent> GetCommentRepliesArea(MovieMatch.Comments.CommentDto reply,CommentWithStarsDto comment) =>
+    @<div class="cms-comment-replies-area" data-reply-id="@(reply.RepliedCommentId?.ToString())">
+    <div class="bg-light card p-3 mx-0 mt-3">
+        <div class="comment">
+            <h5>
+                @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
+                @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
+            </h5>
+            
+            @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
+
+            <div class="row mt-2 commentsRow2">
+                <div class="col">
+                    <div class="my-2">
+                        @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="reaction-in-comment">
+                        @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                {
+                        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
+                }
+                    </div>
+                </div>
+            </div>
+
+            @GetEditArea(reply.Id, Model.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
+        </div>
+        </div>
+    </div>;
+}
+
 <div class="commentss" id=cms-commentsId>
     </div>
 
@@ -167,7 +201,7 @@
   
         @foreach (var comment in Model.CommentsWithStars)
         {
-            <div class="comment " id="@comment.Id">
+        <div class="comment-stars" id="@(comment.Id)">
 
                 <div class="card p-3 mx-0 my-3">
                     <h5>
@@ -199,49 +233,7 @@
                     {
                         @foreach (var reply in comment.Replies)
                         {
-                            <div class="bg-light card p-3 mx-0 mt-3">
-                                <div class="comment">
-                                    <h5>
-                                       @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
-                                        @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
-                                    </h5>
-
-                                    @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
-
-                                    <div class="row mt-2 commentsRow2">
-                                        <div class="col">
-                                            <div class="my-2">
-                                                @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="reaction-in-comment">
-                                                @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                                                {
-                                                    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @GetEditArea(reply.Id, Model.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
-                                </div>
-                            </div>
-                        }
-                        @if (comment.Replies.Count >= 3)
-                        {
-                            <div class=" mt-2">
-                                @if (CurrentUser.IsAuthenticated)
-                                {
-                                    <a href="#" class="comment-links  comment-reply-link btn btn-primary btn-sm" data-reply-id="@comment.Id.ToString()">
-                                        <i class="fa fa-reply me-1"></i> @L["Reply"]
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="@(Model.LoginUrl + "_" + comment.Id)" class="btn btn-sm btn-primary shadow-sm"> @L["LoginToReply"]</a>
-                                }
-                            </div>
+                            @GetCommentRepliesArea(reply,comment).Invoke(null);
                         }
                     }
                     @if (CurrentUser.IsAuthenticated)
@@ -251,4 +243,7 @@
                 </div>
             </div>
         }
+
    </div>
+
+

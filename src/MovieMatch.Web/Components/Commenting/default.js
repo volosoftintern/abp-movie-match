@@ -1,10 +1,11 @@
 ﻿(function ($) {
-
+    var wasSubmitted = false;  
     var l = abp.localization.getResource('CmsKit');
 
     abp.widgets.CmsCommenting = function ($widget) {
         var widgetManager = $widget.data('abp-widget-manager');
         var $commentArea = $widget.find('.cms-comment-area');
+
 
         function getFilters() {
             return {
@@ -14,11 +15,11 @@
         }
 
         function registerEditLinks($container) {
+            
             $container.find('.comment-edit-link').each(function () {
                 var $link = $(this);
                 $link.on('click', function (e) {
                     e.preventDefault();
-
                     var commentId = $link.data('id');
 
                     var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + commentId + ']');
@@ -52,7 +53,6 @@
                 var $link = $(this);
                 $link.on('click', function (e) {
                     e.preventDefault();
-
                     var replyCommentId = $link.data('reply-id');
 
                     var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id=' + replyCommentId + ']');
@@ -92,7 +92,6 @@
                                 var id = $link.data('id');
                                 abp.notify.info(l('SuccessfullyDeleted'));
                                 $("#" + id).css("display", "none");
-                               // widgetManager.refresh($widget);
                             });
                         }
                     });
@@ -113,9 +112,12 @@
                             //concurrencyStamp: formAsObject.commentConcurrencyStamp
                         }
                     ).then(function (data) {
-                        
-                        $("#" + "cms-comment_Movie_" + data.entityId + "_" + data.id).css("display", "none")
-                        $("." + "cms-comment-content-area").css("display", "unset");
+                        debugger;
+                        //$("#" + "cms-comment_Movie_" + data.entityId + "_" + data.id).css("display", "none")
+                        var $relatedCommentEditArea = $container.find('.cms-comment-edit-area[data-id=' + data.id + ']');
+                        var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + data.id + ']');
+                        $relatedCommentEditArea.hide();
+                        $relatedCommentContentArea.show();
                         $("#p_" + data.id).text(data.text)
 
                     });
@@ -127,33 +129,50 @@
             $container.find('.cms-comment-form').each(function () {
                 var $form = $(this);
                 $form.submit(function (e) {
-                    e.preventDefault();
-                    var formAsObject = $form.serializeFormToObject();
+                    if (!wasSubmitted) {
+                        e.preventDefault();
+                        var formAsObject = $form.serializeFormToObject();
 
-                    if (formAsObject.repliedCommentId == '') {
-                        formAsObject.repliedCommentId = null;
-                    }
-                    
-                    volo.cmsKit.public.comments.commentPublic.create(
-                        $commentArea.attr('data-entity-type'),
-                        $commentArea.attr('data-entity-id'),
-                        {
-                            repliedCommentId: formAsObject.repliedCommentId,
-                            text: formAsObject.commentText
+                        if (formAsObject.repliedCommentId == '') {
+                            formAsObject.repliedCommentId = null;
                         }
-                    ).then(function (data) {
-                        currPage = currentPage
-                        $.ajax({
-                            url: '/Comments/MyViewComponent/',
-                            data: { entityType: "Movie", entityId: data.entityId, currPage: currPage },
-                            type: 'GET',
-                            success: function (data) {
-                                $("#cms-comment").empty()
-                                $("#cms-commentsId").prepend(data);
+
+                        wasSubmitted = true;
+                        volo.cmsKit.public.comments.commentPublic.create(
+                            $commentArea.attr('data-entity-type'),
+                            $commentArea.attr('data-entity-id'),
+                            {
+                                repliedCommentId: formAsObject.repliedCommentId,
+                                text: formAsObject.commentText
                             }
-                        })
-                    });
+                        ).then(function (data) {
+                            var $relatedCommentFormArea = $container.find('.cms-comment-form-area[data-reply-id=' + data.repliedCommentId + ']');
+                            var $relatedCommentReplyArea = $(`#${data.repliedCommentId}.comment-stars`)
+                            var id = data.repliedCommentId;
+                            //reply or new comment control
+                            if ($form[0][3]) {
+                               
+                                widgetManager.refresh()
+                                currentPage--;
+                            }
+                            else {
+                                currentPage = 1;
+                                $.ajax({
+                                    url: '/Comments/MyViewComponent/',
+                                    data: { entityType: "Movie", entityId: data.entityId, currPage: currentPage },
+                                    type: 'GET',
+                                    success: function (data) {
+                                        $("#cms-comment").empty();
+                                        $("#cms-commentsId").prepend(data);
+
+                                    }
+                                })
+                            }
+
+                        });
+                    }
                 });
+                wasSubmitted = false;
             });
         }
 
@@ -211,18 +230,24 @@
 
         if (scrollTop + clientHeight >= scrollHeight - 5 &&
             hasMoreComments(currentPage, limit, total)) {
+            debugger;
             var id = $("#cms-comment").attr("data-content");
             currentPage++;
-            //movieMatch.rating.ratingPublic.getCommentsWithRating("Movie", id).done((res) => {
-            //console.log(res);
             $.ajax({
+
                 url: '/Comments/MyViewComponent/',
                 data: { entityType: "Movie", entityId: id, currPage: currentPage },
                 type: 'GET',
                 success: function (data) {
-                    console.log(data);
-                    $("#cms-comment").empty();
-                    $("#cms-comment").append(data);
+                    var pos = data.search('<div class="comment-stars"');
+                    if (pos == -1) {
+                        currentPage--;
+                    }
+                    else {
+                        $("#cms-comment").append(data.substr(pos));
+                        abp.widgets.CmsCommenting($("#nav-home")).init();
+                    }
+                   
 
                 }
             })
@@ -231,3 +256,5 @@
     });
 })(jQuery);
 
+
+       
