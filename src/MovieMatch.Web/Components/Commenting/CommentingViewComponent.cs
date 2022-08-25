@@ -32,9 +32,8 @@ namespace MovieMatch.Web.Components.Commenting;
 [ViewComponent(Name = "CmsCommenting")]
 [Widget(
     ScriptTypes = new[] { typeof(Commenting.CommentingScriptBundleContributor) },
-   // ScriptFiles = new[] { "/Components/Commenting/def.js" },
     StyleTypes = new[] { typeof(CommentingStyleBundleContributor) },
-   StyleFiles =new[] { "/Components/Commenting/def.css" },
+   StyleFiles =new[] { "/Components/Commenting/Default.css" },
     RefreshUrl = "/CmsKitPublicWidgets/Commenting",
     AutoInitialize = true
 )]
