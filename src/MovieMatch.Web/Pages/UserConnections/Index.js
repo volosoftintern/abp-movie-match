@@ -81,39 +81,19 @@ $(document).ready(function () {
         formData.append("Name", $('#UploadFileDto_Name').val());
         //formData = FillNewEventFormData(formData);
         console.log(fileInput);
-        var httpMetod = 'POST'
+        var httpMethod = 'POST'
 
         $.ajax({
-            //xhr: function () {
-            //    var xhr = new window.XMLHttpRequest();
-            //    xhr.upload.addEventListener("progress", function (evt) {
-            //        if (evt.lengthComputable) {
-            //            var percentComplete = evt.loaded / evt.total;
-            //            percentComplete = parseInt(percentComplete * 100);
-            //            if (percentComplete !== 100) {
-            //                $('#upload').prop("disabled", true);
-            //            }
-            //        }
-            //    }, false);
-
-            //    return xhr;
-            //},
+            
             url: '/file/upload',
             data: formData,
-            type: httpMetod,
+            type: httpMethod,
             contentType: false,
             processData: false,
             success: function (response) {
                 $('#img').attr('src', '/images/host/my-file-container/'+ response);
                 $('#upload').click();
-                //if (eventIdInput.val().length === 36) {
-                //    abp.notify.success('Updated event');
-                //} else {
-                //    abp.notify.success('Created event as a draft', '', toastr.options.timeOut = 2500);
-                //    //eventIdInput.val(response.id);
-                //    //eventUrlCodeInput.val(response.urlCode);
-                //}
-                //    SwitchToTrackCreation()
+              
             },
             error: function (errorRaw) {
                 abp.notify.error(errorRaw.responseJSON.error.message, 'Error',

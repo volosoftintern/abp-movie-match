@@ -16,15 +16,7 @@ namespace MovieMatch.Controllers
         {
             _fileAppService = fileAppService;
         }
-        [HttpGet]
-        [Route("download/{fileName}")]
-        public async Task<IActionResult> DownloadAsync(string fileName)
-        {
-            var fileDto = await _fileAppService.GetBlobAsync(new GetBlobRequestDto { Name = fileName });
-            return File(fileDto.Content, "application/octet-stream", fileDto.Name);
-
-
-        }
+        
 
         [HttpPost]
         public async Task<string> UploadAsync(SaveBlobInputDto input)

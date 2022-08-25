@@ -27,29 +27,20 @@ namespace MovieMatch.UserConnections
         }
      
 
-        public async Task<IQueryable<UserConnection>> GetFollowersAsync(Guid userId)
-        {
-            var dbSet = await GetDbSetAsync();
-            return dbSet.Where(c => c.FollowingId == userId);
-        }
-
-        public async Task<IQueryable<UserConnection>> GetFollowingAsync(Guid userId)
-        {
-            var dbSet=await GetDbSetAsync();
-            return dbSet.Where(c => c.FollowerId == userId);
-        }
+       
         public async Task<IQueryable<IdentityUser>> GetUsersListAsync(
            int skipCount,
            int maxResultCount,string filter=null
-       )
+         )
         {
-            var query = await GetDbSetAsync();
-
-
+       
             var dbContext = await GetDbContextAsync();
             var userqueryable = dbContext.Set<IdentityUser>().AsQueryable();
     
-            var users =  userqueryable.Where(x=>x.Id!=_currentUser.Id).PageBy(skipCount,maxResultCount).WhereIf(!string.IsNullOrEmpty(filter),x=>x.Name.Contains(filter)).OrderBy(x=>x.Name);
+            var users =  userqueryable.Where(x=>x.Id!=_currentUser.Id)
+                .PageBy(skipCount,maxResultCount)
+                .WhereIf(!string.IsNullOrEmpty(filter),x=>x.Name.Contains(filter))
+                .OrderBy(x=>x.Name);
             return users;
             
 

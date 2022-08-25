@@ -26,7 +26,9 @@ public class MovieMatchMenuContributor : IMenuContributor
             var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);
             if(userMenu == null)
             {
-            }                userMenu = new ApplicationMenuItem(IdentityMenuNames.Users, "My Profile", "/UserConnections",icon:"fa fa-user");
+                userMenu = new ApplicationMenuItem(IdentityMenuNames.Users, "My Profile", "/UserConnections", icon: "fa fa-user");
+            }                
+
 
             context.Menu.AddItem(userMenu);
         }
