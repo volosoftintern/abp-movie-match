@@ -10,8 +10,7 @@ namespace MovieMatch.UserConnections
 {
     public interface IUserConnectionRepository : IRepository<UserConnection>
     {
-        Task<IQueryable<UserConnection>> GetFollowersAsync(Guid userId);
-        Task<IQueryable<UserConnection>> GetFollowingAsync(Guid userId);
+      
         Task<IQueryable<IdentityUser>> GetUsersListAsync(
            int skipCount,
            int maxResultCount,string filter=null);

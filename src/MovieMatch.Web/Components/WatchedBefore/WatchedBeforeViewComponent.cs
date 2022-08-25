@@ -6,7 +6,7 @@ namespace MovieMatch.Web.Components.WatchedBefore
 {
     [Widget(
         ScriptFiles = new[] { "/Components/WatchedBefore/Default.js" },
-        StyleFiles = new[] {"/Components/WatchedBefore/def.css"}
+        StyleFiles = new[] {"/Components/WatchedBefore/Default.css"}
         )]
     public class WatchedBeforeViewComponent:AbpViewComponent
     {

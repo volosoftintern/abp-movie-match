@@ -3,6 +3,7 @@
 @using MovieMatch.Web.Components.Commenting
 @using Volo.Abp.Users
 @using MovieMatch.Web.Components.Rating
+@using Volo.Abp;
 @inject ICurrentUser CurrentUser
 @model MovieMatch.Web.Pages.Movies.DetailModel
 
@@ -22,7 +23,7 @@
                             <div class="col-10 px-3">
                                 @await Component.InvokeAsync(typeof(RatingViewComponent), new
                             {
-                            entityType = "Movie",
+                            entityType = nameof(Movie),
                             entityId = Model.MovieId.ToString(),
                             })
                             </div>
@@ -84,16 +85,17 @@
                     </div>
                 </nav>
 
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        @await Component.InvokeAsync(typeof(CommentingViewComponent),
-                        new {
-                        entityType = "Movie",
-                        entityId = Model.MovieId.ToString(),
-                        currPage=1
-                        })
-
-                    </div>
+    <div class="tab-content" id="nav-tabContent">
+     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        @await Component.InvokeAsync(typeof(CommentingViewComponent),
+        new {
+        entityType = nameof(Movie),
+        entityId = Model.MovieId.ToString(),
+        currPage=1,
+        movie=Model.MovieDetail,
+        })
+       
+     </div>
 
                     <div class="nav-tabe fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     </div>

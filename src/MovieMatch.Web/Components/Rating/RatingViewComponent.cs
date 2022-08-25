@@ -15,7 +15,7 @@ namespace MovieMatch.Web.Components.Rating;
 [Widget(
     StyleTypes = new[] { typeof(Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingStyleBundleContributor) },
     ScriptTypes = new[] { typeof(RatingScriptBundleContributor) },
-    StyleFiles = new[] { "/Components/Rating/def.css" },
+    StyleFiles = new[] { "/Components/Rating/Default.css" },
     RefreshUrl = "/CmsKitPublicWidgets/Rating",
     AutoInitialize = true
 )]

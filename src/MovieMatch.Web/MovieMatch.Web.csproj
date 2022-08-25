@@ -59,8 +59,18 @@
     <Folder Include="Options\" />
     <Folder Include="Pages\Components\" />
     <Folder Include="Pages\Dummy\" />
-    <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\NewFolder\" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <EmbeddedResource Include="Components\**\*.js" />
   </ItemGroup>
+
+   <ItemGroup>
+        <None Update="Components\**\*.js">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Components\**\*.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>

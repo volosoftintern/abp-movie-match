@@ -1,70 +1,19 @@
+
 $(function () {
 
     var skipCount = 0;
-    var maxResultCount = 10;
-
-    $('#shareBtn').on('click', (e) => {
-
-        const rate = $("input[name=rating]:checked").val();
-        const comment = $("#movieComment").val();
-        const movieId = $("#movieList").val();
-        const movieTitle = $("#movieList option:selected").text('selected')
-
-        if (isNullOrEmpty(rate)) return //popup
-        if (isNullOrEmpty(comment)) return //popup
-        if (isNullOrEmpty(movieId)) return
-
-        let post = {
-            userId: `${abp.currentUser.id}`,
-            movieId: movieId,
-            rate: rate,
-            comment: `${comment}`,
-            movieTitle: `${movieTitle}`
-        }
-
-        movieMatch.posts.post.create(post).done((res) => {
-
-            $('#post-list').prepend(`
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">${res.username}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${res.movieTitle}</h6>
-                        <p class="card-text">${res.comment}</p>
-                        <p class="card-text"><i class="fas fa-star"></i> ${res.rate}</p>
-                    </div>
-                </div>
-            `)
-            clearForms();
-        });
-
-    });
-
-    clearForms = () => {
-        $('#movieName').val('');
-        $('#movieComment').val('');
-        $('#movieList')
-            .find('option')
-            .remove();
-
-        $('input[type=radio]:checked').prop('checked', false);
-
-    }
-
-    
+    const maxResultCount = 10;
+    const defaultImagePath = "default_picture.png";
+    const rootImagePath = "/images/host/my-file-container/";
 
     getPosts = async () => {
         await $('.loader').fadeIn().promise();
-
-        //await $('.post-list').fadeOut().promise();
         
-        movieMatch.posts.post.getFeed({ userId: `${abp.currentUser.id}`,maxCount:maxResultCount,skipCount,skipCount }).done(async (res) => {
+        movieMatch.posts.post.getFeed({ userId: `${abp.currentUser.id}`,maxCount:maxResultCount,skipCount}).done(async (res) => {
             await $('.loader').fadeOut().promise();
-
-            //await $('.post-list').fadeIn().promise();
 
             renderResults(res.items);
             
-
             if (res.items.length < maxResultCount) {
 
                 if (res.items.length == 0) {
@@ -72,7 +21,6 @@ $(function () {
                 } else {
                     $('.btn-load-more').prop('disabled', true);
                     $('.btn-load-more').text('No More Data');
-
                 }
             } 
 
@@ -87,10 +35,14 @@ $(function () {
     renderResults = (posts) => {
 
         posts.forEach((val, i) => {
+            
             $('#post-list').append(`
                 <div class="card" >
                     <div class="card-body">
-                        <h5 class="card-title">${val.user.name}<span class="text-muted px-1">@${val.user.userName}</span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span> </h5>
+                       
+                        <h5 class="card-title">
+                        <img class="profile rounded-circle prep" src="${isNullOrUndefined(val.user.extraProperties.photo) ? rootImagePath+defaultImagePath : rootImagePath+val.user.extraProperties.photo}"/>  ${val.user.name}<span class="text-muted px-1">@<a href="${val.user.userName}">${val.user.userName}</a></span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span>
+                        </h5>
                         <h6 class="card-subtitle text-muted mb-1">${val.movie.title}</h6>
                         <a href="/Movies/${val.movie.id}">
                             <div class="row mb-1">
@@ -195,6 +147,10 @@ $(function () {
 
     isNullOrEmpty = (str) => {
         return str === null || str.match(/^ *$/) !== null;
+    }
+
+    isNullOrUndefined= (str) => {
+        return str === null || str===undefined;
     }
 
     loadMore =async (skipCount, maxResultCount) => {

@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
+@using MovieMatch
 @using MovieMatch.Comments
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
@@ -19,14 +20,18 @@
 
 
 @{
-    Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
+    Func<dynamic, IHtmlContent> GetCommentTitle(MyCmsUserDto author, DateTime creationTime) =>
         @<span>
             <i class="far fa-comment-alt me-2"></i>
+
+        <img class="profile rounded-circle" src="@author.Path">
             @((string.IsNullOrWhiteSpace(author.Name)
+
         ? author.UserName
         :author.Name+ " " + author.Surname).Trim())
 
-            <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
+   
+        <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
             <a class="text-muted float-end title " href="@Model.EntityId">@(Model.Movie.Title)</a> 
         </span>;
 }
@@ -238,74 +243,7 @@
                 </div>
             </div>
         }
+
    </div>
 
-
-@*<div class="bg-light card p-3 mx-0 mt-3">
-    <div class="comment">
-        <h5>
-            <span>
-                <i class="far fa-comment-alt me-2"></i>
-                admin
-
-                <a class="text-muted float-end creationTime">8/25/2022 7:58:56 PM</a>
-                <a class="text-muted float-end title " href="438148">Minions: The Rise of Gru</a>
-            </span>
-            <span>
-                <small class="text-dark fa fa-star float-end givenRating" id="rating_8541bed9-e48d-5013-59f8-3a05d33d2776">1/5 given rating</small>
-            </span>
-        </h5>
-
-        <div class="cms-comment-content-area" data-id="dc49b9f5-393a-f406-1c7e-3a05e81e2287" id=dc49b9f5-393a-f406-1c7e-3a05e81e2287>
-            <p class="m-0" id=p_dc49b9f5-393a-f406-1c7e-3a05e81e2287>
-                kit
-            </p>
-        </div>
-
-        <div class="row mt-2 commentsRow2">
-            <div class="col">
-                <div class="my-2">
-                    <div class="inner-comment-buttons text-start">
-                        <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-id="dc49b9f5-393a-f406-1c7e-3a05e81e2287">
-                            <i class="fa fa-trash  mr -1"></i> Delete
-                        </a>
-                        <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="dc49b9f5-393a-f406-1c7e-3a05e81e2287">
-                            <i class="fa fa-pencil  mr -1 "></i> Edit
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-auto">
-                <div class="reaction-in-comment">
-                </div>
-            </div>
-        </div>
-
-        <div class="cms-comment-edit-area" id="cms-comment_Movie_438148_dc49b9f5-393a-f406-1c7e-3a05e81e2287" data-id="dc49b9f5-393a-f406-1c7e-3a05e81e2287" style="display:none">
-            <div class="card bg-light p-3 mx-0 mt-3">
-                <form class="cms-comment-update-form">
-                    <input hidden value="dc49b9f5-393a-f406-1c7e-3a05e81e2287" name="id" />
-                    <div class="row editRow">
-                        <div class="col">
-                            <div class="mb-3 m-0">
-                                <textarea class="form-control" name="commentText" rows="3">kit</textarea>
-                                <input name="commentConcurrencyStamp" value="2fac3aa36e1846a4b6e7ce21a2cdc760" type="hidden" />
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-light" data-busy-text="Processing..."> Update </button>
-                                <button type="button" class="comment-edit-cancel-button btn btn-light btn-sm" data-id="dc49b9f5-393a-f406-1c7e-3a05e81e2287" data-busy-text="Processing..."><i class="fa fa-times me-1"></i>  Cancel </button>
-                            </div>
-                        </div>
-                        <div class="mt-0">
-                            <small class="text-muted float-start"><a href="https://www.markdownguide.org/basic-syntax/">Markdown</a> supported.</small>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-*@
 

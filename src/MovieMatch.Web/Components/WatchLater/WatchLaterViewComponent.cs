@@ -6,7 +6,7 @@ namespace MovieMatch.Web.Components.WatchLater
 {
     [Widget(
         ScriptFiles = new[] { "/Components/WatchLater/Default.js" },
-        StyleFiles = new[] { "/Components/WatchLater/def.css" }
+        StyleFiles = new[] { "/Components/WatchLater/Default.css" }
         )]
     public class WatchLaterViewComponent : AbpViewComponent
     {

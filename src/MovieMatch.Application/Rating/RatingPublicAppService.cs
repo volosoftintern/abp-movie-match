@@ -3,10 +3,13 @@ using MovieMatch.Comments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
@@ -17,9 +20,11 @@ using Volo.CmsKit.Public.Ratings;
 using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Users;
 using CmsUserDto = Volo.CmsKit.Public.Comments.CmsUserDto;
+using CommentDto = MovieMatch.Comments.CommentDto;
 
 namespace MovieMatch.Rating;
 
+[Authorize]
 [RequiresGlobalFeature(typeof(RatingsFeature))]
 public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicAppService
 {
@@ -28,15 +33,19 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     public ICmsUserLookupService CmsUserLookupService { get; }
     protected RatingManager RatingManager { get; }
     protected ICommentRepository CommentRepository { get; }
+    protected IIdentityUserRepository _userRepository { get; }
     public int pageNumber;
+
+    private const int maxItem = 5;
 
     public RatingPublicAppService(
         ICommentRepository commentRepository,
         IRatingRepository ratingRepository,
         ICmsUserLookupService cmsUserLookupService,
         RatingManager ratingManager,
-        ICommentPublicAppService commentPublicAppService)
+        ICommentPublicAppService commentPublicAppService, IIdentityUserRepository identityUserRepository)
     {
+        _userRepository = identityUserRepository;
         CommentRepository = commentRepository;
         RatingRepository = ratingRepository;
         CmsUserLookupService = cmsUserLookupService;
@@ -45,7 +54,7 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         pageNumber = new int();
     }
 
-    [Authorize]
+
     public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId,
         CreateUpdateRatingInput input)
     {
@@ -57,7 +66,7 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         return ObjectMapper.Map<Volo.CmsKit.Ratings.Rating, RatingDto>(rating);
     }
 
-    [Authorize]
+
     public virtual async Task DeleteAsync(string entityType, string entityId)
     {
         var rating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, CurrentUser.GetId());
@@ -94,121 +103,84 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
         return ratingWithStarCountDto;
     }
-    private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
+    private MyCmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
     {
-        return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
+        return ObjectMapper.Map<CmsUser, MyCmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
     }
-    [Authorize]
-    public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId,int currPage)
-    {        
+
+    public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId, int currPage)
+    {
         var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
+
         var parentComments = comments
-        .Where(c => c.Comment.RepliedCommentId == null).OrderByDescending(c => c.Comment.CreationTime)
-        .Select(c => ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment)).Skip((currPage-1)*5).Take(5)
-        .ToList();
-        foreach (var parentComment in parentComments)
-        {
-            parentComment.Author = GetAuthorAsDtoFromCommentList(comments, parentComment.Id);
-
-            parentComment.Replies = comments
-                .Where(c => c.Comment.RepliedCommentId == parentComment.Id)
-                .Select(c => ObjectMapper.Map<Comment, Comments.CommentDto>(c.Comment))
-                .ToList();
-
-            foreach (var reply in parentComment.Replies)
+            .Where(c => c.Comment.RepliedCommentId == null)
+            .OrderByDescending(c => c.Comment.CreationTime)
+            .Select(c =>
             {
-                reply.Author = GetAuthorAsDtoFromCommentList(comments, reply.Id);
-            }
-        }
+                var comment = ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment);
+                comment.Author = ObjectMapper.Map<CmsUser, MyCmsUserDto>(c.Author);
+                return comment;
+            })
+            .Skip((currPage-1)*maxItem).Take(maxItem)
+            .ToList();
 
-        var commentWithStarCountDto = new List<CommentWithStarsDto>();
 
-        foreach (var comment in parentComments)
+        parentComments.ForEach((x) =>
         {
-            var userRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, comment.CreatorId);
-            if (userRating == null)
+            x.Author = GetAuthorAsDtoFromCommentList(comments, x.Id);
+            x.Path = string.IsNullOrEmpty(x.Author.Path) ? ProfilePictureConsts.DefaultPhotoPath : x.Author.Path;
+            x.Replies = comments
+                .Where(c => c.Comment.RepliedCommentId == x.Id)
+                .Select(c => ObjectMapper.Map<Comment, Comments.CommentDto>(c.Comment)).ToList();
+
+            x.Replies.ForEach(async (r) =>
             {
-                commentWithStarCountDto.Add(
-                new CommentWithStarsDto
+                var user = await _userRepository.GetAsync(r.CreatorId);
+                r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
+                r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
+            });
+
+        });
+
+        var semaphore = new SemaphoreSlim(1);
+
+        var res= (await Task.WhenAll(parentComments.Select(async (c) =>
+        {
+            try
+            {
+                var userRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, c.CreatorId);
+
+                return new CommentWithStarsDto
                 {
-                    Author = comment.Author,
-                    ConcurrencyStamp = comment.ConcurrencyStamp,
-                    CreationTime = comment.CreationTime,
+                    Author = new MyCmsUserDto { 
+                        Id = c.Author.Id, 
+                        Name = c.Author.Name, 
+                        UserName = c.Author.UserName, 
+                        Path = c.Path 
+                    },
+                    ConcurrencyStamp = c.ConcurrencyStamp,
+                    CreationTime = c.CreationTime,
                     EntityId = entityId,
                     EntityType = entityType,
-                    Id = comment.Id,
-                    Replies = comment.Replies,
-                    Text = comment.Text,
-                    CreatorId = comment.CreatorId,
-                    StarsCount = 0,
-                });
+                    Id = c.Id,
+                    Replies = c.Replies == null ? new List<CommentDto>() : c.Replies,
+                    Text = c.Text,
+                    CreatorId = c.Author.Id,
+                    StarsCount = userRating == null ? 0 : userRating.StarCount
+                };
+
             }
-            else
+            finally
             {
-                commentWithStarCountDto.Add(
-                new CommentWithStarsDto
-                {
-                    Author = comment.Author,
-                    ConcurrencyStamp = comment.ConcurrencyStamp,
-                    CreationTime = comment.CreationTime,
-                    EntityId = entityId,
-                    EntityType = entityType,
-                    Id = comment.Id,
-                    Replies = comment.Replies,
-                    Text = comment.Text,
-                    CreatorId = comment.CreatorId,
-                    StarsCount = userRating.StarCount,
-                });
+                semaphore.Release();
             }
-        }
-        
-        return commentWithStarCountDto;
+
+        }))).ToList();
+
+        semaphore.Dispose();
+
+        return res;
     }
-
-
 }
 
 
-
-//var listOfComments = CommentPublicAppService.GetListAsync(entityType, entityId).Result.Items;
-//var commentWithStarCountDto = new List<CommentWithStarsDto>();
-//        foreach (var comment in listOfComments)
-//        {
-//            var userRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, comment.CreatorId);
-//            if (userRating == null)
-//            {
-//                commentWithStarCountDto.Add(
-//                new CommentWithStarsDto
-//                {
-//                    Author = comment.Author,
-//                    ConcurrencyStamp = comment.ConcurrencyStamp,
-//                    CreationTime = comment.CreationTime,
-//                    EntityId = entityId,
-//                    EntityType = entityType,
-//                    Id = comment.Id,
-//                    Replies = comment.Replies,
-//                    Text = comment.Text,
-//                    CreatorId = comment.CreatorId,
-//                    StarsCount = 0
-//                });
-//            }
-//            else
-//{
-//    commentWithStarCountDto.Add(
-//    new CommentWithStarsDto
-//    {
-//        Author = comment.Author,
-//        ConcurrencyStamp = comment.ConcurrencyStamp,
-//        CreationTime = comment.CreationTime,
-//        EntityId = entityId,
-//        EntityType = entityType,
-//        Id = comment.Id,
-//        Replies = comment.Replies,
-//        Text = comment.Text,
-//        CreatorId = comment.CreatorId,
-//        StarsCount = userRating.StarCount
-//    });
-//}
-            
-//        }
-//        return commentWithStarCountDto;

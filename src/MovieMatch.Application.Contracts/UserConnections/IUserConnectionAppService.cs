@@ -14,17 +14,16 @@ namespace MovieMatch.UserConnections
 
         IApplicationService
     {
-        Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input);
+        Task<PagedResultDto<FollowerDto>> GetListAsync(GetIdentityUsersInput input);
         Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetUsersFollowInfo input);
         Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input);
         Task<int> GetFollowersCount(string username);
         Task<int> GetFollowingCount(string username);
-        Task<List<Guid>> GetFirstAsync();
+        Task<List<Guid>> GetCurrentUserFollowingAsync();
         Task<string> GetPhotoAsync(string userName);
         Task SetPhotoAsync(string userName,string name);
-        Task FollowAsync(Guid id, bool isActive);
-        Task UploadAsync(IFormFile file);
-        Task UnFollowAsync(Guid id, bool isActive);
+        Task FollowAsync(Guid id);
+        Task UnFollowAsync(Guid id);
         Task<UserInformationDto> GetUserInfoAsync(string username);
 
         Task<List<IdentityUserDto>> GetRecommendedUsersList(GetIdentityUsersInput input);

@@ -20,12 +20,9 @@
                         {
                             data: "path",
                             render: function (data) {
-                                if (data != null) {
+                               
                                     return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
-                                }
-                                else {
-                                    return '<img class="profile rounded-circle" src="/default_picture.png"/>'
-                                }
+                               
                             }
                         },
 
