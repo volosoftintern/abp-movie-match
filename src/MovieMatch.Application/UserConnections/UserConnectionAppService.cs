@@ -48,46 +48,37 @@ namespace MovieMatch.UserConnections
 
         
         public async Task<PagedResultDto<FollowerDto>> GetListAsync(GetIdentityUsersInput input)
-
-
-
-
         {
 
+            var filteredUsers = await _userConnectionRepository.GetUsersListAsync(input.SkipCount,input.MaxResultCount,input.Filter);
+
+            var userlist =await _identityUserRepository.GetListAsync();
 
 
-            //    var res = await _userConnectionRepository.GetListAsync(input.Sorting,input.SkipCount,input.MaxResultCount);
 
-            // var res = await _userConnectionRepository.GetQueryableAsync();
-            var filteredUsersList =await _userConnectionRepository.GetUsersListAsync(input.SkipCount,input.MaxResultCount,input.Filter);
-            var list =await _identityUserRepository.GetListAsync();
+            var filteredUsersList = filteredUsers.ToList();
 
-            
-            
-
-            var filteredUsers = filteredUsersList.ToList();
-
-           var followerdto= filteredUsers.Select(x => new FollowerDto
-            {
-                Id = x.Id,
-                isFollow = x.GetProperty<bool>("isFollow"),
-                Name = x.UserName,
-                Path = x.GetProperty<string>("Photo"),
-            }).ToList();
+            var followerdto= filteredUsersList.Select(x => new FollowerDto
+             {
+                 Id = x.Id,
+                 isFollow = x.GetProperty<bool>("isFollow"),
+                 Name = x.UserName,
+                 Path = x.GetProperty<string>("Photo"),
+             }).ToList();
             
     
 
 
 
-            foreach (var item in filteredUsers)
+            foreach (var item in filteredUsersList)
             {
                 await SetisFollowAsync(item.UserName, false);
             }
 
-            var currentUserFollowing = await GetFirstAsync();
+            var currentUserFollowing = await GetCurrentUserFollowingAsync();
             foreach (var item in currentUserFollowing)
             {
-                foreach (var user in filteredUsers)
+                foreach (var user in filteredUsersList)
                 {
                     if (user.Id == item)
                     {
@@ -100,26 +91,26 @@ namespace MovieMatch.UserConnections
                 }
             }
 
-            return new PagedResultDto<FollowerDto>(((list.Count)-1), followerdto);
+            return new PagedResultDto<FollowerDto>(((userlist.Count)-1), followerdto);
                            
          
     
 
         }
-        public async Task<List<Guid>> GetFirstAsync()
+        public async Task<List<Guid>> GetCurrentUserFollowingAsync()
         {
-            var res = await _userConnectionRepository.GetListAsync();
-            var response = res.Where(n => n.FollowerId == _currentUser.Id).Select(c => (c.FollowingId)).ToList();
+            var connections = await _userConnectionRepository.GetListAsync();
+            var response = connections.Where(n => n.FollowerId == _currentUser.Id).Select(c => (c.FollowingId)).ToList();
             return response;
 
         }
 
-        public async Task FollowAsync(Guid id, bool isActive)
+        public async Task FollowAsync(Guid id)
         {
-            var follower = _userConnectionManager.Create(id);
+            var connection = _userConnectionManager.Create(id);
 
-            await _userConnectionRepository.InsertAsync(follower, true);
-            var res = await _userConnectionRepository.GetListAsync();
+            await _userConnectionRepository.InsertAsync(connection, true);
+            
 
             var finduser = await _identityUserRepository.GetAsync(id);
             await SetisFollowAsync(finduser.UserName, true);
@@ -129,17 +120,17 @@ namespace MovieMatch.UserConnections
 
 
 
-        public async Task UnFollowAsync(Guid id, bool isActive)
+        public async Task UnFollowAsync(Guid id)
         {
 
-            var result = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
+            var connection = await _userConnectionRepository.GetAsync((c) => c.FollowerId == _currentUser.Id && c.FollowingId == id);
 
-            if (result != null)
+            if (connection != null)
             {
 
-                var finduser=  await _identityUserRepository.GetAsync(result.FollowingId);
+                var finduser=  await _identityUserRepository.GetAsync(connection.FollowingId);
                 await SetisFollowAsync(finduser.UserName, false);
-                await _userConnectionRepository.DeleteAsync(result, true);
+                await _userConnectionRepository.DeleteAsync(connection, true);
             }
 
         }
@@ -147,21 +138,20 @@ namespace MovieMatch.UserConnections
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input)
         {
-            var userr = await _userRepository.GetAsync(x => x.UserName == input.username);
-            var res = await _userConnectionRepository.GetListAsync();         
+            var user = await _userRepository.GetAsync(x => x.UserName == input.username);
+            var connections = await _userConnectionRepository.GetQueryableAsync();         
             
-            var user = await _identityUserRepository.GetListAsync();   
+            
             var users = await _identityUserRepository.GetListAsync();
 
-            var response = res.Where(n => n.FollowingId == userr.Id).Select(c =>(c.FollowerId)).ToList();
+            var followers = connections.Where(n => n.FollowingId == user.Id).Select(c =>(c.FollowerId)).ToList();
 
-            var q = (from pd in response
+            var q = (from pd in followers
                      join od in users.ToList() on pd equals od.Id
                      select new FollowerDto
                      {
                          Id = pd,
                          Name = od.UserName,
-
                          Path = od.GetProperty<string>("Photo"),
                          isFollow = od.GetProperty<bool>("isFollow")
 
@@ -172,6 +162,7 @@ namespace MovieMatch.UserConnections
         }
         public async Task<int> GetFollowersCount(string userName)
         {
+
             var user = await _userRepository.GetAsync(x => x.UserName == userName);
             var count= (await _userConnectionRepository.GetQueryableAsync())
             .Where(x=>x.FollowingId==user.Id).Count();
@@ -183,18 +174,18 @@ namespace MovieMatch.UserConnections
             var count= (await _userConnectionRepository.GetQueryableAsync())
             .Where(x=>x.FollowerId==user.Id).Count();
             return count;
+
         }
         public async Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetUsersFollowInfo input)
         {
-            var userr = await _userRepository.GetAsync(x => x.UserName == input.username);
+            var user = await _userRepository.GetAsync(x => x.UserName == input.username);
             var res = await _userConnectionRepository.GetListAsync();
 
-            var user = await _identityUserRepository.GetListAsync();
 
             var users = await _identityUserRepository.GetListAsync();
 
 
-            var response = res.Where(n => n.FollowerId == userr.Id).Select(c => (c.FollowingId)).ToList();
+            var response = res.Where(n => n.FollowerId == user.Id).Select(c => (c.FollowingId)).ToList();
             var q = (from pd in response
                      join od in users.ToList() on pd equals od.Id
                      select new FollowerDto
@@ -210,26 +201,19 @@ namespace MovieMatch.UserConnections
             return new PagedResultDto<FollowerDto>(q.Count(), q);
 
         }
-        public async Task UploadAsync(IFormFile file)
-        {
-            var dir = _env.ContentRootPath;
-            using (var fileStream = new FileStream(Path.Combine(dir, file.Name), FileMode.Open, FileAccess.Read))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-        }
+        
 
         public async Task SetPhotoAsync(string userName, string name)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, name); //Using the new extension property
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, name); 
             await _userRepository.UpdateAsync(user);
         }
 
         public async Task<string> GetPhotoAsync(string userName)
         {
             var user = await _userRepository.GetAsync(u => u.UserName == userName);
-            return user.GetProperty<string>(ProfilePictureConsts.PhotoProperty); //Using the new extension property
+            return user.GetProperty<string>(ProfilePictureConsts.PhotoProperty); 
         }
         public async Task SetisFollowAsync(string userName, bool isFollow)
         {
@@ -258,22 +242,7 @@ namespace MovieMatch.UserConnections
                 Username = username
             };
         }
-        // public async Task<UserConnectionDto> CreateAsync(UserConnectionDto input)
-        // {
-        //    var user=await _userConnectionManager.CreateAsync(_currentUser.GetId(), true);
-        //     if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
-        //     {
-        //         await SaveProfilePictureAsync(_currentUser.GetId(), input.ProfilePictureStreamContent);
-        //     }
-
-        //     return ObjectMapper.Map<UserConnection, UserConnectionDto>(user);
-        // }
-        //public async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
-        // {
-        //     var blobName = id.ToString();
-
-        //     await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
-        // }
+      
 
 
     }
