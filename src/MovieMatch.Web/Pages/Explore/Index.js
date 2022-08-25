@@ -30,7 +30,7 @@ var dataTable = $('#UserConnectionsTable').DataTable(
 
                     
 
-                        return `<a  href=${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
+                        return `<a  href='/UserConnections/${name}' style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
                     }
 
                 },
@@ -88,18 +88,6 @@ followUser = (button) => {
             abp.notify.success(`UnFollowed user`);
 
             $('#UserConnectionsTable').DataTable().ajax.reload();
-
-
-
-
-
-
-
-
-
-
-
-
         });
     }
 }
