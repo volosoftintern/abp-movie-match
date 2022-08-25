@@ -105,7 +105,7 @@ namespace MovieMatch.Movies
         {
 
             var isMoveExist = (await _movieDetailRepository.GetQueryableAsync()).Where(x => x.Id == id).Count() > 0;
-
+            
             if (isMoveExist)
             {
 
@@ -135,6 +135,12 @@ namespace MovieMatch.Movies
                 var response = await _movieApi.FindByIdAsync(id);
                 return ObjectMapper.Map<DM.MovieApi.MovieDb.Movies.Movie, MovieDetailDto>(response.Item);
             });
+
+            
+            if (!(await _movieRepository.GetQueryableAsync()).Any(x => x.Id == id))// check exist in movie table
+            {
+                await CreateAsync(new CreateMovieDto(id:_movieDetail.Id,overview:_movieDetail.Overview,posterPath:_movieDetail.PosterPath,title:_movieDetail.Title));
+            }
 
             _movieCredit = await _creditPolicy.ExecuteAsync(async () =>
             {
@@ -178,6 +184,8 @@ namespace MovieMatch.Movies
 
             return _movieDetail;
         }
+
+        
         public async Task<MovieDto> CreateAsync(CreateMovieDto input)
         {
             var movie = _movieManager.Create(input.Id, input.Title, input.PosterPath, input.Overview);
@@ -324,7 +332,7 @@ namespace MovieMatch.Movies
 
             if (input.IsDirector && (await _moviePersonRepository.GetQueryableAsync()).Where(x => x.PersonId == input.PersonId).Count() > 0)
             {
-                
+
                 var movieIds = (await _moviePersonRepository.GetQueryableAsync())
                     .Where(x => x.PersonId == input.PersonId)
                     .Select(x => x.MovieDetailId);
@@ -366,12 +374,12 @@ namespace MovieMatch.Movies
                     paramBuilder.WithCast(input.PersonId);
                 }
 
-                var response = await _discoverApi.DiscoverMoviesAsync(paramBuilder,input.PageNumber);
+                var response = await _discoverApi.DiscoverMoviesAsync(paramBuilder, input.PageNumber);
                 totalCount = response.TotalResults;
                 return ObjectMapper.Map<IReadOnlyList<MovieInfo>, IReadOnlyList<MovieDto>>(response.Results);
             });
 
-            return new PagedResultDto<MovieDto>(totalCount,personMovies);
+            return new PagedResultDto<MovieDto>(totalCount, personMovies);
         }
         public async Task<IReadOnlyList<MovieDto>> GetSimilarMoviesAsync(int id)
         {
