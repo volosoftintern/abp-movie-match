@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MovieMatch.UserConnections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
 
@@ -12,7 +14,8 @@ namespace MovieMatch.Web.Pages.Explore
     public class IndexModel : PageModel
     {
         private readonly IUserConnectionAppService _userConnectionService;
-
+        public PagedResultDto<IdentityUserDto> Users;
+        public List<IdentityUserDto> RecommendedUsers;
         public IndexModel(IUserConnectionAppService userConnectionService)
         {
             _userConnectionService = userConnectionService;
@@ -23,8 +26,9 @@ namespace MovieMatch.Web.Pages.Explore
         public async Task  OnGet()
         {
             //  filepath= await _userConnectionService.GetPhotoAsync(_currentUser.UserName);
-            var result = await _userConnectionService.GetListAsync(new GetIdentityUsersInput());
-            UserCount = (int)result.TotalCount;
+            Users = await _userConnectionService.GetListAsync(new GetIdentityUsersInput());
+            RecommendedUsers = await _userConnectionService.GetRecommendedUsersList(new GetIdentityUsersInput());
+            UserCount = (int)Users.TotalCount;
         }
     }
 }

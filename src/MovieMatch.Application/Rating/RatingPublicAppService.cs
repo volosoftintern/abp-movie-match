@@ -100,14 +100,11 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     }
     [Authorize]
     public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId,int currPage)
-    {
-        var total = (currPage*5);
-        
-
+    {        
         var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
         var parentComments = comments
         .Where(c => c.Comment.RepliedCommentId == null).OrderByDescending(c => c.Comment.CreationTime)
-        .Select(c => ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment)).Skip(0).Take(total)
+        .Select(c => ObjectMapper.Map<Comment, CommentWithStarsDto>(c.Comment)).Skip((currPage-1)*5).Take(5)
         .ToList();
         foreach (var parentComment in parentComments)
         {
@@ -161,7 +158,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
                     Text = comment.Text,
                     CreatorId = comment.CreatorId,
                     StarsCount = userRating.StarCount,
-
                 });
             }
         }

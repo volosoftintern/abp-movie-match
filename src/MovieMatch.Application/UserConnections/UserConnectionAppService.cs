@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MovieMatch.Movies;
+using MovieMatch.Rating;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -16,13 +20,13 @@ using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 using Volo.Abp.Validation;
+using Volo.CmsKit.Ratings;
+using static Volo.Abp.Identity.IdentityPermissions;
 
 namespace MovieMatch.UserConnections
 {
     public class UserConnectionAppService : ApplicationService, IUserConnectionAppService
     {
-        //  private readonly IIdentityUserRepository identityUserRepository;
-
         private readonly UserConnectionManager _userConnectionManager;
         private readonly ICurrentUser _currentUser;
         private readonly IUserConnectionRepository _userConnectionRepository;
@@ -30,10 +34,25 @@ namespace MovieMatch.UserConnections
         private readonly IBlobContainer<MyFileContainer> _organizationBlobContainer;
         private readonly IHostingEnvironment _env;
         private readonly IUserRepository _userRepository;
+        private readonly IRatingPublicAppService _ratingPublicAppService;
+        private readonly IRatingRepository _ratingRepository;
+        private readonly IMovieAppService _movieAppService;
+        private readonly IMovieRepository _movieRepository;
 
 
 
-        public UserConnectionAppService(IUserRepository userRepository, IHostingEnvironment env, IBlobContainer<MyFileContainer> organizationBlobContainer, IIdentityUserRepository identityUserRepository, IUserConnectionRepository userConnectionRepository, ICurrentUser currentUser, UserConnectionManager userConnectionManager)
+        public UserConnectionAppService(IUserRepository userRepository,
+            IHostingEnvironment env,
+            IBlobContainer<MyFileContainer> organizationBlobContainer,
+            IIdentityUserRepository identityUserRepository,
+            IUserConnectionRepository userConnectionRepository,
+            ICurrentUser currentUser,
+            UserConnectionManager userConnectionManager,
+            IRatingPublicAppService ratingPublicAppService,
+            IRatingRepository ratingRepository,
+            IMovieAppService movieAppService,
+            IMovieRepository movieRepository
+            )
         {
             _env = env;
             _userRepository = userRepository;
@@ -42,10 +61,11 @@ namespace MovieMatch.UserConnections
             _currentUser = currentUser;
             _userConnectionManager = userConnectionManager;
             _organizationBlobContainer = organizationBlobContainer;
+            _ratingPublicAppService = ratingPublicAppService;
+            _ratingRepository= ratingRepository;
+            _movieAppService = movieAppService;
+            _movieRepository= movieRepository;
         }
-
-
-
 
         public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
@@ -243,6 +263,75 @@ namespace MovieMatch.UserConnections
                 Path = path,
                 Username = username
             };
+        }
+        public async Task<List<IdentityUserDto>> GetRecommendedUsersList(GetIdentityUsersInput input)
+        {
+            List<IdentityUserDto> userDto = new List<IdentityUserDto>();
+            List<double> similarityList = new List<double>();
+            int k=0, i=0, j=0, index;
+            var movies =await _movieRepository.GetListAsync();
+            var users= await _identityUserRepository.GetListAsync();
+            int[,] A = new int[users.Count, movies.Count];
+            index = users.ToList().FindIndex(x=>x.UserName==CurrentUser.UserName);
+            foreach (var user in users)
+            {
+                foreach (var movie in movies.OrderByDescending(x=>x.Id))
+                {
+                    var userRating = await _ratingRepository.GetCurrentUserRatingAsync("Movie", movie.Id.ToString(), (Guid)user.Id);
+                    if (userRating == null)
+                    {
+                        A[i,j] = 0;
+                    }
+                    else
+                    {
+                        A[i,j] = userRating.StarCount;
+                    }
+                    j++;
+                }
+                j = 0;
+                i++;
+            }
+
+            similarityList = GetCosineSimilarity(A, index, users.Count, movies.Count);
+            foreach (var item in users)
+            {
+                if(k<users.Count-1)
+                {
+                    if(similarityList[k] > 0.5)
+                    {
+                        var identityUserDto=ObjectMapper.Map<IdentityUser,IdentityUserDto>(item);
+                        userDto.Add(identityUserDto);
+                    }
+                    k++;
+                }
+            }
+            return userDto;
+        }
+        public List<double> GetCosineSimilarity(int[,] A,int index, int userCount,int movieCount)
+        {
+            List<double> similarityList =new List<double>();
+            double dot;
+            double mag1;
+            double mag2;
+            int i = 0;
+            while(i< userCount)
+            {
+                if (index!=i)
+                {
+                    dot = 0.0d;
+                    mag1 = 0.0d;
+                    mag2 = 0.0d;
+                    for (int j = 0; j < movieCount; j++)
+                    {
+                        dot += A[index, j] * A[i, j];
+                        mag1 += Math.Pow(A[index, j], 2);
+                        mag2 += Math.Pow(A[i, j], 2);
+                    }
+                    similarityList.Add(dot / (Math.Sqrt(mag1) * Math.Sqrt(mag2)));
+                }
+                i++;
+            }
+            return similarityList;
         }
         // public async Task<UserConnectionDto> CreateAsync(UserConnectionDto input)
         // {

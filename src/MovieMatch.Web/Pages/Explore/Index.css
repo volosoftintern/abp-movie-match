@@ -169,3 +169,11 @@ body {
     height: var(--profile-size);
     width: var(--profile-size);
 }
+
+.swiper-slide img {
+    height: 300px;
+}
+
+.movie-carousel {
+    height: 350px;
+}

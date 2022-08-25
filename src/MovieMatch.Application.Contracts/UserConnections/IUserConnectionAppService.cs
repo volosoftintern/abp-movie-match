@@ -26,7 +26,7 @@ namespace MovieMatch.UserConnections
         Task UploadAsync(IFormFile file);
         Task UnFollowAsync(Guid id, bool isActive);
         Task<UserInformationDto> GetUserInfoAsync(string username);
-      
 
+        Task<List<IdentityUserDto>> GetRecommendedUsersList(GetIdentityUsersInput input);
     }
 }
