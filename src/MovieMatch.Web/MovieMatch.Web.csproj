@@ -64,4 +64,13 @@
     <EmbeddedResource Include="Components\**\*.js" />
   </ItemGroup>
 
+   <ItemGroup>
+        <None Update="Components\**\*.js">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Components\**\*.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
