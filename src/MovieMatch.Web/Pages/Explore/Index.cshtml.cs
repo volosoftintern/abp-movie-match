@@ -14,7 +14,7 @@ namespace MovieMatch.Web.Pages.Explore
     public class IndexModel : PageModel
     {
         private readonly IUserConnectionAppService _userConnectionService;
-        public PagedResultDto<IdentityUserDto> Users;
+        public PagedResultDto<FollowerDto> Users;
         public List<IdentityUserDto> RecommendedUsers;
         public IndexModel(IUserConnectionAppService userConnectionService)
         {
