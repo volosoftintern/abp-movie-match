@@ -263,5 +263,7 @@ src/MovieMatch.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
-**/wwwroot/images/*
+**/wwwroot/images/host/my-file-container/*
 tempkey.jwk
+
+!**/wwwroot/images/host/my-file-container/default_picture.png

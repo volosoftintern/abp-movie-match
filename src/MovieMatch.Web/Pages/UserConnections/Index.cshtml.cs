@@ -59,28 +59,15 @@ namespace MovieMatch.Web.Pages.UserConnections
 
         }
        
-
-        public async Task OnGetAsync(string username)
+        public async Task OnGetAsync()
         {
-
             if (UserName == null)
                 UserName = _currentUser.UserName;
-            FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetUsersFollowInfo { username = UserName })).Items.Count;
-           // FollowersCount = (await _userConnectionService.GetFollowersAsync(new GetIdentityUsersInput(), UserName)).Items.Count;
-            FollowingCount =(await _userConnectionService.GetFollowingAsync(new GetUsersFollowInfo { username=UserName})).Items.Count;
+            FollowersCount = (await _userConnectionService.GetFollowersCount( UserName));
+            FollowingCount =(await _userConnectionService.GetFollowingCount(UserName));
 
-           
-           
-          
-  
-            
             path =await _userConnectionService.GetPhotoAsync(UserName);
-          //  Organization = new OrganizationViewModel();
-
-
-
-            //user.Name= _currentUser.Name;
-            //return RedirectToPage(user.Name);
+          
         }
        public async Task<IActionResult> OnPostAsync()
        {
@@ -90,7 +77,7 @@ namespace MovieMatch.Web.Pages.UserConnections
            if(Photo!=null)
            {
                string uploadsfolder = Path.Combine(_env.WebRootPath, "images");
-               uniquefilename=Guid.NewGuid().ToString()+ "_" +Photo.FileName;//BÝÞEY DENÝYCEM
+               uniquefilename=Guid.NewGuid().ToString()+ "_" +Photo.FileName;
                string filePath = Path.Combine(uploadsfolder, uniquefilename);
                Photo.CopyTo(new FileStream(filePath, FileMode.Create));
            }

@@ -162,15 +162,19 @@ namespace MovieMatch.UserConnections
         }
         public async Task<int> GetFollowersCount(string userName)
         {
-            var count = await GetFollowersAsync(new GetUsersFollowInfo() { username = userName });
-          
-            return count.Items.Count;
+
+            var user = await _userRepository.GetAsync(x => x.UserName == userName);
+            var count= (await _userConnectionRepository.GetQueryableAsync())
+            .Where(x=>x.FollowingId==user.Id).Count();
+            return count;
         }
         public async Task<int> GetFollowingCount(string userName)
         {
-            var count = await GetFollowingAsync(new GetUsersFollowInfo() { username = userName });
-            
-            return count.Items.Count;
+            var user = await _userRepository.GetAsync(x => x.UserName == userName);
+            var count= (await _userConnectionRepository.GetQueryableAsync())
+            .Where(x=>x.FollowerId==user.Id).Count();
+            return count;
+
         }
         public async Task<PagedResultDto<FollowerDto>> GetFollowingAsync(GetUsersFollowInfo input)
         {
