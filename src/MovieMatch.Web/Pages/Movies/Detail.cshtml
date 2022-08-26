@@ -6,7 +6,9 @@
 @using Volo.Abp;
 @inject ICurrentUser CurrentUser
 @model MovieMatch.Web.Pages.Movies.DetailModel
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MovieMatch.Localization
+@inject IHtmlLocalizer<MovieMatchResource> L
 @section styles{
     <abp-style src="/Pages/Movies/Detail.css"/>
 }
@@ -59,19 +61,19 @@
                         <p class="d-flex justify-content-around">
                             @if (@Model.MovieDetail.IsActiveWatchLater)
                             {
-                                <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" class="btn btn-danger btn-sm">Remove from watch later list</button>
+                                <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" class="btn btn-danger btn-sm">@L["RemoveFromWatchLaterList"]</button>
                             }
                             else
                             {
-                                <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" class="btn btn-primary ">Add to watch later list</button>
+                                <button type="button" id="idWatchLater" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchLater" class="btn btn-primary ">@L["AddWatchLaterList"]</button>
                             }
                             @if (@Model.MovieDetail.IsActiveWatchedBefore)
                             {
-                                <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" class="btn btn-danger btn-sm">Remove from watched before list</button>
+                                <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" class="btn btn-danger btn-sm">@L["RemoveFromWatchedBeforeList"]</button>
                             }
                             else
                             {
-                                <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" class="btn btn-secondary">Add to watched before list</button>
+                                <button type="button" id="idWatchedBefore" data-id="@Model.MovieId" data-content="@Model.MovieDetail.IsActiveWatchedBefore" class="btn btn-secondary">@L["AddWatchedBeforeList"]</button>
                             }
                         </p>
                     </div>
@@ -80,8 +82,8 @@
             <div class="row g-0">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Comments</button>
-                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="watchersList(@Model.MovieId)">Watcher Profiles</button>
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">@L["Comments"]</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" onclick="watchersList(@Model.MovieId)">@L["WatcherProfiles"]</button>
                     </div>
                 </nav>
 

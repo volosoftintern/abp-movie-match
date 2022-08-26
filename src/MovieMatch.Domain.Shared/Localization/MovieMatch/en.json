@@ -57,7 +57,16 @@
     "UnWatch":"Unwatch",
     "WatchLater":"Watch Later",
     "WatchedBefore":"Watched Before",
-    
+    "RemoveFromWatchLaterList":"Remove from watch later list",
+    "AddWatchLaterList":"Add to watch later list",
+    "RemoveFromWatchedBeforeList":"Remove from watched before list",
+    "AddWatchedBeforeList":"Add to watched before list",
+    "Comments":"Comments",
+    "WatcherProfiles":"Watcher Profiles",
+    "NoWatchersYet":"No Watchers Yet",
+    "MovieWathced":"{0} Movie Watched",
+    "Follow":"Follow",
+    "UnFollow":"Unfolow"
   }
 
 }
