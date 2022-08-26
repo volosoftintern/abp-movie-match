@@ -2,13 +2,22 @@
   "profiles": {
     "WSL": {
       "commandName": "WSL2",
-      "distributionName": ""
+      "distributionName": "",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     },
     "Profile 1": {
-      "commandName": "Executable"
+      "commandName": "Executable",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     },
     "Profile 2": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     }
   }
 }
