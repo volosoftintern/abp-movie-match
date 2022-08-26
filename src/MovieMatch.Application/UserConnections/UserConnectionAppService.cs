@@ -141,10 +141,6 @@ namespace MovieMatch.UserConnections
             await SetisFollowAsync(finduser.UserName, true);
 
         }
-
-
-
-
         public async Task UnFollowAsync(Guid id)
         {
 
@@ -159,7 +155,6 @@ namespace MovieMatch.UserConnections
             }
 
         }
-
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input)
         {
@@ -337,22 +332,7 @@ namespace MovieMatch.UserConnections
             }
             return similarityList;
         }
-        // public async Task<UserConnectionDto> CreateAsync(UserConnectionDto input)
-        // {
-        //    var user=await _userConnectionManager.CreateAsync(_currentUser.GetId(), true);
-        //     if (input.ProfilePictureStreamContent != null && input.ProfilePictureStreamContent.ContentLength > 0)
-        //     {
-        //         await SaveProfilePictureAsync(_currentUser.GetId(), input.ProfilePictureStreamContent);
-        //     }
-
-        //     return ObjectMapper.Map<UserConnection, UserConnectionDto>(user);
-        // }
-        //public async Task SaveProfilePictureAsync(Guid id, IRemoteStreamContent streamContent)
-        // {
-        //     var blobName = id.ToString();
-
-        //     await _organizationBlobContainer.SaveAsync(blobName, streamContent.GetStream(), overrideExisting: true);
-        // }
+ 
 
 
 

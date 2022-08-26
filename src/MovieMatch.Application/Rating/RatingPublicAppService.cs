@@ -148,6 +148,7 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         {
             try
             {
+                await semaphore.WaitAsync();
                 var userRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, c.CreatorId);
 
                 return new CommentWithStarsDto
