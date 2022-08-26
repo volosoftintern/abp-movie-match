@@ -24,10 +24,9 @@ namespace MovieMatch
         }
         public async override Task<IdentityResult> CreateAsync(IdentityUser user)
         {
-            if(user.GetProperty("Photo")==null)
+            if(user.GetProperty(ProfilePictureConsts.PhotoProperty)==null)
             {
-                user.SetProperty("Photo", "default_picture.png");
-
+                user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
             }
             return await base.CreateAsync(user);
         }

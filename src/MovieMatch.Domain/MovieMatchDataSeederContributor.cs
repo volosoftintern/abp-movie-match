@@ -104,28 +104,28 @@ namespace MovieMatch
 
             var user = new IdentityUser(_guidGenerator.Create(), "baris", "baris@abp.io");
 
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
             
 
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "kutay", "kutay@abp.io");
 
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
 
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "cagatay", "cagatay@abp.io");
 
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "ali", "ali@abp.io");
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
             await _userManager.CreateAsync(user, "1q2w3E*");
 
             user = new IdentityUser(_guidGenerator.Create(), "veli", "veli@abp.io");
-            user.SetProperty(ProfilePictureConsts.PhotoProperty, "/images/host/my-file-container/default_picture.png");
+            user.SetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
 
 
             await _userManager.CreateAsync(user, "1q2w3E*");
