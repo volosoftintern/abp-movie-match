@@ -141,10 +141,6 @@ namespace MovieMatch.UserConnections
             await SetisFollowAsync(finduser.UserName, true);
 
         }
-
-
-
-
         public async Task UnFollowAsync(Guid id)
         {
 
@@ -159,7 +155,6 @@ namespace MovieMatch.UserConnections
             }
 
         }
-
 
         public async Task<PagedResultDto<FollowerDto>> GetFollowersAsync(GetUsersFollowInfo input)
         {
