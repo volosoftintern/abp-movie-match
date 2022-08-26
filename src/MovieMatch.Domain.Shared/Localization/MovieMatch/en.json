@@ -76,7 +76,9 @@
     "FileTitle":"File Upload and Download",
     "Send":"Send",
     "AboutMe":"About Me",
-    "Message":"Message"
+    "Message":"Message",
+    "NoRating":"No given rating",
+    "GivenRating":"{0}/5 Given Rating"
     
   }
 
