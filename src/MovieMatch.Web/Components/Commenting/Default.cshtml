@@ -4,6 +4,7 @@
 @using Microsoft.JSInterop
 @using MovieMatch
 @using MovieMatch.Comments
+@using MovieMatch.Localization
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
 @using Volo.CmsKit.GlobalFeatures
@@ -15,6 +16,7 @@
 @inject ICurrentUser CurrentUser
 @inject IOptionsSnapshot<CmsKitUiOptions> cmsKitUiOptions;
 @inject IHtmlLocalizer<CmsKitResource> L
+@inject IHtmlLocalizer<MovieMatchResource> Localization
 @model MovieMatch.Web.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
 @{
@@ -38,12 +40,12 @@
      @<span>
          @if(starsCount==0)
         {
-         <small class="text float-end noRating" id="rating_@id">@L["NoRating"]</small>
+         <small class="text float-end noRating" id="rating_@id">@Localization["NoRating"]</small>
         }
         else
         {
-           <small class="text-dark fa fa-star float-end givenRating" id="rating_@id">@L["GivenRating",starsCount]</small>
-         }  
+         <small class="text-dark fa fa-star float-end givenRating" id="rating_@id"> @Localization["GivenRating",new object [] { starsCount }]</small>
+        }  
      </span>;
 }
 
