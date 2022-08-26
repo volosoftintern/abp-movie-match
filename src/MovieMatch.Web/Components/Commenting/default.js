@@ -84,14 +84,15 @@
                 var $link = $(this);
                 $link.on('click', '', function (e) {
                     e.preventDefault();
-
+                    var $relatedCommentReplyArea = $(`#${$link.data('id') }.comment-stars`)
                     abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
                         if (ok) {
                             volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
                             ).then(function () {
                                 var id = $link.data('id');
                                 abp.notify.info(l('SuccessfullyDeleted'));
-                                $("#" + id).css("display", "none");
+                                //$("#" + id).css("display", "none");
+                                $relatedCommentReplyArea.hide()
                             });
                         }
                     });
@@ -112,7 +113,6 @@
                             //concurrencyStamp: formAsObject.commentConcurrencyStamp
                         }
                     ).then(function (data) {
-                        debugger;
                         //$("#" + "cms-comment_Movie_" + data.entityId + "_" + data.id).css("display", "none")
                         var $relatedCommentEditArea = $container.find('.cms-comment-edit-area[data-id=' + data.id + ']');
                         var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + data.id + ']');
@@ -147,7 +147,7 @@
                             }
                         ).then(function (data) {
                             var $relatedCommentFormArea = $container.find('.cms-comment-form-area[data-reply-id=' + data.repliedCommentId + ']');
-                            var $relatedCommentReplyArea = $(`#${data.repliedCommentId}.comment-stars`)
+                            
                             var id = data.repliedCommentId;
                             //reply or new comment control
                             if ($form[0][3]) {
@@ -230,7 +230,6 @@
 
         if (scrollTop + clientHeight >= scrollHeight - 5 &&
             hasMoreComments(currentPage, limit, total)) {
-            debugger;
             var id = $("#cms-comment").attr("data-content");
             currentPage++;
             $.ajax({

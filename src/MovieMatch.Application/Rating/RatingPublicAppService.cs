@@ -124,8 +124,8 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
             .Skip((currPage-1)*maxItem).Take(maxItem)
             .ToList();
 
-
-        parentComments.ForEach((x) =>
+        var semaphore = new SemaphoreSlim(1);
+        parentComments.ForEach( (x) =>
         {
             x.Author = GetAuthorAsDtoFromCommentList(comments, x.Id);
             x.Path = string.IsNullOrEmpty(x.Author.Path) ? ProfilePictureConsts.DefaultPhotoPath : x.Author.Path;
@@ -135,14 +135,21 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
             x.Replies.ForEach(async (r) =>
             {
-                var user = await _userRepository.GetAsync(r.CreatorId);
-                r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
-                r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
+                try
+                {
+                    await semaphore.WaitAsync();
+                    var user = await _userRepository.GetAsync(r.CreatorId);
+                    r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
+                    r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             });
-
+            
         });
 
-        var semaphore = new SemaphoreSlim(1);
 
         var res= (await Task.WhenAll(parentComments.Select(async (c) =>
         {

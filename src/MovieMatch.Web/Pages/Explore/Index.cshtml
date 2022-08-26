@@ -32,27 +32,35 @@
 </abp-card>
 
 
-        <h3>Recommendend Profiles (@Model.UserCount)</h3>
+        <h3>Recommendend Profiles (@Model.RecommendedUsers.Count)</h3>
         <div class="swiper user-carousel">
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
                 <!-- Slides -->
-        @foreach (var item in Model.RecommendedUsers)
+            @if(Model.RecommendedUsers==null){
+            <div class="swiper-slide">
+            <h3>No matching users were found, please rate the movies and try again.</h3>
+            </div>
+            }
+            else
             {
-
+                @foreach (var item in Model.RecommendedUsers)
+                {
                 <div class="swiper-slide">
                     <div class="card">
-                        <img class="rounded-circle card-img-top " src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="Card image cap">
+                            <img class="rounded-circle card-img-top " src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">@item.UserName</h5>
                             <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">Last updated 3 mins ago</small>
+                           <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
                     </div>
                 </div>
+                }
             }
+       
 
         </div>
         <!-- If we need pagination -->
