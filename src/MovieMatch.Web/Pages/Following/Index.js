@@ -28,7 +28,7 @@
                             data: "name",
                             render: function (name) {
 
-                                return `<a  href=${name} style="text-transform:capitalize" > ${name} </a>`
+                                return `<a  href='/UserConnections/${name}' style="text-transform:capitalize" > ${name} </a>`
 
                             }
                         }
