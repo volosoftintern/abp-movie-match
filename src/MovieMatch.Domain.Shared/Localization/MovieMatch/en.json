@@ -74,7 +74,10 @@
     "Upload":"Upload",
     "Download":"Download File",
     "FileTitle":"File Upload and Download",
-    "Send":"Send"
+    "Send":"Send",
+    "AboutMe":"About Me",
+    "Message":"Message"
+    
   }
 
 }
