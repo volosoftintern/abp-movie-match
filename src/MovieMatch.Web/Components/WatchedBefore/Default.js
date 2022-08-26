@@ -50,15 +50,13 @@
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
                         .then(() => {
-                            abp.notify.info("Successfully deleted!");
+                            abp.notify.info(l('SuccessfullyDeleted'));
                             dataTable.ajax.reload();
                             movieMatch.moviesWatchedBefore.watchedBefore.getCount(abp.currentUser.id).done((count) => {
                                 var str = l('ProfileTab:MoviesIWatchedBefore', count);
                                 $("#ProfileManagementWrapper a[role='tab'].active")[0].innerText = str;
                                 $(".tab-content > div.active>h2")[0].innerText = str;
-                                //component refresh code below
-                                //var myWidgetManager = new abp.WidgetManager('.abp-widget-wrapper[data-widget-name="WatchedBefore"]');
-                                //myWidgetManager.refresh();
+                               
                             });
                      })
                 }

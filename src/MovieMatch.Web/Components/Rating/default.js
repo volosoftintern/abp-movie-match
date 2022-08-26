@@ -41,7 +41,7 @@
                             }
                         ).then(function (starCount) {
                             widgetManager.refresh($widget);
-                            $("#rating_"+abp.currentUser.id).text(starCount.starCount+"/5 Given Rating")
+                            $("#rating_"+abp.currentUser.id).text(l('GivenRating',starCount.starCount))
                         })
                     }
                 });
@@ -61,7 +61,7 @@
                                 $ratingArea.attr("data-entity-type"),
                                 $ratingArea.attr("data-entity-id")
                             ).then(function () {
-                                $("#rating_" + abp.currentUser.id).text("No given rating")
+                                $("#rating_" + abp.currentUser.id).text(l('NoRating'))
                                 widgetManager.refresh($widget);
                             });
                         }

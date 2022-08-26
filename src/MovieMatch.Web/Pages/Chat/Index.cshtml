@@ -2,6 +2,9 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @using Volo.Abp.Users
 @model MovieMatch.Web.Pages.Chat.IndexModel
+@using MovieMatch.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<MovieMatchResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
     <abp-style src="/Pages/Chat/Chat.css" />
@@ -139,14 +142,10 @@
                         <input name="Text" class="form-control" id="messageText" />
                     </div>
                     <div class="form-group">
-                        <button id="submitButton" type="button" class="btn btn-outline-primary">SEND</button>
+                        <button id="submitButton" type="button" class="btn btn-outline-primary">@L["Send"]</button>
                     </div>
                 </form>
                         </div>
             </abp-column>
         </abp-row>
-
-
-   
-
        </div>
