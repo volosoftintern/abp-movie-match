@@ -70,7 +70,10 @@
     "FollowUser":"Follow User",
     "UnFollowUser":"Unfolow User",
     "FollowedUser":"Followed User",
-    "UnFollowedUser":"Unfollowed User"
+    "UnFollowedUser":"Unfollowed User",
+    "Upload":"Upload",
+    "Download":"Download File",
+    "FileTitle":"File Upload and Download"
   }
 
 }

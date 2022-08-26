@@ -1,4 +1,7 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MovieMatch.Localization
+@inject IHtmlLocalizer<MovieMatchResource> L
 @model MovieMatch.Web.Pages.Files.Index
 
 @section scripts{
@@ -8,7 +11,7 @@
 
 <abp-card>
     <abp-card-header>
-        <h3>File Upload and Download</h3>
+        <h3>@L["FileTitle"]</h3>
     </abp-card-header>
     <abp-card-body>
         <abp-row>
@@ -16,17 +19,14 @@
                 <h3>Upload File</h3>
                 <hr />
                 <form method="post" enctype="multipart/form-data">
-@*                    <abp-input asp-for="UploadFileDto.Name"></abp-input>*@
-
                     <abp-input asp-for="UploadFileDto.File"></abp-input>
-
                     <button id="upload"
-                        type="button" class="btn btn-info"> Upload</button>
+                        type="button" class="btn btn-info"> @L["Upload"]</button>
                 </form>
             </abp-column>
 
             <abp-column style="border-left: 1px dotted gray">
-                <h3>Download File</h3>
+                <h3>@L["Download"]</h3>
                 <hr />
             </abp-column>
         </abp-row>

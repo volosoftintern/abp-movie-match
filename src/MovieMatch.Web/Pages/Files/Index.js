@@ -15,26 +15,14 @@
         downloadWindow.focus();
     });
 
-    //$("#file").change(function () {
-    //    var fileName = $(this)[0].files[0].name;
-
-    //    $("#UploadFileDto_Name").val(fileName);
-    //});
-
-
     $("#upload").on('click',function (e) {
         e.preventDefault();
             
-        //if (!$(this).valid()) {
-        //    return false;
-        //}
-
         var formData = new FormData();
         var fileInput = document.getElementById('UploadFileDto_File');
         formData.append("Content", fileInput.files[0]);
         formData.append("Name", $('#UploadFileDto_Name').val());
-        //formData = FillNewEventFormData(formData);
-        console.log(fileInput);
+        
         var httpMetod = 'POST'
 
         $.ajax({
@@ -58,14 +46,7 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                //if (eventIdInput.val().length === 36) {
-                //    abp.notify.success('Updated event');
-                //} else {
-                //    abp.notify.success('Created event as a draft', '', toastr.options.timeOut = 2500);
-                //    //eventIdInput.val(response.id);
-                //    //eventUrlCodeInput.val(response.urlCode);
-                //}
-            //    SwitchToTrackCreation()
+                
             },
             error: function (errorRaw) {
                 abp.notify.error(errorRaw.responseJSON.error.message, 'Error',
