@@ -17,8 +17,6 @@
 @inject IHtmlLocalizer<CmsKitResource> L
 @model MovieMatch.Web.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
-
-
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(MyCmsUserDto author, DateTime creationTime) =>
         @<span>
@@ -40,11 +38,11 @@
      @<span>
          @if(starsCount==0)
         {
-         <small class="text float-end noRating" id="rating_@id">no rating done</small>
+         <small class="text float-end noRating" id="rating_@id">@L["NoRating"]</small>
         }
         else
         {
-           <small class="text-dark fa fa-star float-end givenRating" id="rating_@id">@starsCount/5 given rating</small>
+           <small class="text-dark fa fa-star float-end givenRating" id="rating_@id">@L["GivenRating",starsCount]</small>
          }  
      </span>;
 }
