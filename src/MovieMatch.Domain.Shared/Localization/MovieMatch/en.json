@@ -34,7 +34,22 @@
     "MovieId": "Movie Id",
     "UserId": "User Id",
     "MovieMatch:00001": "There is already added a movie with the same title: {title}",
-    "Menu:Explore":"Explore" 
+    "Menu:Explore":"Explore",
+    "Loading":"Loading...",
+    "NoPostData":"No Post Data",
+    "LoadMore":"Load More",
+    "NoMoreData":"No More Data",
+    "RemoveWatchLater":"Remove Watch Later",
+    "MovieAddedWatchLater":"Movie added watch later list.",
+    "Success":"Success",
+    "MovieAddedWatchedBefore":"Movie added watched before list.",
+    "RemoveWatchedBefore":"Remove Watched Before",
+    "SuccessfullyDeleted":"Successfully deleted!",
+    "AddWatchLater":"Add Watch Later",
+    "AddWatchedBefore":"Add Watched Before",
+    "Minute":"m",
+    "Hour":"h",
+    "Day":"d"
   }
 
 }

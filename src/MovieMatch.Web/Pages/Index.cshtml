@@ -14,7 +14,6 @@
 }
     @section scripts {
     <abp-script src="/Pages/Index.js" />
-    @*<abp-script type="typeof(SignalRBrowserScriptContributor)" />*@
 }
 
     <div class="container d-flex align-items-center flex-column mb-3">
@@ -22,14 +21,14 @@
         </div>
 
         <div class="spinner-border loader" role="status">
-            <span class="sr-only">Loading...</span>
+            <span class="sr-only">@L["Loading"]</span>
         </div>
 
         <h2 class="no-post-data">
-            No Post Data
+            @L["Loading"]
         </h2>
 
         <button class="btn btn-secondary btn-load-more">
-            Load More
+            @L["LoadMore"]
         </button>
 </div>

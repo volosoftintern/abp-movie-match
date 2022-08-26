@@ -5,7 +5,7 @@ $(function () {
     const maxResultCount = 10;
     const defaultImagePath = "default_picture.png";
     const rootImagePath = "/images/host/my-file-container/";
-
+    const l= abp.localization.getResource("MovieMatch");
     getPosts = async () => {
         await $('.loader').fadeIn().promise();
         
@@ -20,7 +20,7 @@ $(function () {
                     await $('.no-post-data').fadeIn().promise();
                 } else {
                     $('.btn-load-more').prop('disabled', true);
-                    $('.btn-load-more').text('No More Data');
+                    $('.btn-load-more').text(l('NoMoreData'));
                 }
             } 
 
@@ -93,10 +93,10 @@ $(function () {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
             $(`#${movieId}.btn-watch-later`).toggleClass("btn-primary btn-secondary");
-            $(`#${movieId}.btn-watch-later`).text("Remove Watch Later");
+            $(`#${movieId}.btn-watch-later`).text(l('RemoveWatchLater'));
             abp.notify.success(
-                'Movie added watch later list.',
-                'Success'
+                l('MovieAddedWatchLater'),
+                l('Success')
             );
         });
     }
@@ -104,41 +104,41 @@ $(function () {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
             $(`#${movieId}.btn-watched-before`).toggleClass("btn-primary btn-secondary");
-            $(`#${movieId}.btn-watched-before`).text("Remove Watched Before");
+            $(`#${movieId}.btn-watched-before`).text(l('RemoveWatchedBefore'));
             abp.notify.success(
-                'Movie added watched before list.',
-                'Success'
+                l('MovieAddedWatchedBefore'),
+                l('Success')
             );
         });
     }
 
     removeFromWatchLaterList = (id) => {
-        abp.message.confirm('Are you sure?')
+        abp.message.confirm(l('AreYouSure'))
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchLater(id)
                         .then(() => {
                             $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
-                            abp.notify.info("Successfully deleted!");
+                            abp.notify.info(l('SuccessfullyDeleted'));
                             $(`#${id}.btn-watch-later`).toggleClass("btn-secondary btn-primary");
-                            $(`#${id}.btn-watch-later`).text("Add Watch Later");
+                            $(`#${id}.btn-watch-later`).text(l('AddWatchLater'));
                             
                         })
                 }
             });
     };
     removeFromWatchedBeforeList = (id) => {
-        abp.message.confirm('Are you sure?')
+        abp.message.confirm(l('AreYouSure'))
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
                         .then(() => {
                             $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
-                            abp.notify.info("Successfully deleted!");
+                            abp.notify.info(l('SuccessfullyDeleted'));
                             $(`#${id}.btn-watched-before`).toggleClass("btn-secondary btn-primary");
-                            $(`#${id}.btn-watched-before`).text("Add Watched Before");
+                            $(`#${id}.btn-watched-before`).text(l('AddWatchedBefore'));
                         })
                 }
             });
@@ -166,7 +166,7 @@ $(function () {
 
             if (res.items.length < maxResultCount) {
                 $('.btn-load-more').prop('disabled', true);
-                $('.btn-load-more').html('No More Data');
+                $('.btn-load-more').html(l('NoMoreData'));
                 
             }
 
@@ -193,11 +193,11 @@ $(function () {
         const month = 30*day;
 
         if (diff < hour) {
-            return `${Math.floor(diff/minute)}m`;
+            return `${Math.floor(diff/minute)}${l('Minute')}`;
         } else if (diff < day) {
-            return `${Math.floor(diff/hour)}h`;
+            return `${Math.floor(diff/hour)}${l('Hour')}`;
         } else if (diff < month) {
-            return `${Math.floor(diff/day)}d`;
+            return `${Math.floor(diff/day)}${l('Day')}`;
         } 
 
         return date.toLocaleDateString();
