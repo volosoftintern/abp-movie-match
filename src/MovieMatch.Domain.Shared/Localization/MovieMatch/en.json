@@ -49,7 +49,15 @@
     "AddWatchedBefore":"Add Watched Before",
     "Minute":"m",
     "Hour":"h",
-    "Day":"d"
+    "Day":"d",
+    "Search":"Search",
+    "PopularMovies":"Popular Movies",
+    "MovieListTotalResult":"Total {0} results for \"{1}\"",
+    "MovieListNoResult":"No result for \"(1)\"",
+    "UnWatch":"Unwatch",
+    "WatchLater":"Watch Later",
+    "WatchedBefore":"Watched Before",
+    
   }
 
 }

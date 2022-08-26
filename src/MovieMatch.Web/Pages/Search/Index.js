@@ -3,16 +3,14 @@
     $paginationPopular = $('#pagination-popular');
     $paginationSearch = $('#pagination-search');
     
-
+    const l= abp.localization.getResource("MovieMatch");
     fetchPopularMovies = (event, page) => {
-
 
         event.preventDefault();
 
         movieMatch.search.search.getMovies({ currentPage: page }).done((response) => {
             $("#movie-list").empty();
             renderResults(response.results, $("#movie-list"));
-            //$paginationPopular.twbsPagination('changeTotalPages', { totalPages: response.totalPages, currentPage: 1 });
         })
     }
 
@@ -36,23 +34,18 @@
             renderResults(response.results, $("#movie-list"));
             await $('.loader').fadeOut().promise();
             await $('.movie-list-title').fadeIn().promise();
-            //pagination.twbsPagination('changeTotalPages', response.totalPages, 1);
-
         });
     }
 
     searchMovies = (ev, page) => {
-        event.preventDefault();
+        ev.preventDefault();
         $('.movie-list-title').fadeOut();
         $('.loader').fadeIn();
-
-
-        console.log(`SearchMovies: ${$("#movie-name").val()}`);
 
         movieMatch.search.search.getMovies({ name: $("#movie-name").val(), currentPage: page }).done((res) => {
 
             $("#movie-list").empty();
-            $('.movie-list-title').text(`Total ${res.totalResults} results for "${$("#movie-name").val()}"`);
+            $('.movie-list-title').text(l('MovieListTotalResult',res.totalResults,$("#movie-name").val()));
 
             $('.loader').fadeOut();
             $('.movie-list-title').fadeIn();
@@ -80,12 +73,11 @@
 
             $("#movie-list").empty();
             if (response.totalResults > 0) {
-                $('.movie-list-title').text(`Total ${response.totalResults} results for "${$("#movie-name").val()}"`);
+                $('.movie-list-title').text(l('MovieListTotalResult',response.totalResults,$("#movie-name").val()));
             } else {
-                $('.movie-list-title').text(`No result for "${$("#movie-name").val()}"`);
+                $('.movie-list-title').text(l('MovieListNoResult',$("#movie-name").val()));
             }
                 
-
             $('.loader').fadeOut();
             $('.movie-list-title').fadeIn();
 
@@ -98,20 +90,8 @@
                 totalPages: response.totalPages,
                 onPageClick: searchMovies
             })
-            //$('#pagination-search').twbsPagination('show', 1);
+            
             $('#pagination-search').twbsPagination('changeTotalPages', response.totalPages,1);
-
-            //$paginationSearch.twbsPagination({
-
-            //    startPage: 1,
-
-            //    totalPages: response.totalPages,
-
-            //    onPageClick: searchMovies
-            //})
-
-
-
         });
     })
 
@@ -130,8 +110,8 @@
                                     <p class="card-text movie-limited-overview">${val.overview}</p>
                                     <div class="d-flex justify-content-between">
                                         
-                                        <button type="button" class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? 'UnWatch' : 'Watch Later'} </a>
-                                        <button type="button" class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? 'UnWatch' : 'Watched Before'} </a>
+                                        <button type="button" class="btn btn-sm btn-watch-later ${val.isActiveWatchLater ? 'btn-danger' : 'btn-primary'}" id='${val.id}'>${val.isActiveWatchLater ? l('Unwatch') : l('WatchLater')} </a>
+                                        <button type="button" class="btn btn-sm btn-watched-before ${val.isActiveWatchedBefore ? 'btn-danger' : 'btn-secondary'}" id='${val.id}'>${val.isActiveWatchedBefore ? l('Unwatch') : l('WatchedBefore')} </a>
                                     </div>
                                 </div>
                             </div>
@@ -167,10 +147,10 @@
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
             $(`#${movieId}.btn-watch-later`).toggleClass("btn-primary btn-danger");
-            $(`#${movieId}.btn-watch-later`).text("UnWatch");
+            $(`#${movieId}.btn-watch-later`).text(l('Unwatch'));
             abp.notify.success(
-                    'Movie added watch later list.',
-                    'Success'
+                    l('MovieAddedWatchLater'),
+                    l('Success')
             );   
         });
     }
@@ -178,41 +158,41 @@
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {            
             $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
             $(`#${movieId}.btn-watched-before`).toggleClass("btn-secondary btn-danger");
-            $(`#${movieId}.btn-watched-before`).text("UnWatch");
+            $(`#${movieId}.btn-watched-before`).text(l('Unwatch'));
             abp.notify.success(
-                    'Movie added watched before list.',
-                    'Success'
+                    l('MovieAddedWatchedBefore'),
+                    l('Success')
             );   
         });
     }
 
     removeFromWatchLaterList = (id) => {
-        abp.message.confirm('Are you sure?')
+        abp.message.confirm(l('AreYouSure'))
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchLater(id)
                         .then(() => {
                             $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
-                            abp.notify.info("Successfully deleted!");
+                            abp.notify.info(l('SuccessfullyDeleted'));
                             $(`#${id}.btn-watch-later`).toggleClass("btn-danger btn-primary");
-                            $(`#${id}.btn-watch-later`).text("Watch Later");
+                            $(`#${id}.btn-watch-later`).text(l('WatchLater'));
                             
                         })
                 }
             });
     };
     removeFromWatchedBeforeList = (id) => {
-        abp.message.confirm('Are you sure?')
+        abp.message.confirm(l('AreYouSure'))
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
                         .then(() => {
                             $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
-                            abp.notify.info("Successfully deleted!");
+                            abp.notify.info(l('SuccessfullyDeleted'));
                             $(`#${id}.btn-watched-before`).toggleClass("btn-danger btn-secondary");
-                            $(`#${id}.btn-watched-before`).text("Watched Before");
+                            $(`#${id}.btn-watched-before`).text(l('WatchedBefore'));
                             
                         })
                 }
