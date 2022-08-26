@@ -73,7 +73,8 @@
     "UnFollowedUser":"Unfollowed User",
     "Upload":"Upload",
     "Download":"Download File",
-    "FileTitle":"File Upload and Download"
+    "FileTitle":"File Upload and Download",
+    "Send":"Send"
   }
 
 }
