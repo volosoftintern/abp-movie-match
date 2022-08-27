@@ -6,6 +6,7 @@
 @using Volo.Abp.Users
 @using Volo.Abp.Data
 @inject IStringLocalizer<MovieMatchResource> L
+@inject ICurrentUser _currentUser;
 @{
     var photoPath = "";
     if (Model.path != null)
@@ -57,10 +58,30 @@
                             <h4 class="my-0" style="margin-left:17px" id="username">
                                 @Model.UserName.Substring(0,1).ToUpper()@Model.UserName.Substring(1,(Model.UserName.Length-1)).ToLower()
                             </h4>
-                            <button type="button"
-                                class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light">@L["Follow"]</button>
-                            <button type="button"
-                                class="btn btn-soft-success btn-xs waves-effect mb-2 waves-light">@L["Message"]</button>
+                            @if(Model.UserName!=_currentUser.UserName)
+                            {
+                                @if (Model.isActive == false)
+                                {
+                                    <button type="button" id="followbtn" data-id="@Model.Id"
+                                    class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light followbtn">
+                                        Follow
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" id="followbtn" data-id="@Model.Id"
+                                    class="btn btn-soft-primary btn-xs waves-effect mb-2 waves-light">
+                                        UnFollow
+                                    </button>
+                                }
+                                <button type="button"
+                                    class="btn btn-soft-success btn-xs waves-effect mb-2 waves-light">
+                                    @L["Message"]
+                                </button>
+                            }
+                            
+                            
+                            
                         </div>
                     </div>
 

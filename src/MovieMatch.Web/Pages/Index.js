@@ -41,7 +41,7 @@ $(function () {
                     <div class="card-body">
                        
                         <h5 class="card-title">
-                        <img class="profile rounded-circle prep" src="${isNullOrUndefined(val.user.extraProperties.photo) ? rootImagePath+defaultImagePath : rootImagePath+val.user.extraProperties.photo}"/>  ${val.user.name}<span class="text-muted px-1">@<a href="${val.user.userName}">${val.user.userName}</a></span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span>
+                        <img class="profile rounded-circle prep" src="${isNullOrUndefined(val.user.extraProperties.photo) ? rootImagePath+defaultImagePath : rootImagePath+val.user.extraProperties.photo}"/>  ${val.user.name}<span class="text-muted px-1">@<a href="UserConnections/${val.user.userName}">${val.user.userName}</a></span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span>
                         </h5>
                         <h6 class="card-subtitle text-muted mb-1">${val.movie.title}</h6>
                         <a href="/Movies/${val.movie.id}">
