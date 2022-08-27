@@ -1,5 +1,4 @@
-﻿const defaultPicturePath = "/images/host/my-file-container/default_picture.png"
-
+﻿
 var l = abp.localization.getResource('MovieMatch');
 
 var dataTable = $('#UserConnectionsTable').DataTable(
@@ -57,7 +56,7 @@ followUser = (button) => {
     var id = btn.attr("id");
 
     if ((btn).attr("isActive") == 'false') {
-        movieMatch.userConnections.userConnection.follow(btn.attr("id"), btn.attr("isActive")).done(() => {
+        movieMatch.userConnections.userConnection.follow(btn.attr("id")).done(() => {
 
             (btn).text(l('UnFollowUser'));
             (btn).attr("isActive", 'true');
@@ -70,7 +69,7 @@ followUser = (button) => {
         });
     }
     else {
-        movieMatch.userConnections.userConnection.unFollow(id, isActive).done(() => {
+        movieMatch.userConnections.userConnection.unFollow(id).done(() => {
 
             (btn).attr("isActive", 'false');
 

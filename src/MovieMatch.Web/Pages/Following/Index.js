@@ -38,7 +38,8 @@
                             data: "isFollow",
                             render: function (data, type, row) {
                                 isActive = row.isFollow; var id = row.id;
-                                if (isActive === true) {
+                                
+                                if (isActive === false) {
                                     return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">${l('FollowUser')}</button>`
                                 }
                                 else {
@@ -59,8 +60,9 @@
 
 followUser = (button) => {
     var btn = $(button);
+    var l = abp.localization.getResource('MovieMatch');
     var id = btn.attr("id");
-
+   
     if ((btn).attr("isActive") == 'false') {
         movieMatch.userConnections.userConnection.follow(btn.attr("id"), btn.attr("isActive")).done(() => {
         
@@ -80,7 +82,7 @@ followUser = (button) => {
             
             $('#UserConnectionsTable').DataTable().ajax.reload();
             
-            (btn).text(l('FollowUser'));
+            (btn).text('Follow User');
             
             abp.notify.success(l('UnFollowedUser'));
             

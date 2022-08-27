@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -27,32 +29,33 @@ namespace MovieMatch.Web.Pages.UserConnections
         [BindProperty(SupportsGet =true)]
         public string UserName { get; set; }
         public bool Uploaded { get; set; } = false;
-        //  public OrganizationViewModel Organization { get; set; }
         private readonly IUserConnectionAppService _userConnectionService;
         private readonly ICurrentUser _currentUser;
         public string filepath { get; set; }
         private readonly IHostingEnvironment _env;
         private readonly IFileAppService _fileAppService;
+        private readonly IUserRepository _userRepository;
        
-       
+       public bool isActive { get; set; }
         public string path { get; set; }
         public int FollowersCount { get; set; }
+        public Guid Id { get; set; }
         public int FollowingCount { get; set; }
         [BindProperty]
         public IFormFile Photo { get; set; }
 
 
-        //    private readonly CurrentUser _currentUser;
-        //    public IdentityUser user;
+       
 
         public IndexModel()
         {
 
 
         }
-        public IndexModel(IFileAppService fileAppService,IHostingEnvironment env, IUserConnectionAppService userConnectionService, ICurrentUser currentUser)
+        public IndexModel(IUserRepository userRepository,IFileAppService fileAppService,IHostingEnvironment env, IUserConnectionAppService userConnectionService, ICurrentUser currentUser)
         {
-            _fileAppService= fileAppService;
+            _userRepository = userRepository;
+            _fileAppService = fileAppService;
             _env= env;
             _currentUser = currentUser;
             _userConnectionService = userConnectionService;
@@ -61,8 +64,18 @@ namespace MovieMatch.Web.Pages.UserConnections
        
         public async Task OnGetAsync()
         {
+            var userquery =await _userRepository.GetQueryableAsync();
             if (UserName == null)
+            {
                 UserName = _currentUser.UserName;
+            }
+            var user= userquery.FirstOrDefault(x => x.UserName == UserName);
+
+            isActive = (bool)user.GetProperty("isFollow");
+            Id = user.Id;
+
+            
+                
             FollowersCount = (await _userConnectionService.GetFollowersCount( UserName));
             FollowingCount =(await _userConnectionService.GetFollowingCount(UserName));
 

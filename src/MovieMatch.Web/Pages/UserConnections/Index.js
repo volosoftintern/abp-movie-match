@@ -1,8 +1,8 @@
 ﻿$(function () {
-
+    
     var followersInfoModal, followingInfoModal;
 
-    var isActive, ids, names;
+    
 
 
     followingInfoModal = new abp.ModalManager({
@@ -54,7 +54,6 @@ $(document).ready(function () {
 
 
 
-
 $("#UploadFileDto_File").on('change', function (e) {
     e.preventDefault();
 
@@ -98,6 +97,37 @@ $("#UploadFileDto_File").on('change', function (e) {
 
 
 
+
+$(document).ready(function () {
+
+    $('#followbtn').on('click', function () {
+        var btn = $(this);
+        if (btn.text().trim() == 'Follow') {
+
+            movieMatch.userConnections.userConnection.follow(btn.data("id")).done(() => {
+                btn.text('UnFollow');
+                abp.notify.success('Followed User');
+                var count = parseInt($('#followers').text());
+                count++;
+                $('#followers').text(count);
+            });
+
+
+        }
+        if (btn.text().trim() == 'UnFollow') {
+            movieMatch.userConnections.userConnection.unFollow(btn.data("id")).done(() => {
+                btn.text('Follow');
+                abp.notify.success('UnFollowed User');
+                var count = parseInt($('#followers').text());
+                count--;
+                $('#followers').text(count);
+
+            });
+        }
+    });
+
+
+});
 
 
 
