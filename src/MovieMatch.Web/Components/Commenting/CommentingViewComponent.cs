@@ -1,4 +1,4 @@
-﻿using System;
+﻿        using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,7 +61,8 @@ public class CommentingViewComponent : AbpViewComponent
     }
     public virtual async Task<IViewComponentResult> InvokeAsync(
         string entityType,
-        string entityId,int currPage,MovieDetailDto movie)
+        string entityId,
+        int currPage)
     {
 
         var comments = (await CommentPublicAppService

@@ -97,12 +97,7 @@
                         count = c;
                     });
                     if (element.path != null) {
-                        list.append(`
-                    
-                    
-                    
-                    
-                  
+                        list.append(`                  
                     <div class="card d-flex flex-row">
 
                      <div class="col-sm-2 d-flex flex-column justify-content-around">

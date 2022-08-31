@@ -34,7 +34,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     protected RatingManager RatingManager { get; }
     protected ICommentRepository CommentRepository { get; }
     protected IIdentityUserRepository _userRepository { get; }
-    public int pageNumber;
 
     private const int maxItem = 5;
 
@@ -51,7 +50,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         CmsUserLookupService = cmsUserLookupService;
         RatingManager = ratingManager;
         CommentPublicAppService = commentPublicAppService;
-        pageNumber = new int();
     }
 
 
@@ -110,7 +108,7 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
     public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId, int currPage)
     {
-        var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
+        var comments = CommentRepository.GetListWithAuthorsAsync(entityType, entityId).Result.Skip((currPage - 1) * maxItem).Take(maxItem).OrderByDescending(c => c.Comment.CreationTime).ToList();
 
         var parentComments = comments
             .Where(c => c.Comment.RepliedCommentId == null)
@@ -121,7 +119,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
                 comment.Author = ObjectMapper.Map<CmsUser, MyCmsUserDto>(c.Author);
                 return comment;
             })
-            .Skip((currPage-1)*maxItem).Take(maxItem)
             .ToList();
 
         var semaphore = new SemaphoreSlim(1);
