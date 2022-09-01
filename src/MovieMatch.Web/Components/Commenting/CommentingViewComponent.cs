@@ -65,8 +65,6 @@ public class CommentingViewComponent : AbpViewComponent
         int currPage)
     {
 
-        var comments = (await CommentPublicAppService
-            .GetListAsync(entityType, entityId)).Items;
         
         var loginUrl = $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
        
@@ -77,7 +75,6 @@ public class CommentingViewComponent : AbpViewComponent
             EntityId = entityId,
             EntityType = entityType,
             LoginUrl = loginUrl,
-            Comments = comments.OrderByDescending(i => i.CreationTime).ToList(),
             Movie =await _movieAppService.GetAsync(id), 
             CommentsWithStars =await  _ratingPublicAppService.GetCommentsWithRatingAsync(entityType, entityId,currPage)
         };
@@ -92,7 +89,7 @@ public class CommentingViewComponent : AbpViewComponent
     {
         viewModel.RawCommentTexts = new Dictionary<Guid, string>();
 
-        foreach (var comment in viewModel.Comments)
+        foreach (var comment in viewModel.CommentsWithStars)
         {
             viewModel.RawCommentTexts.Add(comment.Id, comment.Text);
             comment.Text = await MarkdownToHtmlRenderer.RenderAsync(comment.Text, true);

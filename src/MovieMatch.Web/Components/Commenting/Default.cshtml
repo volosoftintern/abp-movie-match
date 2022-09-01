@@ -4,6 +4,7 @@
 @using Microsoft.JSInterop
 @using MovieMatch
 @using MovieMatch.Comments
+@using MovieMatch.Localization
 @using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
 @using Volo.CmsKit.GlobalFeatures
@@ -15,37 +16,36 @@
 @inject ICurrentUser CurrentUser
 @inject IOptionsSnapshot<CmsKitUiOptions> cmsKitUiOptions;
 @inject IHtmlLocalizer<CmsKitResource> L
+@inject IHtmlLocalizer<MovieMatchResource> Localization
 @model MovieMatch.Web.Components.Commenting.CommentingViewComponent.CommentingViewModel
-
-
 
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(MyCmsUserDto author, DateTime creationTime) =>
     @<span>
-                <i class="far fa-comment-alt me-2"></i>
+        <i class="far fa-comment-alt me-2"></i>
 
-            <img class="profile rounded-circle" src="@author.Path">
-                @((string.IsNullOrWhiteSpace(author.Name)
+        <img class="profile rounded-circle" src="@author.Path">
+        @((string.IsNullOrWhiteSpace(author.Name)
 
-        ? author.UserName
-        :author.Name+ " " + author.Surname).Trim())
+            ? author.UserName
+            : author.Name + " " + author.Surname).Trim())
 
-       
-            <a class="text-muted float-end creationTime" >@creationTime.ToString()</a> 
-                <a class="text-muted float-end title " href="@Model.EntityId">@(Model.Movie.Title)</a> 
+
+        <a class="text-muted float-end creationTime">@creationTime.ToString()</a>
+        <a class="text-muted float-end title " href="@Model.EntityId">@(Model.Movie.Title)</a>
     </span>;
 }
 @{
-     Func<dynamic, IHtmlContent> GetCommentStar(int starsCount,Guid? id) =>
+    Func<dynamic, IHtmlContent> GetCommentStar(int starsCount, Guid? id) =>
     @<span>
-             @if(starsCount==0)
-        {
-             <small class="text float-end noRating" id="rating_@id">no rating done</small>
-        }
-        else
-        {
-               <small class="text-dark fa fa-star float-end givenRating" id="rating_@id">@starsCount/5 given rating</small>
-         }  
+        @if (starsCount == 0)
+                {
+         <small class="text float-end noRating" id="rating_@id">@Localization["NoRating"]</small>
+                }
+                else
+                {
+         <small class="text-dark fa fa-star float-end givenRating" id="rating_@id"> @Localization["GivenRating",new object [] { starsCount }]</small>
+                }
     </span>;
 }
 
@@ -53,99 +53,99 @@
 @{
     Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
     @<div class="cms-comment-form-area bg-light card p-3 mx-0  @(repliedCommentId.HasValue ? "my-3" : "mt-3")"
-                  data-reply-id="@(repliedCommentId?.ToString() ?? "")"
-                  style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
-            <form class="cms-comment-form">
-                <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
-                <div class="row commentArea">
-                    <div class="col commetColumn">
-                        <div class="mb-3 m-0">
-                            <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
-                        </div>
+              data-reply-id="@(repliedCommentId?.ToString() ?? "")"
+              style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
+        <form class="cms-comment-form">
+            <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
+            <div class="row commentArea">
+                <div class="col commetColumn">
+                    <div class="mb-3 m-0">
+                        <textarea class="form-control" name="commentText" placeholder="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"])..." rows="3"></textarea>
                     </div>
-                    <div class="col-auto">
-                        <div class="text-end">
-                            <abp-button type="submit" button-type="Light" size="Block" class="abpBtn">
-                                <i class="fa fa-comment-alt me-1"></i> @L["Send"]
-                            </abp-button>
-                            @if (cancelButton)
-                            {
-                                    <abp-button type="button" button-type="Light" class="reply-cancel-button mb-2" size="Block_Small" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
-                                        <i class="fa fa-times me-1"></i>  @L["Cancel"]
-                                    </abp-button>
-                            }
-                            </div>
-                        </div>
+                </div>
+                <div class="col-auto">
+                    <div class="text-end">
+                        <abp-button type="submit" button-type="Light" size="Block" class="abpBtn">
+                            <i class="fa fa-comment-alt me-1"></i> @L["Send"]
+                        </abp-button>
+                        @if (cancelButton)
+                {
+                        <abp-button type="button" button-type="Light" class="reply-cancel-button mb-2" size="Block_Small" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
+                            <i class="fa fa-times me-1"></i>  @L["Cancel"]
+                        </abp-button>
+                }
+                    </div>
+                </div>
 
-                    </div>
-                </form>
+            </div>
+        </form>
     </div>;
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, string text) =>
-    @<div class="cms-comment-content-area" data-id="@id.ToString()" id=@id.ToString()>
-            <p class="m-0" id=p_@id.ToString()>
-                @Html.Raw(text)
-            </p>
+    @<div class="cms-comment-content-area" data-id="@id.ToString()" id="edit_@id.ToString()">
+        
+            @Html.Raw(text)
+
     </div>;
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentActionArea(Guid id, Guid authorId, bool isReply) =>
     @<div class="inner-comment-buttons text-start">
-            @if (!isReply)
-            {
-                    @if (CurrentUser.IsAuthenticated)
+        @if (!isReply)
                 {
-                        <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}_{id}_link")">
-                            <i class="fa fa-reply mr -1"></i> @L["Reply"]
-                        </a>
+        @if (CurrentUser.IsAuthenticated)
+        {
+            <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}_{id}_link")">
+                <i class="fa fa-reply mr -1"></i> @L["Reply"]
+            </a>
+        }
+        else
+        {
+            <a href="@(Model.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
+        }
                 }
-                else
+        @if (authorId == CurrentUser.Id)
                 {
-                        <a href="@(Model.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm"> @L["LoginToReply"]</a>
+        <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-id="@id.ToString()">
+            <i class="fa fa-trash  mr -1"></i> @L["Delete"]
+        </a>
+        <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="@id.ToString()">
+            <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
+        </a>
                 }
-            }
-                @if (authorId == CurrentUser.Id)
-            {
-                    <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-id="@id.ToString()">
-                        <i class="fa fa-trash  mr -1"></i> @L["Delete"]
-                    </a>
-                    <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="@id.ToString()">
-                        <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
-                    </a>
-            }
     </div>;
 }
 @{
     Func<dynamic, IHtmlContent> GetEditArea(Guid id, string text, string concurrencyStamp) =>
     @<div class="cms-comment-edit-area" id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}_{id}")" data-id="@id.ToString()" style="display:none">
-            <div class="card bg-light p-3 mx-0 mt-3">
-                <form class="cms-comment-update-form">
-                    <input hidden value="@id.ToString()" name="id" />
-                    <div class="row editRow">
-                        <div class="col">
-                            <div class="mb-3 m-0">
-                                <textarea class="form-control" name="commentText" rows="3">@text</textarea>
-                                <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="text-end">
-                                <abp-button type="submit" button-type="Light" size="Block"> @L["Update"] </abp-button>
-                                <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
-                            </div>
-                        </div>
-                        <div class="mt-0">
-                            <small class="text-muted float-start">@L["MarkdownSupported"]</small>
+        <div class="card bg-light p-3 mx-0 mt-3">
+            <form class="cms-comment-update-form">
+                <input hidden value="@id.ToString()" name="id" />
+                <div class="row editRow">
+                    <div class="col">
+                        <div class="mb-3 m-0">
+                            <textarea class="form-control" name="commentText" rows="3">@text</textarea>
+                            <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-auto">
+                        <div class="text-end">
+                            <abp-button type="submit" button-type="Light" size="Block"> @L["Update"] </abp-button>
+                            <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
+                        </div>
+                    </div>
+                    <div class="mt-0">
+                        <small class="text-muted float-start">@L["MarkdownSupported"]</small>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>;
 }
 
 @{
-    Func<dynamic, IHtmlContent> GetCommentRepliesArea(MovieMatch.Comments.CommentDto reply,CommentWithStarsDto comment) =>
+    Func<dynamic, IHtmlContent> GetCommentRepliesArea(MovieMatch.Comments.CommentDto reply, CommentWithStarsDto comment) =>
     @<div class="cms-comment-replies-area" data-reply-id="@(reply.RepliedCommentId?.ToString())">
         <div class="bg-light card p-3 mx-0 mt-3">
             <div class="comment">
@@ -153,7 +153,7 @@
                     @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
                     @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                 </h5>
-                
+
                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
                 <div class="row mt-2 commentsRow2">
@@ -174,17 +174,14 @@
 
                 @GetEditArea(reply.Id, Model.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
             </div>
-            </div>
+        </div>
     </div>;
 }
 
-<div class="commentss" id=cms-commentsId>
-    </div>
+<div class="cms-comment-area mb-5" id="cms-comment" data-content="@Model.EntityId" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
-    <div class="cms-comment-area mb-5" id="cms-comment" data-content="@Model.EntityId" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
-    
-    @if(CurrentUser.IsAuthenticated)
+    @if (CurrentUser.IsAuthenticated)
     {
         <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
             @GetCommentArea(null).Invoke(null)
@@ -197,51 +194,53 @@
         </div>
     }
 
-	
-  
-        @foreach (var comment in Model.CommentsWithStars)
-        {
+
+
+    @foreach (var comment in Model.CommentsWithStars)
+    {
         <div class="comment-stars" id="@(comment.Id)">
 
-                <div class="card p-3 mx-0 my-3">
-                    <h5>
-                        @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
-                        @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
-                    </h5>
+            <div class="card p-3 mx-0 my-3">
+                <h5>
+                    @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
+                    @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
+                </h5>
+                
+                @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-                    @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
-
-                    <div class="row mt-2 commentsRow">
-                        <div class="col">
-                            <div class="my-2 ">
-                                @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="reaction-in-comment">
-                                @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                                {
-                                    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
-                                }
-                            </div>
+                <div class="row mt-2 commentsRow">
+                    <div class="col">
+                        <div class="my-2 ">
+                            @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
                         </div>
                     </div>
-
-                    @GetEditArea(comment.Id, Model.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
-
-                    @if (comment.Replies.Any())
-                    {
-                        @foreach (var reply in comment.Replies)
-                        {
-                            @GetCommentRepliesArea(reply,comment).Invoke(null)
-                        }
-                    }
-                    @if (@CurrentUser.IsAuthenticated)
-                    {
-                        @GetCommentArea(comment.Id, true).Invoke(null)
-                    }
+                    <div class="col-auto">
+                        <div class="reaction-in-comment">
+                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                            {
+                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-        }
 
-   </div>
+                @GetEditArea(comment.Id, Model.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
+
+                @if (comment.Replies.Any())
+                {
+                    @foreach (var reply in comment.Replies)
+                    {
+                        @GetCommentRepliesArea(reply,comment).Invoke(null)
+                        ;
+                    }
+                }
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    @GetCommentArea(comment.Id, true).Invoke(null)
+                }
+            </div>
+        </div>
+    }
+
+</div>
+

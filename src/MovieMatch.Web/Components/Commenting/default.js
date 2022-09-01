@@ -118,7 +118,8 @@
                         var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + data.id + ']');
                         $relatedCommentEditArea.hide();
                         $relatedCommentContentArea.show();
-                        $("#p_" + data.id).text(data.text)
+                        debugger;
+                        $(`#edit_${data.id}>p`).text(data.text)
 
                     });
                 });
@@ -146,12 +147,8 @@
                                 text: formAsObject.commentText
                             }
                         ).then(function (data) {
-                            var $relatedCommentFormArea = $container.find('.cms-comment-form-area[data-reply-id=' + data.repliedCommentId + ']');
-                            
-                            var id = data.repliedCommentId;
                             //reply or new comment control
                             if ($form[0][3]) {
-                               
                                 widgetManager.refresh()
                                 currentPage--;
                             }
@@ -163,8 +160,7 @@
                                     type: 'GET',
                                     success: function (data) {
                                         $("#cms-comment").empty();
-                                        $("#cms-commentsId").prepend(data);
-
+                                        $("#cms-comment").prepend(data);
                                     }
                                 })
                             }
