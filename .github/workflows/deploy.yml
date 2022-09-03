@@ -14,6 +14,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Set Connection String for Production
+        uses: bariscanyilmaz/paste-secret@v1.1
+        with:
+          secrets: >
+            [
+              { "filename": "src/MovieMatch/MovieMatch.Web/appsettings.Production.json", "keys": [{"key": "CONNECTION_STRING","value": "${{secrets.CONNECTION_STRING}}"}]},
+              { "filename": "src/MovieMatch/MovieMatch.DbMigrator/appsettings.Production.json", "keys": [{"key": "CONNECTION_STRING","value": "${{secrets.CONNECTION_STRING}}"}]}
+            ]
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
