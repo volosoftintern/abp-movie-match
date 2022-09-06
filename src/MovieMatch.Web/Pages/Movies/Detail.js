@@ -41,10 +41,12 @@
             $(`#idWatchedBefore`).attr("data-content", "True");
             $(`#idWatchedBefore`).css({ "background-color": "red", "font-size": "13px" });
             $(`#idWatchedBefore`).text("Remove from watched before list");
+            watchersList(movieId);
             abp.notify.success(
                 'Movie added watched before list.',
                 'Success'
             );
+            
         });
     }
 
@@ -72,12 +74,12 @@
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
-                        .then(() => {
+                        .then(() => {                            
                             $(`#idWatchedBefore`).attr("data-content", "False");
                             abp.notify.info("Successfully deleted!");
                             $(`#idWatchedBefore`).css("background-color", "grey");
                             $(`#idWatchedBefore`).text("Add to watched before list");
-                            
+                            watchersList(id);
                             dataTable.ajax.reload();
                         })
                 }
@@ -88,9 +90,8 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
-            if (res.length == 0) list.append(` <div class="no watchers">no watchers yet</div>`)
+            if (res.length == 0) list.append(` <div class="d-flex justify-content-around">no watchers yet</div>`)
             else {
-                console.log(res);
                 for (var element of res) {
                     var count = 0;
                     await getCount(element.id).then((c) => {
@@ -160,18 +161,12 @@
         btn = $(button);
         if (btn.text() == 'Follow') {
             movieMatch.userConnections.userConnection.follow(btn.attr('id'), btn.attr('isFollow')).done(() => {
-
                 btn.text('UnFollow');
-
-
             });
         }
         else{
             movieMatch.userConnections.userConnection.unFollow(btn.attr('id'), btn.attr('isFollow')).done(() => {
-
                 btn.text('Follow');
-
-
             });
         }
     }

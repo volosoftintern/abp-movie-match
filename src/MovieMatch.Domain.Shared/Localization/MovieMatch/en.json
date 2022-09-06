@@ -78,7 +78,7 @@
     "AboutMe": "About Me",
     "Message": "Message",
     "NoRating": "No given rating",
-    "GivenRating": "Given Rating {0}",
+    "GivenRating": "{0}/5 Given Rating ",
     "SimilarMovies": "Similar Movies ({0})"
   }
 

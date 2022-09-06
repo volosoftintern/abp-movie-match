@@ -108,6 +108,7 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
     public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId, int currPage)
     {
+
         var comments =await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 
         var parentComments = comments

@@ -64,7 +64,6 @@
 
                             ).then(function () {
                                 widgetManager.refresh($widget);
-                                debugger;
                                 var id =`rating_${abp.currentUser.id}`
                                 $(`[id=${id}]`).text("No given rating")                                
                             });

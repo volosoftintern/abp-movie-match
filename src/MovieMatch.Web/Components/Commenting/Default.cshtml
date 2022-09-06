@@ -40,11 +40,11 @@
     @<span>
         @if (starsCount == 0)
                 {
-         <small class="text float-end noRating" id="rating_@id">@Localization["NoRating"]</small>
+        <small class="text-dark fa fa-star float-end d-flex" id="rating_@id">@Localization["NoRating"]</small>
                 }
                 else
                 {
-         <small class="text-dark fa fa-star float-end givenRating" id="rating_@id"> @Localization["GivenRating",new object [] { starsCount }]</small>
+         <small class="text-dark fa fa-star float-end" id="rating_@id"> @Localization["GivenRating",new object [] { starsCount }]</small>
                 }
     </span>;
 }
@@ -146,29 +146,23 @@
 
 @{
     Func<dynamic, IHtmlContent> GetCommentRepliesArea(MovieMatch.Comments.CommentDto reply, CommentWithStarsDto comment) =>
-    @<div class="cms-comment-replies-area" data-reply-id="@(reply.RepliedCommentId?.ToString())">
+    @<div class="cms-comment-replies-area" data-reply-id="@(reply.RepliedCommentId?.ToString())" data-id=@reply.Id>
         <div class="bg-light card p-3 mx-0 mt-3">
             <div class="comment">
                 <h5>
                     @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
-                    @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                 </h5>
 
                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
                 <div class="row mt-2 commentsRow2">
                     <div class="col">
-                        <div class="my-2">
                             @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
-                        </div>
+                        
                     </div>
-                    <div class="col-auto">
-                        <div class="reaction-in-comment">
-                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                {
-                            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
-                }
-                        </div>
+
+                    <div class="col-auto commentStar">
+                         @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)  
                     </div>
                 </div>
 
@@ -203,7 +197,6 @@
             <div class="card p-3 mx-0 my-3">
                 <h5>
                     @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
-                    @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)
                 </h5>
                 
                 @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
@@ -212,15 +205,11 @@
                     <div class="col">
                         <div class="my-2 ">
                             @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
+                           
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="reaction-in-comment">
-                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                            {
-                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
-                            }
-                        </div>
+                    <div class="col-auto commentStar">
+                         @GetCommentStar(comment.StarsCount,comment.CreatorId).Invoke(null)  
                     </div>
                 </div>
 

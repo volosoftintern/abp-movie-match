@@ -10,7 +10,7 @@
         function getFilters() {
             return {
                 entityType: $commentArea.attr('data-entity-type'),
-                entityId: $commentArea.attr('data-entity-id')
+                entityId: $commentArea.attr('data-entity-id'),
             };
         }
 
@@ -84,15 +84,16 @@
                 var $link = $(this);
                 $link.on('click', '', function (e) {
                     e.preventDefault();
-                    var $relatedCommentReplyArea = $(`#${$link.data('id') }.comment-stars`)
+                    var id = $link.data('id');
+                    var $relatedCommentReplyArea = $(`#${id}.comment-stars`)
+                    var $relatedCommentRepliesArea = $container.find('.cms-comment-replies-area[data-id=' + id+ ']');
                     abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
                         if (ok) {
                             volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
                             ).then(function () {
-                                var id = $link.data('id');
                                 abp.notify.info(l('SuccessfullyDeleted'));
-                                //$("#" + id).css("display", "none");
                                 $relatedCommentReplyArea.hide()
+                                $relatedCommentRepliesArea.hide()
                             });
                         }
                     });
@@ -118,7 +119,6 @@
                         var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + data.id + ']');
                         $relatedCommentEditArea.hide();
                         $relatedCommentContentArea.show();
-                        debugger;
                         $(`#edit_${data.id}>p`).text(data.text)
 
                     });
@@ -150,7 +150,7 @@
                             //reply or new comment control
                             if ($form[0][3]) {
                                 widgetManager.refresh()
-                                currentPage--;
+                                currentPage=1
                             }
                             else {
                                 currentPage = 1;
@@ -227,11 +227,9 @@
         if (scrollTop + clientHeight >= scrollHeight - 5 &&
             hasMoreComments(currentPage, limit, total)) {
             var id = $("#cms-comment").attr("data-content");
-            currentPage++;
             $.ajax({
-
                 url: '/Comments/MyViewComponent/',
-                data: { entityType: "Movie", entityId: id, currPage: currentPage },
+                data: { entityType: "Movie", entityId: id, currPage: ++currentPage },
                 type: 'GET',
                 success: function (data) {
                     var pos = data.search('<div class="comment-stars"');

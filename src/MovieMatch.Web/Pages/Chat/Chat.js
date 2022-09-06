@@ -5,7 +5,6 @@ $(function () {
     var connection = new signalR.HubConnectionBuilder().withUrl("/signalr-hubs/chat").build();
 
     connection.on("ReceiveMessage", function (targetUserName,text) {
-        debugger;
         let row = document.createElement('div');
         row.className = "row"
 
