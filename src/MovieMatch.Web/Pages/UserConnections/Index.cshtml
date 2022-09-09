@@ -109,7 +109,13 @@
                                         class="text-muted mt-1 mb-2 fw-normal">@L["Following"]</abp-button>
                                     <h2 id="following" class="mb-0 fw-bold">@Model.FollowingCount</h2>
                                 </div>
+                                <div class="col-4 border-end border-light">
 
+                                    <abp-button id="showWatchedMovies" data-name="@Model.UserName"
+                                                class="text-muted mt-1 mb-2 fw-normal">@L["MoviesIWatchedBefore"]</abp-button>
+                                    <h2 id="watchedMovies" class="mb-0 fw-bold">@Model.WatchedMoviesCount</h2>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
