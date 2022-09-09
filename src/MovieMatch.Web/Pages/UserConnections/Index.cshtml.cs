@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MovieMatch.MoviesWatchedBefore;
 using MovieMatch.UserConnections;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace MovieMatch.Web.Pages.UserConnections
         public string UserName { get; set; }
         public bool Uploaded { get; set; } = false;
         private readonly IUserConnectionAppService _userConnectionService;
+        private readonly IWatchedBeforeAppService _watchedBeforeAppService;
         private readonly ICurrentUser _currentUser;
         public string filepath { get; set; }
         private readonly IHostingEnvironment _env;
@@ -39,6 +41,7 @@ namespace MovieMatch.Web.Pages.UserConnections
        public bool isActive { get; set; }
         public string path { get; set; }
         public int FollowersCount { get; set; }
+        public int WatchedMoviesCount { get; set; }
         public Guid Id { get; set; }
         public int FollowingCount { get; set; }
         [BindProperty]
@@ -52,8 +55,9 @@ namespace MovieMatch.Web.Pages.UserConnections
 
 
         }
-        public IndexModel(IUserRepository userRepository,IFileAppService fileAppService,IHostingEnvironment env, IUserConnectionAppService userConnectionService, ICurrentUser currentUser)
+        public IndexModel(IUserRepository userRepository,IFileAppService fileAppService,IHostingEnvironment env, IUserConnectionAppService userConnectionService, ICurrentUser currentUser,IWatchedBeforeAppService watchedBeforeAppService)
         {
+            _watchedBeforeAppService = watchedBeforeAppService;
             _userRepository = userRepository;
             _fileAppService = fileAppService;
             _env= env;
@@ -78,6 +82,7 @@ namespace MovieMatch.Web.Pages.UserConnections
                 
             FollowersCount = (await _userConnectionService.GetFollowersCount( UserName));
             FollowingCount =(await _userConnectionService.GetFollowingCount(UserName));
+            WatchedMoviesCount = await _watchedBeforeAppService.GetCountAsync(user.Id);
 
             path =await _userConnectionService.GetPhotoAsync(UserName);
           

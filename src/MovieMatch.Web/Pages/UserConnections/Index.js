@@ -16,6 +16,12 @@
         scriptUrl: '/Pages/Followers/Index.js'
 
     });
+    watchedMoviesInfoModal = new abp.ModalManager({
+        viewUrl: '/WatchedMovies/WatchedMoviesInfoModal',
+        modalClass: 'WatchedMoviesInfo',
+        scriptUrl: '/Pages/WatchedMovies/Index.js'
+
+    });
 
 
     $('#showFollowing').click(function () {
@@ -24,6 +30,12 @@
 
 
         followingInfoModal.open({ username: username });
+    });
+    $('#showWatchedMovies').click(function () {
+       
+
+
+        watchedMoviesInfoModal.open();
     });
 
 
