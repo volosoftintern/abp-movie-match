@@ -41,7 +41,9 @@
                             }
                         ).then(function (starCount) {
                             widgetManager.refresh($widget);
-                            $("#rating_"+abp.currentUser.id).text(l('GivenRating',starCount.starCount))
+                            var id = `rating_${abp.currentUser.id}`
+                            $(`[id=${id}]`).text(l('GivenRating',starCount.starCount))                            
+
                         })
                     }
                 });
@@ -60,9 +62,13 @@
                             volo.cmsKit.public.ratings.ratingPublic.delete(
                                 $ratingArea.attr("data-entity-type"),
                                 $ratingArea.attr("data-entity-id")
+
                             ).then(function () {
+
                                 $("#rating_" + abp.currentUser.id).text(l('NoRating'))
                                 widgetManager.refresh($widget);
+                                var id =`rating_${abp.currentUser.id}`
+                                $(`[id=${id}]`).text("No given rating")                                
                             });
                         }
                     })

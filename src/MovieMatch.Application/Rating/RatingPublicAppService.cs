@@ -34,7 +34,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     protected RatingManager RatingManager { get; }
     protected ICommentRepository CommentRepository { get; }
     protected IIdentityUserRepository _userRepository { get; }
-    public int pageNumber;
 
     private const int maxItem = 5;
 
@@ -51,7 +50,6 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
         CmsUserLookupService = cmsUserLookupService;
         RatingManager = ratingManager;
         CommentPublicAppService = commentPublicAppService;
-        pageNumber = new int();
     }
 
 
@@ -110,7 +108,8 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
     public virtual async Task<List<CommentWithStarsDto>> GetCommentsWithRatingAsync(string entityType, string entityId, int currPage)
     {
-        var comments = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
+
+        var comments =await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 
         var parentComments = comments
             .Where(c => c.Comment.RepliedCommentId == null)
@@ -121,11 +120,10 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
                 comment.Author = ObjectMapper.Map<CmsUser, MyCmsUserDto>(c.Author);
                 return comment;
             })
-            .Skip((currPage-1)*maxItem).Take(maxItem)
-            .ToList();
+            .Skip((currPage - 1) * maxItem).Take(maxItem).ToList();
 
-
-        parentComments.ForEach((x) =>
+        var semaphore = new SemaphoreSlim(1);
+        parentComments.ForEach( (x) =>
         {
             x.Author = GetAuthorAsDtoFromCommentList(comments, x.Id);
             x.Path = string.IsNullOrEmpty(x.Author.Path) ? ProfilePictureConsts.DefaultPhotoPath : x.Author.Path;
@@ -135,14 +133,21 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
 
             x.Replies.ForEach(async (r) =>
             {
-                var user = await _userRepository.GetAsync(r.CreatorId);
-                r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
-                r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
+                try
+                {
+                    await semaphore.WaitAsync();
+                    var user = await _userRepository.GetAsync(r.CreatorId);
+                    r.Author = GetAuthorAsDtoFromCommentList(comments, r.Id);
+                    r.Author.Path = user.GetProperty(ProfilePictureConsts.PhotoProperty, ProfilePictureConsts.DefaultPhotoPath);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             });
-
+            
         });
 
-        var semaphore = new SemaphoreSlim(1);
 
         var res= (await Task.WhenAll(parentComments.Select(async (c) =>
         {

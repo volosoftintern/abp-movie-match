@@ -286,10 +286,14 @@ namespace MovieMatch.UserConnections
             {
                 if(k<users.Count-1)
                 {
-                    if(similarityList[k] > 0.5)
+                    if(similarityList.Count>k && similarityList[k] > 0.5)
                     {
                         var identityUserDto=ObjectMapper.Map<IdentityUser,IdentityUserDto>(item);
                         userDto.Add(identityUserDto);
+                    }
+                    else if (similarityList.Count==0)
+                    {
+                        return null;
                     }
                     k++;
                 }
@@ -316,7 +320,11 @@ namespace MovieMatch.UserConnections
                         mag1 += Math.Pow(A[index, j], 2);
                         mag2 += Math.Pow(A[i, j], 2);
                     }
-                    similarityList.Add(dot / (Math.Sqrt(mag1) * Math.Sqrt(mag2)));
+                    if(mag1!=0 && mag2!=0)
+                    {
+                        similarityList.Add(dot / (Math.Sqrt(mag1) * Math.Sqrt(mag2)));
+                    }
+                    
                 }
                 i++;
             }

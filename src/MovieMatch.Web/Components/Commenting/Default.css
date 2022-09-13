@@ -6,31 +6,14 @@
     opacity: 1;
     position: relative;
     font-size: 14px;
-    left: 18px;
-    top: 76px;
+    left: -25px;
+    top: 150px;
 }
 
-.noRating {
-    opacity: 1;
-    font-size: 14px;
-    color: slateblue;
-    position: relative;
-    opacity: 1;
-    font-size: 14px;
-    color: slateblue;
-    left: 277px;
-    top: 75px;
+.commentStar{
+display:flex;
+align-items:center;
 }
-
-.givenRating {
-    opacity: 1;
-    position: relative;
-    left: 296px;
-    top: 78px;
-    font-size: 14px;
-    color: slateblue;
-}
-
 .commentArea {
     min-height: 95px;
     height: 20px;

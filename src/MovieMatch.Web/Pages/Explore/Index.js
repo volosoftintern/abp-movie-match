@@ -17,9 +17,7 @@ var dataTable = $('#UserConnectionsTable').DataTable(
                     data: "path",
 
                     render: function (data) {
-
-                        return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
-
+                            return `<img class="profile rounded-circle" src="${data}"/>`
                     }
                 },
                 {

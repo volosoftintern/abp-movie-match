@@ -10,7 +10,7 @@
         function getFilters() {
             return {
                 entityType: $commentArea.attr('data-entity-type'),
-                entityId: $commentArea.attr('data-entity-id')
+                entityId: $commentArea.attr('data-entity-id'),
             };
         }
 
@@ -84,14 +84,16 @@
                 var $link = $(this);
                 $link.on('click', '', function (e) {
                     e.preventDefault();
-
+                    var id = $link.data('id');
+                    var $relatedCommentReplyArea = $(`#${id}.comment-stars`)
+                    var $relatedCommentRepliesArea = $container.find('.cms-comment-replies-area[data-id=' + id+ ']');
                     abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
                         if (ok) {
                             volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
                             ).then(function () {
-                                var id = $link.data('id');
                                 abp.notify.info(l('SuccessfullyDeleted'));
-                                $("#" + id).css("display", "none");
+                                $relatedCommentReplyArea.hide()
+                                $relatedCommentRepliesArea.hide()
                             });
                         }
                     });
@@ -112,13 +114,12 @@
                             //concurrencyStamp: formAsObject.commentConcurrencyStamp
                         }
                     ).then(function (data) {
-                        debugger;
                         //$("#" + "cms-comment_Movie_" + data.entityId + "_" + data.id).css("display", "none")
                         var $relatedCommentEditArea = $container.find('.cms-comment-edit-area[data-id=' + data.id + ']');
                         var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + data.id + ']');
                         $relatedCommentEditArea.hide();
                         $relatedCommentContentArea.show();
-                        $("#p_" + data.id).text(data.text)
+                        $(`#edit_${data.id}>p`).text(data.text)
 
                     });
                 });
@@ -146,14 +147,10 @@
                                 text: formAsObject.commentText
                             }
                         ).then(function (data) {
-                            var $relatedCommentFormArea = $container.find('.cms-comment-form-area[data-reply-id=' + data.repliedCommentId + ']');
-                            var $relatedCommentReplyArea = $(`#${data.repliedCommentId}.comment-stars`)
-                            var id = data.repliedCommentId;
                             //reply or new comment control
                             if ($form[0][3]) {
-                               
                                 widgetManager.refresh()
-                                currentPage--;
+                                currentPage=1
                             }
                             else {
                                 currentPage = 1;
@@ -163,8 +160,7 @@
                                     type: 'GET',
                                     success: function (data) {
                                         $("#cms-comment").empty();
-                                        $("#cms-commentsId").prepend(data);
-
+                                        $("#cms-comment").prepend(data);
                                     }
                                 })
                             }
@@ -230,13 +226,10 @@
 
         if (scrollTop + clientHeight >= scrollHeight - 5 &&
             hasMoreComments(currentPage, limit, total)) {
-            debugger;
             var id = $("#cms-comment").attr("data-content");
-            currentPage++;
             $.ajax({
-
                 url: '/Comments/MyViewComponent/',
-                data: { entityType: "Movie", entityId: id, currPage: currentPage },
+                data: { entityType: "Movie", entityId: id, currPage: ++currentPage },
                 type: 'GET',
                 success: function (data) {
                     var pos = data.search('<div class="comment-stars"');

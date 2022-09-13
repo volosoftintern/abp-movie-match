@@ -38,12 +38,17 @@
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#idWatchedBefore`).attr("data-content", "True");
+
+            //watchersList(movieId);
+
             $(`#idWatchedBefore`).toggleClass("btn-secondary btn-danger");
             $(`#idWatchedBefore`).text(l('RemoveFromWatchedBeforeList'));
+
             abp.notify.success(
                 l('MovieAddedWatchedBefore'),
                 l('Success')
             );
+            
         });
     }
 
@@ -71,8 +76,11 @@
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
-                        .then(() => {
+                        .then(() => {                            
                             $(`#idWatchedBefore`).attr("data-content", "False");
+
+                            //watchersList(id);
+
                             abp.notify.info(l('SuccessfullyDeleted'));
                             $(`#idWatchedBefore`).toggleClass("btn-secondary btn-danger");
                             $(`#idWatchedBefore`).text(l('AddWatchedBeforeList'));
@@ -87,6 +95,7 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
+
             if (res.length == 0) list.append(`<div class="no-watchers">${l('NoWatchersYet')}</div>`)
             else {
 
@@ -96,9 +105,8 @@
                         count = c;
                     });
                     if (element.path != null) {
-                        list.append(`
-                     <div class="card d-flex flex-row">
-
+                        list.append(`                  
+                    <div class="card d-flex flex-row">
                      <div class="col-sm-2 d-flex flex-column justify-content-around">
                         <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
                      </div>
