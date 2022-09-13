@@ -33,9 +33,9 @@
     });
     $('#showWatchedMovies').click(function () {
        
+        var username = $(this).data('name');
 
-
-        watchedMoviesInfoModal.open();
+        watchedMoviesInfoModal.open({ username: username });
     });
 
 

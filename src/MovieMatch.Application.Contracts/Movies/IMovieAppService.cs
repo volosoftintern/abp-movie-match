@@ -9,7 +9,7 @@ namespace MovieMatch.Movies
     {
         Task<MovieDetailDto> GetAsync(int id);
         Task<MovieDto> CreateAsync(CreateMovieDto movie);
-        Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(PagedAndSortedResultRequestDto input);
+        Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(MoviePagedAndSortedResultRequestDto input);
         Task<PagedResultDto<MovieDto>> GetWatchLaterListAsync(PagedAndSortedResultRequestDto input);
         Task<PersonDto> GetPersonAsync(int directorId,bool isDirector=false);
         Task<bool> AnyAsync(int id);
