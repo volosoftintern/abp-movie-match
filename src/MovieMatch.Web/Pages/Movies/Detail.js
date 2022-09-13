@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    //$(`idWatchLater`).data('isactivewatchlater', val.isActiveWatchLater)
+    const l = abp.localization.getResource("MovieMatch");
     $(`#idWatchLater`).on('click', (e) => {
         const isActiveWatchLater = $(`#idWatchLater`).attr("data-content");
         const id = $(`#idWatchLater`).attr("data-id");
@@ -26,42 +26,44 @@
     addWatchLater = (movieId, userId) => {
         movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#idWatchLater`).attr("data-content", "True");
-            $(`#idWatchLater`).css({ "background-color": "red", "font-size": "13px" });
-            $(`#idWatchLater`).text("Remove from watch later list");
-            $(`#idWatchLater`).css("text-size", "13px");
+            $(`#idWatchLater`).toggleClass("btn-primary btn-danger");
+            $(`#idWatchLater`).text(l('RemoveFromWatchLaterList'));
             abp.notify.success(
-                'Movie added watch later list.',
-                'Success'
+                l('MovieAddedWatchLater'),
+                l('Success')
             );
         });
     }
-    
+
     addWatchedBefore = (movieId, userId) => {
         movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
             $(`#idWatchedBefore`).attr("data-content", "True");
-            $(`#idWatchedBefore`).css({ "background-color": "red", "font-size": "13px" });
-            $(`#idWatchedBefore`).text("Remove from watched before list");
-            watchersList(movieId);
+
+            //watchersList(movieId);
+
+            $(`#idWatchedBefore`).toggleClass("btn-secondary btn-danger");
+            $(`#idWatchedBefore`).text(l('RemoveFromWatchedBeforeList'));
+
             abp.notify.success(
-                'Movie added watched before list.',
-                'Success'
+                l('MovieAddedWatchedBefore'),
+                l('Success')
             );
             
         });
     }
 
     removeFromWatchLaterList = (id) => {
-        abp.message.confirm('Are you sure?')
+        abp.message.confirm(l('AreYouSure'))
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchLater(id)
                         .then(() => {
                             $(`#idWatchLater`).attr("data-content", "False");
-                            abp.notify.info("Successfully deleted!");
-                            $(`#idWatchLater`).css("background-color", "blue");
-                            $(`#idWatchLater`).text("Add to watch later list");
-                            
+                            abp.notify.info(l('SuccessfullyDeleted'));
+                            $(`#idWatchLater`).toggleClass("btn-primary btn-danger");
+                            $(`#idWatchLater`).text(l('AddWatchLaterList'));
+
                             dataTable.ajax.reload();
                         })
                 }
@@ -76,10 +78,13 @@
                         .deleteMoviesWatchedBefore(id)
                         .then(() => {                            
                             $(`#idWatchedBefore`).attr("data-content", "False");
-                            abp.notify.info("Successfully deleted!");
-                            $(`#idWatchedBefore`).css("background-color", "grey");
-                            $(`#idWatchedBefore`).text("Add to watched before list");
-                            watchersList(id);
+
+                            //watchersList(id);
+
+                            abp.notify.info(l('SuccessfullyDeleted'));
+                            $(`#idWatchedBefore`).toggleClass("btn-secondary btn-danger");
+                            $(`#idWatchedBefore`).text(l('AddWatchedBeforeList'));
+
                             dataTable.ajax.reload();
                         })
                 }
@@ -90,8 +95,10 @@
         var list = $("#nav-profile");
         list.empty();
         movieMatch.moviesWatchedBefore.watchedBefore.listOfUsers(movieId).done(async (res) => {
-            if (res.length == 0) list.append(` <div class="d-flex justify-content-around">no watchers yet</div>`)
+
+            if (res.length == 0) list.append(`<div class="no-watchers">${l('NoWatchersYet')}</div>`)
             else {
+
                 for (var element of res) {
                     var count = 0;
                     await getCount(element.id).then((c) => {
@@ -100,53 +107,47 @@
                     if (element.path != null) {
                         list.append(`                  
                     <div class="card d-flex flex-row">
-
                      <div class="col-sm-2 d-flex flex-column justify-content-around">
                         <img src="https://image.tmdb.org/t/p/original//kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg" alt="..." class="h-75 rounded-circle ">
                      </div>
                        <div class="col-sm-3">
                         <p class="card-text"><h5 class="badge bg-dark">${element.name}</h5></p>
                         <img class= "profile rounded-circle prep" id = "rounded" src="/images/host/my-file-container/${element.path}" />
-                        <p class="count">${count} movie watched</p>
+                        <p class="count">${l('MovieWathced', count)}</p>
                     </div>
                      <div class="col-md-5"></div>
                     
                 `);
                     }
-               
-                    
+
+
                     if (element.name != abp.currentUser.userName) {
-                        console.log(abp.currentUser.userName);
-                        if (element.isFollow === false)
-                        {
-                                      list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
-                       
-                             <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark follow">Follow</button>
+                        if (element.isFollow === false) {
+                            list.append(` 
+                                <div class="col-md-2 d-flex flex-column justify-content-center ">               
+                                    <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark follow">${l('Follow')}</button>
                                </div>`)
-                       
+
                         }
                         else {
-                                          
-                               list.append(` <div class="col-md-2 d-flex flex-column justify-content-center ">
-                
-                                   <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark follow">UnFollow</button>
-                              </div>`)
-                             }   
-                       }
-                    
 
-
+                            list.append(` 
+                                <div class="col-md-2 d-flex flex-column justify-content-center ">
+                                    <button onclick=followToggle(this) id=${element.id} isFollow=${element.isFollow} type="button" class="btn btn-outline-dark unfollow">${l('UnFollow')}</button>
+                                </div>`)
+                        }
+                    }
                 }
             }
-            
+
         });
-        
+
     }
-   
-    
+
+
 
     getCount = (id) => {
-        
+
         return new Promise(function (myResolve) {
             movieMatch.moviesWatchedBefore.watchedBefore.getCount(id)
                 .then((res) => {
@@ -157,16 +158,17 @@
 
 
     followToggle = (button) => {
-        console.log(button);
-        btn = $(button);
-        if (btn.text() == 'Follow') {
-            movieMatch.userConnections.userConnection.follow(btn.attr('id'), btn.attr('isFollow')).done(() => {
-                btn.text('UnFollow');
+
+        if ($(button).hasClass('follow')) {
+            movieMatch.userConnections.userConnection.follow($(button).attr('id'), $(button).attr('isFollow')).done(() => {
+                $(button).toggleClass('follow unfollow');
+                $(button).text(l('UnFollow'));
             });
         }
-        else{
-            movieMatch.userConnections.userConnection.unFollow(btn.attr('id'), btn.attr('isFollow')).done(() => {
-                btn.text('Follow');
+        else {
+            movieMatch.userConnections.userConnection.unFollow($(button).attr('id'), $(button).attr('isFollow')).done(() => {
+                $(button).toggleClass('follow unfollow');
+                $(button).text(l('Follow'));
             });
         }
     }

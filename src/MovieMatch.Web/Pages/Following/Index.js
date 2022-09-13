@@ -1,7 +1,6 @@
 ﻿abp.modals.FollowingInfo = function () {
     function initModal(modalManager, args) {
-        console.log(args)
-        console.log(modalManager.getArgs().username)
+        
         var userName = modalManager.getArgs().username;
         var l = abp.localization.getResource('MovieMatch');
         var dataTable = $('#FollowingTable').DataTable(
@@ -16,21 +15,12 @@
 
                 columnDefs:
                     [
-                        //{
-                        //    //data: "id",
-                        //    //render: function (data) {
-                        //    //    movieMatch.userConnections.userConnection.getFollowersCount(data).done(res => {
-                        //    //        $('#followers').innerText = res;
-                        //    //    });
 
-                        //    //}
-                        //},
                         {
                             data: "path",
                             render: function (data) {
-                               
-                                    return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
-                              
+
+                                return `<img class="profile rounded-circle" src="/images/host/my-file-container/${data}"/>`
                             }
                         },
                         {
@@ -38,100 +28,65 @@
                             data: "name",
                             render: function (name) {
 
-                                return `<a  href=${name} style="text-transform:capitalize" /* onclick="changeinfo(this)"*/ > ${name} </a>`
+                                return `<a  href='/UserConnections/${name}' style="text-transform:capitalize" > ${name} </a>`
 
                             }
-
-
-
                         }
-
                         ,
-
                         {
 
-                            
                             data: "isFollow",
                             render: function (data, type, row) {
                                 isActive = row.isFollow; var id = row.id;
-
-
-                                if (isActive === true) {
-                                    return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">Follow User</button>`
-
-
+                                
+                                if (isActive === false) {
+                                    return `<button type="button" id='${(id)}' isActive="false" onclick="followUser(this)" class="btn btn-outline-info">${l('FollowUser')}</button>`
                                 }
                                 else {
-                                    return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-outline-info">UnFollow User</button>`
-
+                                    return `<button type="button" id='${(id)}' isActive="true" onclick="followUser(this)" class="btn btn-outline-info">${l('UnFollowUser')}</button>`
                                 }
-
-
-
                             }
 
                         }
-
-
                     ]
             })
         );
-
-        console.log('initialized the modal...');
     };
 
     return {
         initModal: initModal
-        
     };
-
-
-
 };
 
 followUser = (button) => {
     var btn = $(button);
+    var l = abp.localization.getResource('MovieMatch');
     var id = btn.attr("id");
-
-
+   
     if ((btn).attr("isActive") == 'false') {
         movieMatch.userConnections.userConnection.follow(btn.attr("id"), btn.attr("isActive")).done(() => {
-            (btn).attr("class", "btn btn-outline-info");
-
-            (btn).text("UnFollow User");
+        
+            (btn).text(l('UnFollowUser'));
+            
             (btn).attr("isActive", 'true');
+            
             $('#UserConnectionsTable').DataTable().ajax.reload();
-            abp.notify.success('Followed user');
+            abp.notify.success(l('FollowedUser'));
 
-            var following = document.getElementById('following');
-            var number = parseInt(following.innerText);
-            value = number + 1;
-            following.innerText = value;
-
+            $('#following').text(parseInt($('#following').text())+1);
         });
-    }
-    else {
+    }else {
         movieMatch.userConnections.userConnection.unFollow(id, isActive).done(() => {
-            (btn).attr("class", "btn btn-outline-info");
+            
             (btn).attr("isActive", 'false');
+            
             $('#UserConnectionsTable').DataTable().ajax.reload();
-            (btn).text("Follow User");
-
-            abp.notify.success(`UnFollowed user`);
-            var following = document.getElementById('following');
-            var number = parseInt(following.innerText);
-            value = number - 1;
-            following.innerText = value;
-
-
-
-
-
-
-
-
-
-
+            
+            (btn).text('Follow User');
+            
+            abp.notify.success(l('UnFollowedUser'));
+            
+            $('#following').text(parseInt($('#following').text())-1);
         });
     }
 }

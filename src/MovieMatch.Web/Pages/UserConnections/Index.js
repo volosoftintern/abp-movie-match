@@ -1,57 +1,52 @@
 ﻿$(function () {
-
+    
     var followersInfoModal, followingInfoModal;
-   
-    var isActive,ids,names;
-   
-  
-         followingInfoModal = new abp.ModalManager({
-             viewUrl: '/Following/FollowingInfoModal',
-             modalClass: 'FollowingInfo',
-             scriptUrl: '/Pages/Following/Index.js'
-           // scriptUrl: '/Pages/Following/Index.js' //Lazy load sadece 1 kere çalışır
 
-        });
-         followersInfoModal = new abp.ModalManager({
-             viewUrl: '/Followers/FollowersInfoModal',
-             modalClass: 'FollowersInfo',
-             scriptUrl: '/Pages/Followers/Index.js'
-        //     scriptUrl: '/Pages/Followers/Index.js'
-            
-            
-        });
-   
-   
+    
+
+
+    followingInfoModal = new abp.ModalManager({
+        viewUrl: '/Following/FollowingInfoModal',
+        modalClass: 'FollowingInfo',
+        scriptUrl: '/Pages/Following/Index.js'
+    });
+    followersInfoModal = new abp.ModalManager({
+        viewUrl: '/Followers/FollowersInfoModal',
+        modalClass: 'FollowersInfo',
+        scriptUrl: '/Pages/Followers/Index.js'
+
+    });
+    watchedMoviesInfoModal = new abp.ModalManager({
+        viewUrl: '/WatchedMovies/WatchedMoviesInfoModal',
+        modalClass: 'WatchedMoviesInfo',
+        scriptUrl: '/Pages/WatchedMovies/Index.js'
+
+    });
+
+
     $('#showFollowing').click(function () {
         var that = $(this);
         var username = that.data('name');
-        
+
 
         followingInfoModal.open({ username: username });
     });
+    $('#showWatchedMovies').click(function () {
+       
 
-   
-    $('#showFollowers').on('click', function () {
-      
-        var username = $(this).data('name');
-        followersInfoModal.open({ username:username  });
+
+        watchedMoviesInfoModal.open();
     });
-  
-
-    })     
-    
 
 
+    $('#showFollowers').on('click', function () {
+
+        var username = $(this).data('name');
+        followersInfoModal.open({ username: username });
+    });
 
 
-
-
-
-
-
-
-    
-
+})
 
 $(document).ready(function () {
 
@@ -68,54 +63,44 @@ $(document).ready(function () {
         }
     });
 });
-    
 
 
 
-    $("#UploadFileDto_File").on('change', function (e) {
-        e.preventDefault();
+$("#UploadFileDto_File").on('change', function (e) {
+    e.preventDefault();
 
-        var formData = new FormData();
-        var fileInput = document.getElementById('UploadFileDto_File');
-        formData.append("Content", fileInput.files[0]);
-        formData.append("Name", $('#UploadFileDto_Name').val());
-        //formData = FillNewEventFormData(formData);
-        console.log(fileInput);
-        var httpMethod = 'POST'
+    var formData = new FormData();
+    var fileInput = document.getElementById('UploadFileDto_File');
+    formData.append("Content", fileInput.files[0]);
+    formData.append("Name", $('#UploadFileDto_Name').val());
+    var httpMethod = 'POST'
 
-        $.ajax({
-            
-            url: '/file/upload',
-            data: formData,
-            type: httpMethod,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                $('#img').attr('src', '/images/host/my-file-container/'+ response);
-                $('#upload').click();
-              
-            },
-            error: function (errorRaw) {
-                abp.notify.error(errorRaw.responseJSON.error.message, 'Error',
-                    toastr.options = {
-                        timeOut: 2500,
-                        progressBar: true,
-                        positionClass: "toast-bottom-right"
-                    }
-                );
-            }
-        });
+    $.ajax({
 
-    
+        url: '/file/upload',
+        data: formData,
+        type: httpMethod,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('#img').attr('src', '/images/host/my-file-container/' + response);
+            $('#upload').click();
 
+        },
+        error: function (errorRaw) {
+            abp.notify.error(errorRaw.responseJSON.error.message, 'Error',
+                toastr.options = {
+                    timeOut: 2500,
+                    progressBar: true,
+                    positionClass: "toast-bottom-right"
+                }
+            );
+        }
     });
-   
-    
-
-    
 
 
-    
+
+});
 
 
 
@@ -123,6 +108,44 @@ $(document).ready(function () {
 
 
 
-    
- 
+
+
+$(document).ready(function () {
+
+    $('#followbtn').on('click', function () {
+        var btn = $(this);
+        if (btn.text().trim() == 'Follow') {
+
+            movieMatch.userConnections.userConnection.follow(btn.data("id")).done(() => {
+                btn.text('UnFollow');
+                abp.notify.success('Followed User');
+                var count = parseInt($('#followers').text());
+                count++;
+                $('#followers').text(count);
+            });
+
+
+        }
+        if (btn.text().trim() == 'UnFollow') {
+            movieMatch.userConnections.userConnection.unFollow(btn.data("id")).done(() => {
+                btn.text('Follow');
+                abp.notify.success('UnFollowed User');
+                var count = parseInt($('#followers').text());
+                count--;
+                $('#followers').text(count);
+
+            });
+        }
+    });
+
+
+});
+
+
+
+
+
+
+
+
 

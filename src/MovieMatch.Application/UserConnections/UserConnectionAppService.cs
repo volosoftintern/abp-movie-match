@@ -72,15 +72,11 @@ namespace MovieMatch.UserConnections
 
         
         public async Task<PagedResultDto<FollowerDto>> GetListAsync(GetIdentityUsersInput input)
-
         {
 
             var filteredUsers = await _userConnectionRepository.GetUsersListAsync(input.SkipCount,input.MaxResultCount,input.Filter);
 
             var userlist =await _identityUserRepository.GetListAsync();
-
-
-
             var filteredUsersList = filteredUsers.ToList();
 
             var followerdto= filteredUsersList.Select(x => new FollowerDto
@@ -90,11 +86,7 @@ namespace MovieMatch.UserConnections
                  Name = x.UserName,
                  Path = x.GetProperty<string>("Photo"),
              }).ToList();
-            
-    
-
-
-
+           
             foreach (var item in filteredUsersList)
             {
                 await SetisFollowAsync(item.UserName, false);
@@ -117,9 +109,7 @@ namespace MovieMatch.UserConnections
             }
 
             return new PagedResultDto<FollowerDto>(((userlist.Count)-1), followerdto);
-                           
-         
-    
+                              
 
         }
         public async Task<List<Guid>> GetCurrentUserFollowingAsync()

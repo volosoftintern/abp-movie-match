@@ -50,7 +50,7 @@
                     movieMatch.movies.movie
                         .deleteMoviesWatchLater(id)
                     .then(()=> {
-                        abp.notify.info("Successfully deleted!");
+                        abp.notify.info(l('SuccessfullyDeleted'));
                         dataTable.ajax.reload();
                         movieMatch.moviesWatchLater.watchLater.getCount(abp.currentUser.id).done((count) => {
                             var str = l('ProfileTab:MoviesIWillWatch', count);

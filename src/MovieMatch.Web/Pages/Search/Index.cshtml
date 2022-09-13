@@ -1,4 +1,8 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MovieMatch.Localization
+@inject IHtmlLocalizer<MovieMatchResource> L
+
 @model MovieMatch.Web.Pages.Search.IndexModel
 @section styles{
     <abp-style src="/Pages/Search/Index.css"/>
@@ -14,15 +18,15 @@
 
       <input id="movie-name" class="form-control mx-2" type="search" placeholder="Search" name="name" aria-label="Search">
       
-      <button id="search-movie" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button id="search-movie" class="btn btn-outline-success my-2 my-sm-0" type="submit">@L["Search"]</button>
 
     </form>
 
     
     <div class="spinner-border loader" role="status">
-            <span class="sr-only">Loading...</span>
+            <span class="sr-only">@L["Loading"]</span>
         </div>
-    <h2 class="movie-list-title">Popular Movies</h2>
+    <h2 class="movie-list-title">@L["PopularMovies"]</h2>
 
     <div id="movie-list" class="d-flex flex-wrap justify-content-around">
         

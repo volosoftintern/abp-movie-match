@@ -1,0 +1,25 @@
+﻿@page
+@model MovieMatch.Web.Pages.WatchedMovies.WatchedMoviesInfoModalModel
+@{
+}
+@using Microsoft.Extensions.Localization
+@using MovieMatch.Localization
+@inject IStringLocalizer<MovieMatchResource> L
+@{
+    Layout = null;
+}
+@section scripts{
+    <abp-script src="/Pages/WatchedMovies/Index.js" />
+}
+
+    <abp-modal>
+        <abp-modal-header>
+            <h2>Watched Movies</h2>
+        </abp-modal-header>
+        <abp-modal-body>
+            <abp-table striped-rows="true" id="WatchedMoviesTable">
+
+            </abp-table>
+        </abp-modal-body>
+        <abp-modal-footer buttons="Close"></abp-modal-footer>
+    </abp-modal>
