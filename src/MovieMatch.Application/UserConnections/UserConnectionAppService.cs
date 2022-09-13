@@ -296,7 +296,7 @@ namespace MovieMatch.UserConnections
             {
                 if(k<users.Count-1)
                 {
-                    if(similarityList.Count!=0 && similarityList[k] > 0.5)
+                    if(similarityList.Count>k && similarityList[k] > 0.5)
                     {
                         var identityUserDto=ObjectMapper.Map<IdentityUser,IdentityUserDto>(item);
                         userDto.Add(identityUserDto);

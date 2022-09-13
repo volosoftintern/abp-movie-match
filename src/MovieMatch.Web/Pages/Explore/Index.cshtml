@@ -37,7 +37,8 @@
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
                 <!-- Slides -->
-            @if(Model.RecommendedUsers==null){
+        @if (Model.RecommendedUsers == null || Model.RecommendedUsers.Count == 0)
+        {
             <div class="swiper-slide">
             <h3>No matching users were found, please rate the movies and try again.</h3>
             </div>
