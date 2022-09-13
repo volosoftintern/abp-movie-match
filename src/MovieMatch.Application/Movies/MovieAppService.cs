@@ -19,6 +19,7 @@ using MovieMatch.People;
 using Polly;
 using System.Threading;
 using Polly.Fallback;
+using MovieMatch.UserConnections;
 
 namespace MovieMatch.Movies
 {
@@ -38,6 +39,7 @@ namespace MovieMatch.Movies
         private readonly IRepository<Director, int> _directorRepository;
         private readonly IRepository<People.Person, int> _personRepository;
         private readonly IRepository<MoviePerson> _moviePersonRepository;
+        private readonly IUserRepository _userRepository;
 
         private AsyncFallbackPolicy<PersonDto> _personPolicy;
         private AsyncFallbackPolicy<MovieDetailDto> _moviePolicy;
@@ -59,7 +61,8 @@ namespace MovieMatch.Movies
             IRepository<Director, int> directorRepository,
             IRepository<People.Person, int> personRepository,
             IRepository<Genres.Genre, int> genreRepository,
-            IRepository<MoviePerson> moviePersonRepository
+            IRepository<MoviePerson> moviePersonRepository,
+            IUserRepository userRepository
             )
         {
             _movieList = new List<Movie>();
@@ -68,6 +71,7 @@ namespace MovieMatch.Movies
             _discoverApi = MovieDbFactory.Create<IApiDiscoverRequest>().Value;
             _movieRepository = movieRepository;
             _movieManager = movieManager;
+            _userRepository= userRepository;
 
             _watchedBeforeRepository = watchedBeforeRepository;
             _watchLaterRepository = watchLaterRepository;
@@ -210,9 +214,10 @@ namespace MovieMatch.Movies
             var movie = await _watchLaterRepository.FindByIdAsync(id);
             await _watchLaterRepository.DeleteAsync(movie);
         }
-        public async Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<MovieDto>> GetWatchedBeforeListAsync(MoviePagedAndSortedResultRequestDto input)
         {
-            var moviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == CurrentUser.Id);
+            var user =await _userRepository.FindAsync(x=>x.UserName==input.username);
+            var moviesWatchedBefore = await _watchedBeforeRepository.GetListAsync(x => x.UserId == user.Id);
             var queryable = await _movieRepository.GetQueryableAsync();
 
             var totalCount = moviesWatchedBefore.Count();

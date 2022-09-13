@@ -2,7 +2,8 @@
     function initModal(modalManager, args) {
 
        
-
+        var userName = modalManager.getArgs().username;
+        console.log(userName);
         var l = abp.localization.getResource('MovieMatch');
         var dataTable = $('#WatchedMoviesTable').DataTable(
             abp.libs.datatables.normalizeConfiguration({
@@ -11,7 +12,7 @@
                 order: [[1, "asc"]],
                 searching: false,
                 scrollX: true,
-                ajax: abp.libs.datatables.createAjax(movieMatch.movies.movie.getWatchedBeforeList),
+                ajax: abp.libs.datatables.createAjax(movieMatch.movies.movie.getWatchedBeforeList, {username:userName}),
                 columnDefs: [
                     {
                         title: "Title",
@@ -43,13 +44,19 @@
 
     };
     removeFromWatchedBeforeList = (id) => {
-
+        
         abp.message.confirm('Are you sure?')
             .then((confirmed) => {
                 if (confirmed) {
                     movieMatch.movies.movie
                         .deleteMoviesWatchedBefore(id)
                         .then(() => {
+                            
+                            $('.btn.far.fa-trash-alt').parents('tr:first').remove();
+                            var totalnumberofwatchedmovies = parseInt($('#watchedMovies').text())
+                            totalnumberofwatchedmovies = totalnumberofwatchedmovies - 1;
+                            $('#watchedMovies').text(totalnumberofwatchedmovies);
+
                             abp.notify.info(l('SuccessfullyDeleted'));
                             dataTable.ajax.reload();
                             movieMatch.moviesWatchedBefore.watchedBefore.getCount(abp.currentUser.id).done((count) => {
