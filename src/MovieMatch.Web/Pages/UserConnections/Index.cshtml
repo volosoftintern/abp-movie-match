@@ -3,6 +3,9 @@
 @inject ICurrentUser currentUser
 @using Microsoft.Extensions.Localization
 @using MovieMatch.Localization
+@using MovieMatch.Web.Components.Commenting
+@using MovieMatch.Web.Components.WatchLater
+@using MovieMatch.Web.Components.WatchedBefore
 @using Volo.Abp.Users
 @using Volo.Abp.Data
 @inject IStringLocalizer<MovieMatchResource> L
@@ -96,27 +99,49 @@
 
 
                             <div class="row">
-                                <div class="col-4 border-end border-light">
+                                <div class="col-1 border-end border-light">
                                     <abp-button id="showFollowers" data-name="@Model.UserName"
-                                        class="text-muted mt-1 mb-2 fw-normal">@L["Followers"]</abp-button>
+                                                class="text-muted mt-1 mb-2 fw-normal">@L["Followers"]:<label id=followers>@Model.FollowersCount</label></abp-button>
 
 
-                                    <h2 id=followers class="mb-0 fw-bold">@Model.FollowersCount</h2>
+                                    
                                 </div>
-                                <div class="col-4 border-end border-light">
+                                <div class="col-1 border-end border-light">
 
                                     <abp-button id="showFollowing" data-name="@Model.UserName"
-                                        class="text-muted mt-1 mb-2 fw-normal">@L["Following"]</abp-button>
-                                    <h2 id="following" class="mb-0 fw-bold">@Model.FollowingCount</h2>
+                                                class="text-muted mt-1 mb-2 fw-normal">@L["Following"]: <label id="following">@Model.FollowingCount</label></abp-button>
+                                   
                                 </div>
-                                <div class="col-4 border-end border-light">
+                                <div class="col-1 border-end border-light">
 
                                     <abp-button id="showWatchedMovies" data-name="@Model.UserName"
-                                                class="text-muted mt-1 mb-2 fw-normal">@L["MoviesIWatchedBefore"]</abp-button>
-                                    <h2 id="watchedMovies" class="mb-0 fw-bold">@Model.WatchedMoviesCount</h2>
+                                                class="text-muted mt-1 mb-2 fw-normal watchedMovies">@L["MoviesIWatchedBefore"]:<label id="watchedMovies">@Model.WatchedMoviesCount</label></abp-button>
+                                    
                                 </div>
                                 
                             </div>
+                            <abp-tabs tab-style="Pill">
+                                <abp-tab title="Watched Movies">
+
+                                    @await Component.InvokeAsync(typeof(WatchedBeforeViewComponent),new{
+
+                                    })
+                                </abp-tab>
+                                <abp-tab title="To be Watched">
+                                    
+                                    @await Component.InvokeAsync(typeof(WatchLaterViewComponent),new{
+
+                                    })
+
+
+                                </abp-tab>
+                                <abp-tab title="Comments">
+                                    @*@await Component.InvokeAsync(typeof(CommentingViewComponent),
+                                    new {
+                                    
+                                    })*@
+                                </abp-tab>
+                            </abp-tabs>
                         </div>
                     </div>
                 </div>
