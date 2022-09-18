@@ -7,6 +7,7 @@ namespace MovieMatch.Web.Pages.WatchedMovies
     {
         public void OnGet()
         {
+
         }
     }
 }
