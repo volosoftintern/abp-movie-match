@@ -84,11 +84,24 @@ p {
 }
 
 .card {
-    width: 30rem;
+    width: 50rem;
 }
 
+
 .card-img-top {
-    width: 50px
+    width: 75px;
+    height:60px;
+}
+h6.card-subtitle.text-muted{
+    margin-left:15px;
+    margin-top:10px;
+}
+.directorPath{
+    margin-left:15px;
+}
+
+.movieImg {
+    border-radius: 30%;
 }
 
 .card-text.movie-comment {
@@ -101,7 +114,36 @@ p {
     color: inherit;
 }
 .profile.rounded-circle.prep {
-    height: 40px;
-    width: 40px;
-    margin-top: -10px;
+    height: 70px;
+    width: 70px;
 }
+.txtName:hover {
+    text-decoration: underline;
+}
+
+.txtName {
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+.txtUserName {
+    margin-top: 7px;
+    font-size:15px;
+    margin-left: 3px;
+}
+
+.txtTime {
+    margin-top: 7px;
+    font-size:15px;
+}
+
+.watched {
+    margin-top: 25px;
+}
+
+.txtIsWatch{
+    margin-left:15px;
+    font-size:15px;
+    margin-top:2px;
+}
+

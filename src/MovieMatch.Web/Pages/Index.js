@@ -35,115 +35,49 @@ $(function () {
     renderResults = (posts) => {
 
         posts.forEach((val, i) => {
-            
             $('#post-list').append(`
-                <div class="card" >
+                <div class="card myCard" >
                     <div class="card-body">
                        
-                        <h5 class="card-title">
-                        <img class="profile rounded-circle prep" src="${isNullOrUndefined(val.user.extraProperties.photo) ? rootImagePath+defaultImagePath : rootImagePath+val.user.extraProperties.photo}"/>  ${val.user.name}<span class="text-muted px-1">@<a href="UserConnections/${val.user.userName}">${val.user.userName}</a></span><span class="px-1">&#x26AC;</span><span class="text-muted px-1">${getTimeDiffer(`${val.creationTime}`)}</span>
+                        <h5 class="card-title d-flex justify-content-start">
+                    <div class="d-flex flex-column">
+                   <img class="profile rounded-circle prep" src="${isNullOrUndefined(val.user.extraProperties.photo) ? rootImagePath + defaultImagePath : rootImagePath + val.user.extraProperties.photo}"/>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row">
+                           <span class="txtName"><a href="UserConnections/${val.user.userName}">${val.user.name}</a></span>
+                             <span class="text-muted px-1 txtUserName"><a href="UserConnections/${val.user.userName}">@${val.user.userName}</a></span>
+                                <span class="text-muted px-1 txtTime">&#x26AC;${` `}${getTimeDiffer(`${val.creationTime}`)}</span>
+                        </div>
+                            <div class="d-flex flex-row">
+                                    <span class="text-muted txtIsWatch">&#x26AC; watched</span>
+                                    <span class="text-muted txtIsWatch"><i class="fas fa-star"></i>${val.rate}</span>
+                            </div>
+                    </div>
                         </h5>
-                        <h6 class="card-subtitle text-muted mb-1">${val.movie.title}</h6>
-                        <a href="/Movies/${val.movie.id}">
                             <div class="row mb-1">
-                                <div class="col-2">
-                                    <img class="card-img-top" src="https://image.tmdb.org/t/p/original/${val.movie.posterPath}" alt="${val.movie.title}">
-                                </div>
-                                <div class="col-7">
+                                <div class="col-11">
                                     <p class="card-text movie-comment">${val.comment}</p>
                                 </div>
-                                <div class="col-2">
-                                    <p class="card-text"><i class="fas fa-star"></i> ${val.rate}</p>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-1">
+                                   <img class="card-img-top movieImg" src="https://image.tmdb.org/t/p/original/${val.movie.posterPath}" alt="${val.movie.title}">
+                                </div>
+                                <div class="col-10">
+                                    <div class="row mb-1">
+                                     <a href="/Movies/${val.movie.id}"><h6 class="card-subtitle text-muted mb-1">${val.movie.title}</h6></a>
+                                    </div>
+                                <div class="row mb-1">
+                                    <a href="/Movies/Director/${val.movie.id}"><span class="badge bg-success directorPath">ben ksasdasd</span></a>                                    </div>
                                 </div>
                             </div>
-                        </a>
-
                     </div>
                 </div>
             `)
 
-
-            $(`#${val.movie.id}.btn-watch-later`).data('isactivewatchlater', val.movie.isActiveWatchLater)
-            $(`#${val.movie.id}.btn-watch-later`).on('click', () => {
-                const isActiveWatchLater = $(`#${val.movie.id}.btn-watch-later`).data('isactivewatchlater');
-                if (isActiveWatchLater == false) {
-                    addWatchLater(val.movie.id, abp.currentUser.id)
-                }
-                else {
-                    removeFromWatchLaterList(val.movie.id)
-                }
-
-            });
-
-            $(`#${val.movie.id}.btn-watched-before`).data('isactivewatchedbefore', val.movie.isActiveWatchedBefore)
-            $(`#${val.movie.id}.btn-watched-before`).on('click', () => {
-                const isActiveWatchedBefore = $(`#${val.movie.id}.btn-watched-before`).data('isactivewatchedbefore');
-                if (isActiveWatchedBefore == false) {
-                    addWatchedBefore(val.movie.id, abp.currentUser.id)
-                }
-                else {
-                    removeFromWatchedBeforeList(val.movie.id)
-                }
-            })
-
         })
     }
-
-    addWatchLater = (movieId, userId) => {
-        movieMatch.moviesWatchLater.watchLater.create({ userId: userId, movieId: movieId }).done((res) => {
-            $(`#${movieId}.btn-watch-later`).data('isactivewatchlater', true);
-            $(`#${movieId}.btn-watch-later`).toggleClass("btn-primary btn-secondary");
-            $(`#${movieId}.btn-watch-later`).text(l('RemoveWatchLater'));
-            abp.notify.success(
-                l('MovieAddedWatchLater'),
-                l('Success')
-            );
-        });
-    }
-    addWatchedBefore = (movieId, userId) => {
-        movieMatch.moviesWatchedBefore.watchedBefore.create({ userId: userId, movieId: movieId }).done((res) => {
-            $(`#${movieId}.btn-watched-before`).data('isactivewatchedbefore', true);
-            $(`#${movieId}.btn-watched-before`).toggleClass("btn-primary btn-secondary");
-            $(`#${movieId}.btn-watched-before`).text(l('RemoveWatchedBefore'));
-            abp.notify.success(
-                l('MovieAddedWatchedBefore'),
-                l('Success')
-            );
-        });
-    }
-
-    removeFromWatchLaterList = (id) => {
-        abp.message.confirm(l('AreYouSure'))
-            .then((confirmed) => {
-                if (confirmed) {
-                    movieMatch.movies.movie
-                        .deleteMoviesWatchLater(id)
-                        .then(() => {
-                            $(`#${id}.btn-watch-later`).data('isactivewatchlater', false);
-                            abp.notify.info(l('SuccessfullyDeleted'));
-                            $(`#${id}.btn-watch-later`).toggleClass("btn-secondary btn-primary");
-                            $(`#${id}.btn-watch-later`).text(l('AddWatchLater'));
-                            
-                        })
-                }
-            });
-    };
-    removeFromWatchedBeforeList = (id) => {
-        abp.message.confirm(l('AreYouSure'))
-            .then((confirmed) => {
-                if (confirmed) {
-                    movieMatch.movies.movie
-                        .deleteMoviesWatchedBefore(id)
-                        .then(() => {
-                            $(`#${id}.btn-watched-before`).data('isactivewatchedbefore', false);
-                            abp.notify.info(l('SuccessfullyDeleted'));
-                            $(`#${id}.btn-watched-before`).toggleClass("btn-secondary btn-primary");
-                            $(`#${id}.btn-watched-before`).text(l('AddWatchedBefore'));
-                        })
-                }
-            });
-    };
-
 
     isNullOrEmpty = (str) => {
         return str === null || str.match(/^ *$/) !== null;
@@ -176,7 +110,6 @@ $(function () {
 
         });
     }
-
 
     $('.btn-load-more').on('click', () => {
         loadMore(skipCount, maxResultCount);
