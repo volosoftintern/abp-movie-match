@@ -109,7 +109,6 @@ $("#UploadFileDto_File").on('change', function (e) {
 
 
 
-
 $(document).ready(function () {
 
     $('#followbtn').on('click', function () {
