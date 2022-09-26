@@ -1,6 +1,8 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using MovieMatch.Localization
+@using MovieMatch.Movies
+@using MovieMatch.Web.Components.Navbar
 @using MovieMatch.Web.Components.Post
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @using Volo.Abp.Users
@@ -16,19 +18,26 @@
     <abp-script src="/Pages/Index.js" />
 }
 
-    <div class="container d-flex align-items-center flex-column mb-3">
-        <div id="post-list" class="post-list d-flex flex-column align-items-center my-3 post-container">
+    <div class="d-flex flex-row mb-3">
+@*        <div class="col-3">
+            @await Component.InvokeAsync(typeof(NavbarViewComponent))
+        </div>*@
+        <div class="col-6">
+            <div id="post-list" class="post-list d-flex flex-column align-items-center my-3 post-container">
+            </div>
+            <div class="spinner-border loader" role="status">
+                <span class="sr-only">@L["Loading"]</span>
+            </div>
+
+
+
+            <h2 class="no-post-data">
+                @L["NoPostData"]
+            </h2>
+
+            <button class="btn btn-secondary btn-load-more">
+                @L["LoadMore"]
+            </button>
         </div>
 
-        <div class="spinner-border loader" role="status">
-            <span class="sr-only">@L["Loading"]</span>
-        </div>
-
-        <h2 class="no-post-data">
-            @L["NoPostData"]
-        </h2>
-
-        <button class="btn btn-secondary btn-load-more">
-            @L["LoadMore"]
-        </button>
 </div>

@@ -84,7 +84,7 @@ p {
 }
 
 .card {
-    width: 50rem;
+    width: 35rem;
 }
 
 
@@ -113,10 +113,12 @@ h6.card-subtitle.text-muted{
     text-decoration: none;
     color: inherit;
 }
-.profile.rounded-circle.prep {
+.profile.rounded-circle {
     height: 70px;
     width: 70px;
 }
+
+
 .txtName:hover {
     text-decoration: underline;
 }
@@ -147,3 +149,6 @@ h6.card-subtitle.text-muted{
     margin-top:2px;
 }
 
+.textt:hover {
+    text-decoration: underline;
+}

@@ -17,6 +17,7 @@ public class MovieMatchMenuContributor : IMenuContributor
 
     public async Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
+
         if (context.Menu.Name == StandardMenus.Main)
         {
             await ConfigureMainMenuAsync(context);

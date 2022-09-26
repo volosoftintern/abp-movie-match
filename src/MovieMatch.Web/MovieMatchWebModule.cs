@@ -50,6 +50,13 @@ using Volo.CmsKit.Comments;
 using Volo.Abp.AspNetCore.SignalR;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+using MovieMatch.Web.Components.Navbar;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using MovieMatch.Web.Components.Commenting;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
+using MovieMatch.Web.Toolbars;
 
 namespace MovieMatch.Web;
 
@@ -62,7 +69,7 @@ namespace MovieMatch.Web;
     typeof(AbpIdentityWebModule),
     typeof(AbpSettingManagementWebModule),
     typeof(AbpAccountWebIdentityServerModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+    typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -136,6 +143,7 @@ namespace MovieMatch.Web;
             });
         });
 
+
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -151,7 +159,7 @@ namespace MovieMatch.Web;
         Configure<AbpBundlingOptions>(options =>
         {
             options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
+                LeptonXLiteThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
@@ -237,6 +245,10 @@ namespace MovieMatch.Web;
         Configure<AbpNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new MovieMatchMenuContributor());
+        });
+        Configure<AbpToolbarOptions>(options =>
+        {
+            options.Contributors.Add(new MovieMatchMainToolbarContributor());
         });
 
 

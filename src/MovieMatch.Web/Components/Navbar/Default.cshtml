@@ -1,0 +1,106 @@
+﻿@model MovieMatch.Web.Components.Navbar.NavbarViewComponent.ViewModel
+
+<div class="text-white bg-dark w-100 p-3 h-100 mh-100 d-inline-block myNavbar ">
+        <ul class="nav nav-pills flex-column mb-auto">
+
+        <li>
+            <a class="nav-link text-white">
+                <div class="d-flex flex-row">
+                    <div class="col-4 mx-3">
+                        <img class="profile rounded-circle navbar" src="~/images/host/my-file-container/default_picture.png" />
+                    </div>
+                    <div class="col-7 my-3">
+                        <span class="txtName">kutay</span>
+                        <span class="text-muted px-1 txtUserName">etkutay</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="d-flex flex-row">
+                    <div class="col-4">
+                            <span class="text truncate font-medium text-15 letter-tight">122</span>
+                        <span class="text truncate text-14 text-silik-v2 textt">Kitap</span>
+                        </div>
+                    <div class="col-4">
+                                <span class="text truncate font-medium text-15 letter-tight">122</span>
+                        <span class="text truncate text-14 text-silik-v2 textt">Takip</span>
+                    </div>
+                    <div class="col-5">
+                          <span class="text truncate font-medium text-15 letter-tight">122</span>
+                        <span class="text truncate text-14 text-silik-v2 textt">Takipçi</span>
+                    </div>
+               </div>
+                <hr />
+            </a>
+        </li>
+
+            <li class="nav-item">
+                <a href="https://getbootstrap.com/docs/5.0/examples/sidebars/#" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                <span class="fa fa-home"> Feed</span>
+                </a>
+            </li>
+        <hr />
+            <li>
+                <a href="/Movies/616037" class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                <span class="fa fa-random"> What should i watch?</span>
+                </a>
+            </li>
+        <hr />
+        <li>
+            <a href="/Movies/616037" class="nav-link text-white">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                <span class="fa fa-user"> Explore users</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-white">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                <span class="fa fa-tv"> Explore movies</span>
+            </a>
+        </li>
+        <hr />
+            <li>
+                <a class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                <span class="fa fa-backward"> Movies i watched before</span>
+                </a>
+            </li>
+            <li>
+                <a class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                <span class="fa fa-forward"> Movies i will watch </span>
+            </a>
+            </li>
+              <li>
+            <a class="nav-link text-white">
+                <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                <span class="fa fa-heart"> Liked movies</span>
+            </a>
+              </li>
+        </ul>
+        <hr>
+    </div>
+
+    
+<style>
+        .myNavbar {
+        margin-left:-8rem;
+        margin-top:-2rem;
+         }
+
+    .profile.rounded-circle.navbar {
+        height: 70px;
+        width: 70px;
+    }
+        .txtName {
+        margin-top: 5px;
+        margin-left: 15px;
+    }
+
+    .txtUserName {
+        margin-top: 7px;
+        font-size:15px;
+        margin-left: 3px;
+    }
+</style>

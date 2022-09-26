@@ -1,6 +1,7 @@
 ﻿@page
 @using MovieMatch.Movies
 @using MovieMatch.Web.Components.Commenting
+@using MovieMatch.Web.Components.Navbar
 @using Volo.Abp.Users
 @using MovieMatch.Web.Components.Rating
 @using Volo.Abp;
@@ -16,7 +17,13 @@
  
     <abp-script src="/Pages/Movies/Detail.js" />
 }
-        <div class="card mb-3">
+
+    <div class="d-flex flex-row mb-3">
+ @*       <div class="col-3">
+            @await Component.InvokeAsync(typeof(NavbarViewComponent))
+        </div>*@
+        <div class="col-6">
+            <div class="card mb-3">
                 <div class="row g-0">
                     <div class="col-md-4 d-flex flex-column justify-content-between">
 
@@ -87,16 +94,16 @@
                     </div>
                 </nav>
 
-    <div class="tab-content" id="nav-tabContent">
-     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        @await Component.InvokeAsync(typeof(CommentingViewComponent),
-        new {
-        entityType = nameof(Movie),
-        entityId = Model.MovieId.ToString(),
-        currPage=1,
-        })
-       
-     </div>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        @await Component.InvokeAsync(typeof(CommentingViewComponent),
+                        new {
+                        entityType = nameof(Movie),
+                        entityId = Model.MovieId.ToString(),
+                        currPage=1,
+                        })
+
+                    </div>
 
                     <div class="nav-tabe fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     </div>
@@ -104,31 +111,35 @@
             </div>
 
 
-    </div>
-
-<h3>@L["SimilarMovies",new object[]{Model.SimilarMovies.Count}]</h3>
-<div class="swiper movie-carousel">
-    <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-        <!-- Slides -->
-        @foreach (var item in Model.SimilarMovies)
-        {
-            
-            <div class="swiper-slide">
-                <a href="/Movies/@item.Id">
-                    <img alt="@item.Title" src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
-                </a>
         </div>
-        }
+
+        <h3>@L["SimilarMovies",new object[]{Model.SimilarMovies.Count}]</h3>
+        <div class="swiper movie-carousel">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                @foreach (var item in Model.SimilarMovies)
+                {
+
+                    <div class="swiper-slide">
+                        <a href="/Movies/@item.Id">
+                            <img alt="@item.Title" src="https://image.tmdb.org/t/p/original/@item.PosterPath" />
+                        </a>
+                    </div>
+                }
+
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+        </div>
 
     </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
 
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-</div>
    
    
 
